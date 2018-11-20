@@ -65,3 +65,49 @@ function King()
 {
 	
 }
+
+function Rook()
+{
+    Piece.call(this);
+    this.getValidMoves = function(){
+        var moves=[];
+        // Check for forward movement
+        if(this.y<8){
+            for(var i = this.y+1; i<=8;i++)
+                moves.push(coordinatesToCell(this.x,i)); 
+        }
+        // Check for backward movement
+        if(this.y>1){
+            for(var i = 1; i<this.y;i++)
+                moves.push(coordinatesToCell(this.x,i)); 
+        }
+        // Check for left movement
+        if(this.x>1){
+            for(var i = 1; i<this.x; i++)
+                moves.push(coordinatesToCell(i, this.y));
+        }
+        // Check for right movement
+        if(this.x<8){
+        for(var i = this.x; i<=8; i++)
+            moves.push(coordinatesToCell(i, this.y));
+        }
+        // Return the array of possible moves
+        return moves;
+    }
+}
+
+function Knight(){
+    Piece.call(this);
+    this.getValidMoves = function(){
+        var moves=[];
+        
+        
+    }
+    
+}
+
+
+
+// Prototype redirecting
+Pawn.prototype = Object.create(Piece.prototype);
+Pawn.prototype.constructor = Pawn;
