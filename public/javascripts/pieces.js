@@ -10,7 +10,7 @@ function Piece(x, y, isWhite)
 	this.isWhite = isWhite;
 	
 	// Gets valid moves for the piece (placeholder)
-	this.getValidMoves = function() { return []; }
+	this.getValidMoves = function(board, x, y) { return []; }
 }
 
 // Converts x and y coordinates to the appropriate cell
