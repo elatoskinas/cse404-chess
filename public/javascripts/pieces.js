@@ -1,8 +1,8 @@
 function Piece()
 {
 	// Piece position
-	this.x = 0;
-	this.y = 0;
+	this.x = 3;
+	this.y = 3;
 	
 	// Piece state
 	this.isAlive = true;
