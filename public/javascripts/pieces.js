@@ -148,4 +148,120 @@ function King()
 }
 
 King.prototype = Object.create(King.prototype);
+<<<<<<< HEAD
 King.prototype.constructor = King;
+
+unction Rook()
+{
+    Piece.call(this);
+    this.getValidMoves = function(){
+        var moves=[];
+        // Check for forward movement
+        if(this.y<8){
+            for(var i = this.y+1; i<=8;i++)
+                moves.push(coordinatesToCell(this.x,i)); 
+        }
+        // Check for backward movement
+        if(this.y>1){
+            for(var i = 1; i<this.y;i++)
+                moves.push(coordinatesToCell(this.x,i)); 
+        }
+        // Check for left movement
+        if(this.x>1){
+            for(var i = 1; i<this.x; i++)
+                moves.push(coordinatesToCell(i, this.y));
+        }
+        // Check for right movement
+        if(this.x<8){
+        for(var i = this.x; i<=8; i++)
+            moves.push(coordinatesToCell(i, this.y));
+        }
+        // Return the array of possible moves
+        return moves;
+    }
+}
+
+Rook.prototype = Object.create(Rook.prototype);
+Rook.prototype.constructor = Rook;
+
+function Knight(){
+    Piece.call(this);
+    this.getValidMoves = function(){
+        var moves=[];
+       if(this.x>1){
+       	if(this.y>2)
+       		moves.push(coordinatesToCell(this.x-1, this.y-2));
+       	if(this.y<6)
+       		moves.push(coordinatesToCell(this.x-1, this.y-2));
+       }
+       if(this.x<7){
+       	if(this.y>2)
+       		moves.push(coordinatesToCell(this.x-1, this.y-2));
+       	if(this.y<6)
+       		moves.push(coordinatesToCell(this.x-1, this.y-2));
+       }
+        return moves;
+    }
+    
+}
+
+function Queen(){
+	Piece.call(this);
+    this.getValidMoves = function(){
+        var moves=[];
+        // Check for forward movement
+        if(this.y<8){
+            for(var i = this.y+1; i<=8;i++)
+                moves.push(coordinatesToCell(this.x,i)); 
+        }
+        // Check for backward movement
+        if(this.y>1){
+            for(var i = 1; i<this.y;i++)
+                moves.push(coordinatesToCell(this.x,i)); 
+        }
+        // Check for left movement
+        if(this.x>1){
+            for(var i = 1; i<this.x; i++)
+                moves.push(coordinatesToCell(i, this.y));
+        }
+        // Check for right movement
+        if(this.x<8){
+        for(var i = this.x; i<=8; i++)
+            moves.push(coordinatesToCell(i, this.y));
+        }
+
+
+		var y1 = this.y+this.x; // left-most maximal up-most tile y coordinate for first diagonal (take note that this will never be negative in this case)
+		var y2 = this.y-this.x; // left-most maximal down-most tile y coordinate for second diagonal
+
+		// Start from the left-most cell
+		for (var x1 = 0; x1 < 8; ++x1)
+		{
+			// Check if y1 coordinate is in bounds & not equal to the piece's y coordinate
+			if (y1 != this.y && y1 >= 0 && y1 < 8)
+			{
+				moves.push(coordinatesToCell(x1, y1));
+			}
+
+			// Check if y2 coordinate is in bounds & not equal to the piece's y coordinate
+			if (y2 != this.y && y2 >= 0 && y2 < 8)
+			{
+				moves.push(coordinatesToCell(x1, y2));
+			}
+
+			// Move up on y1
+			y1--;
+
+			// Move down on y2
+			y2++;
+		}
+        // Return the array of possible moves
+        return moves;
+    }
+}
+
+Queen.prototype = Object.create(Queen.prototype);
+Queen.prototype.constructor = Queen;
+=======
+King.prototype.constructor = King;
+>>>>>>> 568d5455647ed1b9d5bbb4834b3785f87cd6d23c
