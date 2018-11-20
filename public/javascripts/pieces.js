@@ -49,7 +49,7 @@ function Pawn()
 			moves.push(coordinatesToCell(this.x, this.y+2*offset));
 		}
 
-		// Return moves array
+		// Return valid moves array
 		return moves;
 	}
 }
@@ -103,10 +103,12 @@ function Bishop()
 			y2++;
 		}
 
+		// Return valid moves array
 		return moves;
 	}
 }
 
+// Prototype redirecting
 Bishop.prototype = Object.create(Piece.prototype);
 Bishop.prototype.constructor = Bishop;
 
@@ -147,11 +149,11 @@ function King()
 	}
 }
 
+// Prototype redirecting
 King.prototype = Object.create(King.prototype);
-<<<<<<< HEAD
 King.prototype.constructor = King;
 
-unction Rook()
+function Rook()
 {
     Piece.call(this);
     this.getValidMoves = function(){
@@ -262,6 +264,3 @@ function Queen(){
 
 Queen.prototype = Object.create(Queen.prototype);
 Queen.prototype.constructor = Queen;
-=======
-King.prototype.constructor = King;
->>>>>>> 568d5455647ed1b9d5bbb4834b3785f87cd6d23c
