@@ -159,23 +159,23 @@ function Rook()
     this.getValidMoves = function(){
         var moves=[];
         // Check for forward movement
-        if(this.y<8){
-            for(var i = this.y+1; i<=8;i++)
+        if(this.y<7){
+            for(var i = this.y+1; i<8;i++)
                 moves.push(coordinatesToCell(this.x,i)); 
         }
         // Check for backward movement
-        if(this.y>1){
-            for(var i = 1; i<this.y;i++)
+        if(this.y>0){
+            for(var i = 0; i<this.y;i++)
                 moves.push(coordinatesToCell(this.x,i)); 
         }
         // Check for left movement
-        if(this.x>1){
-            for(var i = 1; i<this.x; i++)
+        if(this.x>0){
+            for(var i = 0; i<this.x; i++)
                 moves.push(coordinatesToCell(i, this.y));
         }
         // Check for right movement
-        if(this.x<8){
-        for(var i = this.x; i<=8; i++)
+        if(this.x<7){
+        for(var i = this.x+1; i<8; i++)
             moves.push(coordinatesToCell(i, this.y));
         }
         // Return the array of possible moves
@@ -189,49 +189,59 @@ Rook.prototype.constructor = Rook;
 function Knight(){
     Piece.call(this);
     this.getValidMoves = function(){
+
+    	// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
         var moves=[];
-       if(this.x>1){
-       	if(this.y>2)
-       		moves.push(coordinatesToCell(this.x-1, this.y-2));
-       	if(this.y<6)
-       		moves.push(coordinatesToCell(this.x-1, this.y-2));
-       }
-       if(this.x<7){
-       	if(this.y>2)
-       		moves.push(coordinatesToCell(this.x-1, this.y-2));
-       	if(this.y<6)
-       		moves.push(coordinatesToCell(this.x-1, this.y-2));
-       }
+        if(this.x+2<=7&&this.y+1<=7)
+        	moves.push(coordinatesToCell(this.x+2,this.y+1)); 
+        if(this.x+1<=7&&this.y+2<=7)
+        	moves.push(coordinatesToCell(this.x+1,this.y+2));
+        if(this.x+2<=7&&this.y-1>=0)
+        	moves.push(coordinatesToCell(this.x+2,this.y-1));
+        if(this.x+1<=7&&this.y-2>=0)
+        	moves.push(coordinatesToCell(this.x+1,this.y-2));
+        if(this.x-2>=0&&this.y+1<=7)
+        	moves.push(coordinatesToCell(this.x-2,this.y+1));
+        if(this.x-1>=0&&this.y+2<=7)
+        	moves.push(coordinatesToCell(this.x-1,this.y+2));
+        if(this.x-1>=0&&this.y-2>=0)
+        	moves.push(coordinatesToCell(this.x-1,this.y-2));
+        if(this.x-2>=0&&this.y-1>=0)
+        	moves.push(coordinatesToCell(this.x-2,this.y-1));
+
+
         return moves;
     }
     
 }
 
+Knight.prototype = Object.create(Knight.prototype);
+Knight.prototype.constructor = Knight;
+
 function Queen(){
 	Piece.call(this);
     this.getValidMoves = function(){
         var moves=[];
-        // Check for forward movement
-        if(this.y<8){
-            for(var i = this.y+1; i<=8;i++)
+        //Check for forward movement
+        if(this.y<7){
+            for(var i = this.y+1; i<8;i++)
                 moves.push(coordinatesToCell(this.x,i)); 
         }
         // Check for backward movement
-        if(this.y>1){
-            for(var i = 1; i<this.y;i++)
+        if(this.y>0){
+            for(var i = 0; i<this.y;i++)
                 moves.push(coordinatesToCell(this.x,i)); 
         }
         // Check for left movement
-        if(this.x>1){
-            for(var i = 1; i<this.x; i++)
+        if(this.x>0){
+            for(var i = 0; i<this.x; i++)
                 moves.push(coordinatesToCell(i, this.y));
         }
         // Check for right movement
-        if(this.x<8){
-        for(var i = this.x; i<=8; i++)
+        if(this.x<7){
+        for(var i = this.x+1; i<8; i++)
             moves.push(coordinatesToCell(i, this.y));
         }
-
 
 		var y1 = this.y+this.x; // left-most maximal up-most tile y coordinate for first diagonal (take note that this will never be negative in this case)
 		var y2 = this.y-this.x; // left-most maximal down-most tile y coordinate for second diagonal
@@ -257,8 +267,8 @@ function Queen(){
 			// Move down on y2
 			y2++;
 		}
-        // Return the array of possible moves
-        return moves;
+
+		return moves;
     }
 }
 
