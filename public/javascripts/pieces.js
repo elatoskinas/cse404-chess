@@ -1,13 +1,13 @@
-function Piece()
+function Piece(x, y, isWhite)
 {
 	// Piece position
-	this.x = 0;
-	this.y = 0;
+	this.x = x;
+	this.y = y;
 	
 	// Piece state
 	this.isAlive = true;
 	// we only have a boolean here because there's only 2 players
-	this.isWhite = false;
+	this.isWhite = isWhite;
 	
 	// Gets valid moves for the piece (placeholder)
 	this.getValidMoves = function() { return []; }
@@ -20,9 +20,9 @@ var coordinatesToCell = function (x, y)
 	return (String.fromCharCode(x+65)+""+(y+1));
 }
 
-function Pawn()
+function Pawn(x, y, isWhite)
 {
-	Piece.call(this);
+	Piece.call(this, x, y, isWhite);
 	
 	// Keep track if it's the first move for the Pawn
 	this.firstMove = true;
@@ -58,9 +58,9 @@ function Pawn()
 Pawn.prototype = Object.create(Piece.prototype);
 Pawn.prototype.constructor = Pawn;
 
-function Bishop()
+function Bishop(x, y, isWhite)
 {
-	Piece.call(this);
+	Piece.call(this, x, y, isWhite);
 
 	this.getValidMoves = function()
 	{
@@ -112,9 +112,9 @@ function Bishop()
 Bishop.prototype = Object.create(Piece.prototype);
 Bishop.prototype.constructor = Bishop;
 
-function King()
+function King(x, y, isWhite)
 {
-	Piece.call(this);
+	Piece.call(this, x, y, isWhite);
 
 	this.getValidMoves = function()
 	{
@@ -153,9 +153,10 @@ function King()
 King.prototype = Object.create(King.prototype);
 King.prototype.constructor = King;
 
-function Rook()
+function Rook(x, y, isWhite)
 {
-    Piece.call(this);
+	Piece.call(this, x, y, isWhite);
+
     this.getValidMoves = function(){
         var moves=[];
         // Check for forward movement
@@ -186,8 +187,9 @@ function Rook()
 Rook.prototype = Object.create(Rook.prototype);
 Rook.prototype.constructor = Rook;
 
-function Knight(){
-    Piece.call(this);
+function Knight(x, y, isWhite){
+	Piece.call(this, x, y, isWhite);
+
     this.getValidMoves = function(){
 
     	// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
@@ -218,8 +220,9 @@ function Knight(){
 Knight.prototype = Object.create(Knight.prototype);
 Knight.prototype.constructor = Knight;
 
-function Queen(){
-	Piece.call(this);
+function Queen(x, y, isWhite){
+	Piece.call(this, x, y, isWhite);
+
     this.getValidMoves = function(){
         var moves=[];
         //Check for forward movement
