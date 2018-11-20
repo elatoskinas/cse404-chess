@@ -49,7 +49,7 @@ function Pawn()
 			moves.push(coordinatesToCell(this.x, this.y+2*offset));
 		}
 
-		// Return moves array
+		// Return valid moves array
 		return moves;
 	}
 }
@@ -103,10 +103,12 @@ function Bishop()
 			y2++;
 		}
 
+		// Return valid moves array
 		return moves;
 	}
 }
 
+// Prototype redirecting
 Bishop.prototype = Object.create(Piece.prototype);
 Bishop.prototype.constructor = Bishop;
 
@@ -147,5 +149,6 @@ function King()
 	}
 }
 
+// Prototype redirecting
 King.prototype = Object.create(King.prototype);
 King.prototype.constructor = King;
