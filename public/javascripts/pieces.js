@@ -148,6 +148,7 @@ function King()
 }
 
 King.prototype = Object.create(King.prototype);
+<<<<<<< HEAD
 King.prototype.constructor = King;
 
 unction Rook()
@@ -261,3 +262,6 @@ function Queen(){
 
 Queen.prototype = Object.create(Queen.prototype);
 Queen.prototype.constructor = Queen;
+=======
+King.prototype.constructor = King;
+>>>>>>> 568d5455647ed1b9d5bbb4834b3785f87cd6d23c
