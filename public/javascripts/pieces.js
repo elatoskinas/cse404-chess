@@ -209,44 +209,45 @@ Rook.prototype.getValidMoves = function(board, x, y)
         // Check for forward movement
         if(y<7){
             for(var i = y+1; i<8;i++){
-            	if(board[x][i]==null || board[x][i].isWhite!=this.isWhite)
-                moves.push(coordinatesToCell(x,i));
-                else break;
-            
-            if(board[x][i].isWhite!=this.isWhite)
-               	break;
-           }
+            	if(board[x][i]!=null){
+            		if(board[x][i].isWhite!=this.isWhite)
+            			moves.push(coordinatesToCell(x,i));
+            		break;
+            	}
+            	else moves.push(coordinatesToCell(x,i));
+            }
         }
         // Check for backward movement
         if(y>0){
             for(var i = 0; i<y;i++){
-            	if(board[x][i]==null||board[x][i].isWhite!=this.isWhite)
-                moves.push(coordinatesToCell(x,i));
-                else break;
-            
-            if(board[x][i].isWhite!=this.isWhite)
-               	break;
+            	if(board[x][i]!=null){
+            		if(board[x][i].isWhite!=this.isWhite)
+            			moves.push(coordinatesToCell(x,i));
+            		break;
+            	}
+            	else moves.push(coordinatesToCell(x,i));
            }
         }
         // Check for left movement
         if(x>0){
             for(var i = 0; i<x; i++){
-            	if(board[i][y]==null||board[i][y].isWhite!=this.isWhite)
-                moves.push(coordinatesToCell(i, y));
-            	break;
-            
-            if(board[i][y].isWhite!=this.isWhite)
-               	break;
+            	if(board[i][y]!=null){
+            		if(board[i][y].isWhite!=this.isWhite)
+            			moves.push(coordinatesToCell(i, y));
+            		break;
+            	}
+            	else moves.push(coordinatesToCell(i, y));
            }
         }
         // Check for right movement
         if(x<7){
         for(var i = x+1; i<8; i++){
-        	if(board[i][y]==null||board[i][y].isWhite!=this.isWhite)
-            moves.push(coordinatesToCell(i, y));
-        
-        if(board[i][y].isWhite!=this.isWhite)
-               	break;
+        	if(board[i][y]!=null){
+        		if(board[x][i].isWhite!=this.isWhite)
+        			moves.push(coordinatesToCell(i, y));
+        		break;
+        		}
+        		else moves.push(coordinatesToCell(i, y));
            }
         }
         // Return the array of possible moves
