@@ -199,128 +199,112 @@ function Rook()
 =======
 // ----------------------------------------------------------------------
 
-function Rook(x, y, isWhite)
+
+function Rook(isWhite)
 >>>>>>> f9d5c1719dda05f2cc3b3593e3fbc5a6e458577f
 {
 	Piece.call(this, isWhite);
-
-    getValidMoves = function(board, x, y){
-        var moves=[];
-        // Check for forward movement
-        if(y<7){
-            for(var i = y+1; i<8;i++)
-                moves.push(coordinatesToCell(x,i)); 
-        }
-        // Check for backward movement
-        if(y>0){
-            for(var i = 0; i<y;i++)
-                moves.push(coordinatesToCell(x,i)); 
-        }
-        // Check for left movement
-        if(x>0){
-            for(var i = 0; i<x; i++)
-                moves.push(coordinatesToCell(i, y));
-        }
-        // Check for right movement
-        if(x<7){
-        for(var i = x+1; i<8; i++)
-            moves.push(coordinatesToCell(i, y));
-        }
-        // Return the array of possible moves
-        return moves;
-    }
 }
 
 Rook.prototype = Object.create(Rook.prototype);
 Rook.prototype.constructor = Rook;
 
-function Knight(){
-	Piece.call(this, isWhite);
-
-    getValidMoves = function(board, x, y){
-
-    	// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
+Rook.protoype.getValidMoves = function(board, x, y){
         var moves=[];
-        if(x+2<=7&&y+1<=7)
-        	moves.push(coordinatesToCell(x+2,y+1)); 
-        if(x+1<=7&&y+2<=7)
-        	moves.push(coordinatesToCell(x+1,y+2));
-        if(x+2<=7&&y-1>=0)
-        	moves.push(coordinatesToCell(x+2,y-1));
-        if(x+1<=7&&y-2>=0)
-        	moves.push(coordinatesToCell(x+1,y-2));
-        if(x-2>=0&&y+1<=7)
-        	moves.push(coordinatesToCell(x-2,y+1));
-        if(x-1>=0&&y+2<=7)
-        	moves.push(coordinatesToCell(x-1,y+2));
-        if(x-1>=0&&y-2>=0)
-        	moves.push(coordinatesToCell(x-1,y-2));
-        if(x-2>=0&&y-1>=0)
-        	moves.push(coordinatesToCell(x-2,y-1));
-
-
+        // Check for forward movement
+        if(y<7){
+            for(var i = y+1; i<8;i++){
+            	if(board[x][i]==null || board[x][i].isWhite!=this.isWhite)
+                moves.push(coordinatesToCell(x,i));
+                else break;
+            }
+            if(board[x][i].isWhite!=this.isWhite)
+               	break;
+        }
+        // Check for backward movement
+        if(y>0){
+            for(var i = 0; i<y;i++){
+            	if(board[x][i]==null||board[x][i].isWhite!=this.isWhite)
+                moves.push(coordinatesToCell(x,i));
+                else break;
+            }
+            if(board[x][i].isWhite!=this.isWhite)
+               	break;
+        }
+        // Check for left movement
+        if(x>0){
+            for(var i = 0; i<x; i++){
+            	if(board[i][y]==null||board[i][y].isWhite!=this.isWhite)
+                moves.push(coordinatesToCell(i, y));
+            	break;
+            }
+            if(board[i][y].isWhite!=this.isWhite)
+               	break;
+        }
+        // Check for right movement
+        if(x<7){
+        for(var i = x+1; i<8; i++){
+        	if(board[i][y]==null||board[i][y].isWhite!=this.isWhite)
+            moves.push(coordinatesToCell(i, y));
+        }
+        if(board[i][y].isWhite!=this.isWhite)
+               	break;
+        }
+        // Return the array of possible moves
         return moves;
     }
+
+function Knight(isWhite){
+	Piece.call(this, isWhite);
     
 }
 
 Knight.prototype = Object.create(Knight.prototype);
 Knight.prototype.constructor = Knight;
 
-function Queen(){
-	Piece.call(this, isWhite);
 
-    getValidMoves = function(board, x, y){
+Knight.prototype.getValidMoves = function(board, x, y){
+
+    	// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
         var moves=[];
-        //Check for forward movement
-        if(y<7){
-            for(var i = y+1; i<8;i++)
-                moves.push(coordinatesToCell(x,i)); 
-        }
-        // Check for backward movement
-        if(y>0){
-            for(var i = 0; i<y;i++)
-                moves.push(coordinatesToCell(x,i)); 
-        }
-        // Check for left movement
-        if(x>0){
-            for(var i = 0; i<x; i++)
-                moves.push(coordinatesToCell(i, y));
-        }
-        // Check for right movement
-        if(x<7){
-        for(var i = x+1; i<8; i++)
-            moves.push(coordinatesToCell(i, y));
-        }
 
-		var y1 = y+x; // left-most maximal up-most tile y coordinate for first diagonal (take note that this will never be negative in this case)
-		var y2 = y-x; // left-most maximal down-most tile y coordinate for second diagonal
+        if(x+2<=7&&y+1<=7)
+        	if(board[x+2][y+1]==null||board[x+2][y+1].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x+2,y+1)); 
+        if(x+1<=7&&y+2<=7)
+        	if(board[x+1][y+2]==null||board[x+1][y+2].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x+1,y+2));
+        if(x+2<=7&&y-1>=0)
+        	if(board[x+2][y-1]==null||board[x+2][y-1].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x+2,y-1));
+        if(x+1<=7&&y-2>=0)
+        	if(board[x+1][y-2]==null||board[x+1][y-2].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x+1,y-2));
+        if(x-2>=0&&y+1<=7)
+        	if(board[x-2][y+1]==null||board[x-2][y+1].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x-2,y+1));
+        if(x-1>=0&&y+2<=7)
+        	if(board[x-1][y+2]==null||board[x-1][y+2].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x-1,y+2));
+        if(x-1>=0&&y-2>=0)
+        	if(board[x-1][y-2]==null||board[x-1][y-2].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x-1,y-2));
+        if(x-2>=0&&y-1>=0)
+        	if(board[x-2][y-1]==null||board[x-2][y-1].isWhite!=this.isWhite)
+        	moves.push(coordinatesToCell(x-2,y-1));
 
-		// Start from the left-most cell
-		for (var x1 = 0; x1 < 8; ++x1)
-		{
-			// Check if y1 coordinate is in bounds & not equal to the piece's y coordinate
-			if (y1 != y && y1 >= 0 && y1 < 8)
-			{
-				moves.push(coordinatesToCell(x1, y1));
-			}
 
-			// Check if y2 coordinate is in bounds & not equal to the piece's y coordinate
-			if (y2 != y && y2 >= 0 && y2 < 8)
-			{
-				moves.push(coordinatesToCell(x1, y2));
-			}
-
-			// Move up on y1
-			y1--;
-
-			// Move down on y2
-			y2++;
-		}
-
-		return moves;
+        return moves;
     }
+
+
+function Queen(isWhite){
+	Piece.call(this, isWhite);
 }
 
 Queen.prototype = Object.create(Queen.prototype);
 Queen.prototype.constructor = Queen; 
+
+Queen.prototype.getValidMoves = function(board, x, y){
+	return Rook.prototype.getValidMoves(board, x, y).concat(Bishop.prototype.getValidMoves(board, x, y));
+}
