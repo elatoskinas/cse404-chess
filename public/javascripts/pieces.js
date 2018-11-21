@@ -25,13 +25,7 @@ function Pawn(isWhite)
 	
 	// Keep track if it's the first move for the Pawn
 	this.firstMove = true;
-}
-
-// Prototype redirecting
-Pawn.prototype = Object.create(Piece.prototype);
-Pawn.prototype.constructor = Pawn;
-
-Pawn.prototype.getValidMoves = function(board, x, y) {
+	this.getValidMoves = function(board, x, y) {
 	// We igonre the base case here because if a pawn reaches
 	// the end of the board, then it is no longer a pawn.
 	var moves = [];
@@ -76,17 +70,16 @@ Pawn.prototype.getValidMoves = function(board, x, y) {
 	// Return valid moves array
 	return moves;
 }
+}
+
+// Prototype redirecting
+Pawn.prototype = Object.create(Piece.prototype);
+Pawn.prototype.constructor = Pawn;
 
 function Bishop(isWhite)
 {
 	Piece.call(this, isWhite);
-}
-
-// Prototype redirecting
-Bishop.prototype = Object.create(Piece.prototype);
-Bishop.prototype.constructor = Bishop;
-
-Bishop.prototype.getValidMoves = function(board, x, y)
+	this.getValidMoves = function(board, x, y)
 {
 	var moves = [];
 
@@ -150,17 +143,17 @@ Bishop.prototype.getValidMoves = function(board, x, y)
 	// Return valid moves array
 	return moves;
 }
+}
+
+// Prototype redirecting
+Bishop.prototype = Object.create(Piece.prototype);
+Bishop.prototype.constructor = Bishop;
+
 
 function King(isWhite)
 {
 	Piece.call(this, isWhite);
-}
-
-// Prototype redirecting
-King.prototype = Object.create(King.prototype);
-King.prototype.constructor = King;
-
-King.prototype.getValidMoves = function(board, x, y)
+	this.getValidMoves = function(board, x, y)
 {
 	var moves = [];
 
@@ -193,17 +186,13 @@ King.prototype.getValidMoves = function(board, x, y)
 	// Return valid moves array
 	return moves;
 }
+}
 
 // ----------------------------------------------------------------------
 function Rook(isWhite)
 {
 	Piece.call(this, isWhite);
-}
-
-Rook.prototype = Object.create(Rook.prototype);
-Rook.prototype.constructor = Rook;
-
-Rook.prototype.getValidMoves = function(board, x, y)
+	this.getValidMoves = function(board, x, y)
 {
         var moves=[];
         // Check for forward movement
@@ -253,16 +242,19 @@ Rook.prototype.getValidMoves = function(board, x, y)
         // Return the array of possible moves
         return moves;
     }
+}
+
+// Prototype redirecting
+King.prototype = Object.create(King.prototype);
+King.prototype.constructor = King;
+
+Rook.prototype = Object.create(Rook.prototype);
+Rook.prototype.constructor = Rook;
 
 function Knight(isWhite){
 	Piece.call(this, isWhite);
-    
-}
 
-Knight.prototype = Object.create(Knight.prototype);
-Knight.prototype.constructor = Knight;
-
-Knight.prototype.getValidMoves = function(board, x, y)
+	this.getValidMoves = function(board, x, y)
 {
     	// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
         var moves=[];
@@ -295,6 +287,11 @@ Knight.prototype.getValidMoves = function(board, x, y)
 
         return moves;
 }
+    
+}
+
+Knight.prototype = Object.create(Knight.prototype);
+Knight.prototype.constructor = Knight;
 
 
 function Queen(isWhite){
