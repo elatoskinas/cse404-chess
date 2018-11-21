@@ -25,51 +25,52 @@ function Pawn(isWhite)
 	
 	// Keep track if it's the first move for the Pawn
 	this.firstMove = true;
-	this.getValidMoves = function(board, x, y) {
-	// We igonre the base case here because if a pawn reaches
-	// the end of the board, then it is no longer a pawn.
-	var moves = [];
-
-	// Offset: if piece is white, then the offset is 1.
-	var offset = 1;
-
-	// If the piece is black, then the offset is -1
-	if (!this.isWhite)
-		offset = -1;
-
-	// check if no piece is in tile
-	if (board[x][y+offset] == null)
+	this.getValidMoves = function(board, x, y)
 	{
-		// Valid move would be 1 forward
-		moves.push(coordinatesToCell(x, y+offset));
+		// We igonre the base case here because if a pawn reaches
+		// the end of the board, then it is no longer a pawn.
+		var moves = [];
 
-		// If it's the first move for the pawn, then moving 2 forward
-		// is also a valid move
-		if (this.firstMove)
+		// Offset: if piece is white, then the offset is 1.
+		var offset = 1;
+
+		// If the piece is black, then the offset is -1
+		if (!this.isWhite)
+			offset = -1;
+
+		// check if no piece is in tile
+		if (board[x][y+offset] == null)
 		{
-			// check if no piece is in tile
-			if (board[x][y+2*offset] == null)
-				moves.push(coordinatesToCell(x, y+2*offset));
+			// Valid move would be 1 forward
+			moves.push(coordinatesToCell(x, y+offset));
+
+			// If it's the first move for the pawn, then moving 2 forward
+			// is also a valid move
+			if (this.firstMove)
+			{
+				// check if no piece is in tile
+				if (board[x][y+2*offset] == null)
+					moves.push(coordinatesToCell(x, y+2*offset));
+			}
 		}
-	}
 
-	// opponent's piece exists 1 to the left 1 forward
-	if (x-1 >= 0 && board[x-1][y+offset] != null
-		&& board[x-1][y+offset].isWhite != this.isWhite)
-	{
-		moves.push(coordinatesToCell(x-1, y+offset));
-	}
+		// opponent's piece exists 1 to the left 1 forward
+		if (x-1 >= 0 && board[x-1][y+offset] != null
+			&& board[x-1][y+offset].isWhite != this.isWhite)
+		{
+			moves.push(coordinatesToCell(x-1, y+offset));
+		}
 
-	// opponent's piece exists 1 to the right 1 forward
-	if (x+1 < 8 && board[x+1][y+offset] != null
-		&& board[x+1][y+offset].isWhite != this.isWhite)
-	{
-		moves.push(coordinatesToCell(x+1, y+offset));
-	}
+		// opponent's piece exists 1 to the right 1 forward
+		if (x+1 < 8 && board[x+1][y+offset] != null
+			&& board[x+1][y+offset].isWhite != this.isWhite)
+		{
+			moves.push(coordinatesToCell(x+1, y+offset));
+		}
 
-	// Return valid moves array
-	return moves;
-}
+		// Return valid moves array
+		return moves;
+	}
 }
 
 // Prototype redirecting
@@ -79,121 +80,127 @@ Pawn.prototype.constructor = Pawn;
 function Bishop(isWhite)
 {
 	Piece.call(this, isWhite);
+
 	this.getValidMoves = function(board, x, y)
-{
-	var moves = [];
-
-	// Instantiate traversal pairs with initial possibility of traversal
-	var traversePairs =
-	[
-		{ "possible":true, "x":-1,  "y":-1  },
-		{ "possible":true, "x":-1,  "y": 1  },
-		{ "possible":true, "x": 1,  "y":-1  },
-		{ "possible":true, "x": 1,  "y": 1  }
-	]
-
-	// Initialize offset
-	var offset = 0;
-
-	while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible)
 	{
-		// Increase offset
-		offset++;
+		var moves = [];
 
-		// Iterate through all traversal pairs
-		for (var i = 0; i < 4; ++i)
+		// Instantiate traversal pairs with initial possibility of traversal
+		var traversePairs =
+		[
+			{ "possible":true, "x":-1,  "y":-1  },
+			{ "possible":true, "x":-1,  "y": 1  },
+			{ "possible":true, "x": 1,  "y":-1  },
+			{ "possible":true, "x": 1,  "y": 1  }
+		]
+
+		// Initialize offset
+		var offset = 0;
+
+		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible)
 		{
-			// Check if it's possible to traverse in possible combination
-			if (traversePairs[i].possible)
+			// Increase offset
+			offset++;
+
+			// Iterate through all traversal pairs
+			for (var i = 0; i < 4; ++i)
 			{
-				// Calculate new x and new y
-				var new_x = x + traversePairs[i].x*offset;
-				var new_y = y + traversePairs[i].y*offset;
-
-				// Check if in bounds, if not, then traversal with this combination is invalid from now on
-				if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
+				// Check if it's possible to traverse in possible combination
+				if (traversePairs[i].possible)
 				{
-					traversePairs[i].possible = false;
-					continue;
-				}
-				else
-				{
-					// Keep track whether move should be added
-					var addMove = true;
+					// Calculate new x and new y
+					var new_x = x + traversePairs[i].x*offset;
+					var new_y = y + traversePairs[i].y*offset;
 
-					// Check if something is in tile
-					if (board[new_x][new_y] != null)
+					// Check if in bounds, if not, then traversal with this combination is invalid from now on
+					if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
 					{
-						// If it is, then future traversals will no longer be possible, since this piece is blocking the "road"
 						traversePairs[i].possible = false;
-
-						// If the piece is of the same color, then taking the piece is impossible (move is invalid on that piece)
-						if (board[new_x][new_y].isWhite == this.isWhite)
-							addMove = false;
+						continue;
 					}
+					else
+					{
+						// Keep track whether move should be added
+						var addMove = true;
 
-					// Add move if it's not same color piece
-					if (addMove)
-						moves.push(coordinatesToCell(new_x, new_y));
+						// Check if something is in tile
+						if (board[new_x][new_y] != null)
+						{
+							// If it is, then future traversals will no longer be possible, since this piece is blocking the "road"
+							traversePairs[i].possible = false;
+
+							// If the piece is of the same color, then taking the piece is impossible (move is invalid on that piece)
+							if (board[new_x][new_y].isWhite == this.isWhite)
+								addMove = false;
+						}
+
+						// Add move if it's not same color piece
+						if (addMove)
+							moves.push(coordinatesToCell(new_x, new_y));
+					}
 				}
 			}
 		}
-	}
 
-	// Return valid moves array
-	return moves;
-}
+		// Return valid moves array
+		return moves;
+	}
 }
 
 // Prototype redirecting
 Bishop.prototype = Object.create(Piece.prototype);
 Bishop.prototype.constructor = Bishop;
 
-
 function King(isWhite)
 {
 	Piece.call(this, isWhite);
+
 	this.getValidMoves = function(board, x, y)
-{
-	var moves = [];
-
-	// Consider all possible movement pairs
-	// (-1,-1), (-1, 0), (-1, 1), (0, -1), ...
-	for (var i = -1; i <= 1; ++i)
 	{
-		for (var j = -1; j <= 1; ++j)
-		{
-			// Moving to the same place as current position is
-			// not a valid move, so we do not consider it here
-			if (i == 0 && j == 0)
-				continue;
-			
-			// Initialize new x and new y values for movement
-			var new_x = x + i;
-			var new_y = y + j;
+		var moves = [];
 
-			// Check if they're not out of bounds
-			if (new_x >= 0 && new_x != 8
-				&& new_y >= 0 && new_y != 8)
+		// Consider all possible movement pairs
+		// (-1,-1), (-1, 0), (-1, 1), (0, -1), ...
+		for (var i = -1; i <= 1; ++i)
+		{
+			for (var j = -1; j <= 1; ++j)
 			{
-				// If tile is empty or contains opponent's piece, then this is a valid move
-				if (board[new_x][new_y] == null || board[new_x][new_y].isWhite != this.isWhite)
-					moves.push(coordinatesToCell(new_x, new_y));
+				// Moving to the same place as current position is
+				// not a valid move, so we do not consider it here
+				if (i == 0 && j == 0)
+					continue;
+				
+				// Initialize new x and new y values for movement
+				var new_x = x + i;
+				var new_y = y + j;
+
+				// Check if they're not out of bounds
+				if (new_x >= 0 && new_x != 8
+					&& new_y >= 0 && new_y != 8)
+				{
+					// If tile is empty or contains opponent's piece, then this is a valid move
+					if (board[new_x][new_y] == null || board[new_x][new_y].isWhite != this.isWhite)
+						moves.push(coordinatesToCell(new_x, new_y));
+				}
 			}
 		}
-	}
 
-	// Return valid moves array
-	return moves;
+		// Return valid moves array
+		return moves;
+	}
 }
-}
+
+// Prototype redirecting
+King.prototype = Object.create(King.prototype);
+King.prototype.constructor = King;
 
 // ----------------------------------------------------------------------
 function Rook(isWhite)
 {
 	Piece.call(this, isWhite);
+
 	this.getValidMoves = function(board, x, y)
-{
+	{
         var moves=[];
         // Check for forward movement
         if(y<7){
@@ -244,10 +251,6 @@ function Rook(isWhite)
     }
 }
 
-// Prototype redirecting
-King.prototype = Object.create(King.prototype);
-King.prototype.constructor = King;
-
 Rook.prototype = Object.create(Rook.prototype);
 Rook.prototype.constructor = Rook;
 
@@ -255,39 +258,38 @@ function Knight(isWhite){
 	Piece.call(this, isWhite);
 
 	this.getValidMoves = function(board, x, y)
-{
-    	// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
-        var moves=[];
+	{
+			// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
+			var moves=[];
 
-        if(x+2<=7&&y+1<=7)
-        	if(board[x+2][y+1]==null||board[x+2][y+1].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x+2,y+1)); 
-        if(x+1<=7&&y+2<=7)
-        	if(board[x+1][y+2]==null||board[x+1][y+2].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x+1,y+2));
-        if(x+2<=7&&y-1>=0)
-        	if(board[x+2][y-1]==null||board[x+2][y-1].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x+2,y-1));
-        if(x+1<=7&&y-2>=0)
-        	if(board[x+1][y-2]==null||board[x+1][y-2].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x+1,y-2));
-        if(x-2>=0&&y+1<=7)
-        	if(board[x-2][y+1]==null||board[x-2][y+1].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x-2,y+1));
-        if(x-1>=0&&y+2<=7)
-        	if(board[x-1][y+2]==null||board[x-1][y+2].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x-1,y+2));
-        if(x-1>=0&&y-2>=0)
-        	if(board[x-1][y-2]==null||board[x-1][y-2].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x-1,y-2));
-        if(x-2>=0&&y-1>=0)
-        	if(board[x-2][y-1]==null||board[x-2][y-1].isWhite!=this.isWhite)
-        	moves.push(coordinatesToCell(x-2,y-1));
+			if(x+2<=7&&y+1<=7)
+				if(board[x+2][y+1]==null||board[x+2][y+1].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x+2,y+1)); 
+			if(x+1<=7&&y+2<=7)
+				if(board[x+1][y+2]==null||board[x+1][y+2].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x+1,y+2));
+			if(x+2<=7&&y-1>=0)
+				if(board[x+2][y-1]==null||board[x+2][y-1].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x+2,y-1));
+			if(x+1<=7&&y-2>=0)
+				if(board[x+1][y-2]==null||board[x+1][y-2].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x+1,y-2));
+			if(x-2>=0&&y+1<=7)
+				if(board[x-2][y+1]==null||board[x-2][y+1].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x-2,y+1));
+			if(x-1>=0&&y+2<=7)
+				if(board[x-1][y+2]==null||board[x-1][y+2].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x-1,y+2));
+			if(x-1>=0&&y-2>=0)
+				if(board[x-1][y-2]==null||board[x-1][y-2].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x-1,y-2));
+			if(x-2>=0&&y-1>=0)
+				if(board[x-2][y-1]==null||board[x-2][y-1].isWhite!=this.isWhite)
+				moves.push(coordinatesToCell(x-2,y-1));
 
 
-        return moves;
-}
-    
+			return moves;
+	}
 }
 
 Knight.prototype = Object.create(Knight.prototype);
@@ -296,11 +298,23 @@ Knight.prototype.constructor = Knight;
 
 function Queen(isWhite){
 	Piece.call(this, isWhite);
+
+	this.getValidMoves = function(board, x, y)
+	{
+		var tempRook = new Rook(this.isWhite);
+		var tempBishop = new Bishop(this.isWhite);
+
+		var array1 = tempRook.getValidMoves(board, x, y);
+		var array2 = tempBishop.getValidMoves(board, x, y);
+
+		tempRook = null;
+		tempBishop = null;
+
+		var moves = array1.concat(array2);
+		
+		return moves;
+	}
 }
 
 Queen.prototype = Object.create(Queen.prototype);
-Queen.prototype.constructor = Queen; 
-
-Queen.prototype.getValidMoves = function(board, x, y){
-	return Rook.prototype.getValidMoves(board, x, y).concat(Bishop.prototype.getValidMoves(board, x, y));
-}
+Queen.prototype.constructor = Queen;
