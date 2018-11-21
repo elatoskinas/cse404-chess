@@ -25,7 +25,6 @@ function Game(id, p1, p2)
 	// A boolean to indicate which player is active, true = player one (white).
 	var activePlayer = true;
   
-  
 	this.board = []; // the board (a bidimensional array)
 
 	// NOTE: when referencing pieces (such as board[1][3]),
@@ -83,6 +82,12 @@ function Game(id, p1, p2)
 			this.board[i][1] = new Pawn(true); // add White Pawn
 			this.board[i][6] = new Pawn(false); // add Black Pawn
 		}
+	}
+	
+	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
+	this.movePiece = function(x1, y1, x2, y2)
+	{
+		// code here
 	}
 
 	/* Starts a game */

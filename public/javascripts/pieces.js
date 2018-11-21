@@ -14,6 +14,14 @@ var coordinatesToCell = function (x, y)
 	return (String.fromCharCode(x+65)+""+(y+1));
 }
 
+// Converts cell string to x and y coordinate pair
+var cellToCoordinates = function(cell)
+{
+	var x = cell.charCodeAt(0)-65; // Convert first cell character to ASCII code (int) and subtract 65 offset (A = 65, B = 66, ...)
+	var y = parseInt(cell.charAt(1)) - 1; // convert second cell character to integer (0 based, hence the -1)
+	return ([x, y]); // return x and y pair as array
+}
+
 function Pawn(isWhite)
 {
 	Piece.call(this, isWhite);
