@@ -1,11 +1,5 @@
-function Piece(x, y, isWhite)
-{
-	// Piece position
-	this.x = x;
-	this.y = y;
-	
-	// Piece state
-	this.isAlive = true;
+function Piece(isWhite)
+{	
 	// we only have a boolean here because there's only 2 players
 	this.isWhite = isWhite;
 	
@@ -20,14 +14,22 @@ var coordinatesToCell = function (x, y)
 	return (String.fromCharCode(x+65)+""+(y+1));
 }
 
-function Pawn(x, y, isWhite)
+// Converts cell string to x and y coordinate pair
+var cellToCoordinates = function(cell)
 {
-	Piece.call(this, x, y, isWhite);
+	var x = cell.charCodeAt(0)-65; // Convert first cell character to ASCII code (int) and subtract 65 offset (A = 65, B = 66, ...)
+	var y = parseInt(cell.charAt(1)) - 1; // convert second cell character to integer (0 based, hence the -1)
+	return ([x, y]); // return x and y pair as array
+}
+
+function Pawn(isWhite)
+{
+	Piece.call(this, isWhite);
 	
 	// Keep track if it's the first move for the Pawn
 	this.firstMove = true;
 	
-	this.getValidMoves = function() {
+	this.getValidMoves = function(board, x, y) {
 		// We igonre the base case here because if a pawn reaches
 		// the end of the board, then it is no longer a pawn.
 		var moves = [];
@@ -39,14 +41,34 @@ function Pawn(x, y, isWhite)
 		if (!this.isWhite)
 			offset = -1;
 	
-		// Valid move would be 1 forward
-		moves.push(coordinatesToCell(this.x, this.y+offset));
-
-		// If it's the first move for the pawn, then moving 2 forward
-		// is also a valid move
-		if (this.firstMove)
+		// check if no piece is in tile
+		if (board[x][y+offset] == null)
 		{
-			moves.push(coordinatesToCell(this.x, this.y+2*offset));
+			// Valid move would be 1 forward
+			moves.push(coordinatesToCell(x, y+offset));
+
+			// If it's the first move for the pawn, then moving 2 forward
+			// is also a valid move
+			if (this.firstMove)
+			{
+				// check if no piece is in tile
+				if (board[x][y+2*offset] == null)
+					moves.push(coordinatesToCell(x, y+2*offset));
+			}
+		}
+
+		// opponent's piece exists 1 to the left 1 forward
+		if (x-1 >= 0 && board[x-1][y+offset] != null
+			&& board[x-1][y+offset].isWhite != this.isWhite)
+		{
+			moves.push(coordinatesToCell(x-1, y+offset));
+		}
+
+		// opponent's piece exists 1 to the right 1 forward
+		if (x+1 < 8 && board[x+1][y+offset] != null
+			&& board[x+1][y+offset].isWhite != this.isWhite)
+		{
+			moves.push(coordinatesToCell(x+1, y+offset));
 		}
 
 		// Return valid moves array
@@ -58,49 +80,69 @@ function Pawn(x, y, isWhite)
 Pawn.prototype = Object.create(Piece.prototype);
 Pawn.prototype.constructor = Pawn;
 
-function Bishop(x, y, isWhite)
+function Bishop(isWhite)
 {
-	Piece.call(this, x, y, isWhite);
+	Piece.call(this, isWhite);
 
-	this.getValidMoves = function()
+	this.getValidMoves = function(board, x, y)
 	{
 		var moves = [];
 
-		// The trick here to perform everything in one compact loop is to take a few things into account:
-		// 1.When moving diagonally, it is possible to move up-left, up-right, down-left, down-right
-		// 2.These two diagonal lines clash at one point = the current y and x coordinate
-		// 3.Each movement adds/subtracts 1 from x and adds/subtracts 1 from y, ALWAYS! (so there are 4 possible combinations of movements)
-		// 4.Maximum number of diagonal movements to the left is equal to the current x coordinate (0 based!), since after x movements to the left
-		//   we arrive at x = 0.
+		// Instantiate traversal pairs with initial possibility of traversal
+		var traversePairs =
+		[
+			{ "possible":true, "x":-1,  "y":-1  },
+			{ "possible":true, "x":-1,  "y": 1  },
+			{ "possible":true, "x": 1,  "y":-1  },
+			{ "possible":true, "x": 1,  "y": 1  }
+		]
 
-		// Now, taking all this into consideration, we can start both diagonal movements from the left-most part of the board (at x = 0, or the A column)
-		// Then, we iterate until the end, taking only the valid movements into account, and incrementing and decrementing the respective y values
-		// Here, we will represent two y values y1 and y2, one is for one diagonal, the other is for the other. One diagonal climbs up as we go
-		// left, the other climbs down as we go left.
+		// Initialize offset
+		var offset = 0;
 
-		var y1 = this.y+this.x; // left-most maximal up-most tile y coordinate for first diagonal (take note that this will never be negative in this case)
-		var y2 = this.y-this.x; // left-most maximal down-most tile y coordinate for second diagonal
-
-		// Start from the left-most cell
-		for (var x1 = 0; x1 < 8; ++x1)
+		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible)
 		{
-			// Check if y1 coordinate is in bounds & not equal to the piece's y coordinate
-			if (y1 != this.y && y1 >= 0 && y1 < 8)
+			// Increase offset
+			offset++;
+
+			// Iterate through all traversal pairs
+			for (var i = 0; i < 4; ++i)
 			{
-				moves.push(coordinatesToCell(x1, y1));
+				// Check if it's possible to traverse in possible combination
+				if (traversePairs[i].possible)
+				{
+					// Calculate new x and new y
+					var new_x = x + traversePairs[i].x*offset;
+					var new_y = y + traversePairs[i].y*offset;
+
+					// Check if in bounds, if not, then traversal with this combination is invalid from now on
+					if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
+					{
+						traversePairs[i].possible = false;
+						continue;
+					}
+					else
+					{
+						// Keep track whether move should be added
+						var addMove = true;
+
+						// Check if something is in tile
+						if (board[new_x][new_y] != null)
+						{
+							// If it is, then future traversals will no longer be possible, since this piece is blocking the "road"
+							traversePairs[i].possible = false;
+
+							// If the piece is of the same color, then taking the piece is impossible (move is invalid on that piece)
+							if (board[new_x][new_y].isWhite == this.isWhite)
+								addMove = false;
+						}
+
+						// Add move if it's not same color piece
+						if (addMove)
+							moves.push(coordinatesToCell(new_x, new_y));
+					}
+				}
 			}
-
-			// Check if y2 coordinate is in bounds & not equal to the piece's y coordinate
-			if (y2 != this.y && y2 >= 0 && y2 < 8)
-			{
-				moves.push(coordinatesToCell(x1, y2));
-			}
-
-			// Move up on y1
-			y1--;
-
-			// Move down on y2
-			y2++;
 		}
 
 		// Return valid moves array
@@ -112,11 +154,11 @@ function Bishop(x, y, isWhite)
 Bishop.prototype = Object.create(Piece.prototype);
 Bishop.prototype.constructor = Bishop;
 
-function King(x, y, isWhite)
+function King(isWhite)
 {
-	Piece.call(this, x, y, isWhite);
+	Piece.call(this, isWhite);
 
-	this.getValidMoves = function()
+	this.getValidMoves = function(board, x, y)
 	{
 		var moves = [];
 
@@ -132,14 +174,16 @@ function King(x, y, isWhite)
 					continue;
 				
 				// Initialize new x and new y values for movement
-				var new_x = this.x + i;
-				var new_y = this.y + j;
+				var new_x = x + i;
+				var new_y = y + j;
 
 				// Check if they're not out of bounds
 				if (new_x >= 0 && new_x != 8
 					&& new_y >= 0 && new_y != 8)
 				{
-					moves.push(coordinatesToCell(new_x, new_y));
+					// If tile is empty or contains opponent's piece, then this is a valid move
+					if (board[new_x][new_y] == null || board[new_x][new_y].isWhite != this.isWhite)
+						moves.push(coordinatesToCell(new_x, new_y));
 				}
 			}
 		}
@@ -153,7 +197,13 @@ function King(x, y, isWhite)
 King.prototype = Object.create(King.prototype);
 King.prototype.constructor = King;
 
+<<<<<<< HEAD
 function Rook()
+=======
+// ----------------------------------------------------------------------
+
+function Rook(x, y, isWhite)
+>>>>>>> f9d5c1719dda05f2cc3b3593e3fbc5a6e458577f
 {
 	Piece.call(this, isWhite);
 
