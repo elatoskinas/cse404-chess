@@ -1,3 +1,4 @@
+/* Test method */
 var testPiece = function(piece, board, x, y)
 {
     var validMoves = piece.getValidMoves(board, x, y);
@@ -26,3 +27,14 @@ var testPiece = function(piece, board, x, y)
 
       return testBoard;
 }
+
+var main = function()
+{
+  var g = new Game();
+  g.startGame();
+
+  // Tests here
+  console.log(testPiece(g.board[0][0], g.board, 0, 0));
+}
+
+$(document).ready(main);
