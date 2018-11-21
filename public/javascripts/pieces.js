@@ -194,13 +194,7 @@ King.prototype.getValidMoves = function(board, x, y)
 	return moves;
 }
 
-<<<<<<< HEAD
-function Rook()
-=======
-// ----------------------------------------------------------------------
-
-function Rook(x, y, isWhite)
->>>>>>> f9d5c1719dda05f2cc3b3593e3fbc5a6e458577f
+function Rook(isWhite)
 {
 	Piece.call(this, isWhite);
 
@@ -234,7 +228,7 @@ function Rook(x, y, isWhite)
 Rook.prototype = Object.create(Rook.prototype);
 Rook.prototype.constructor = Rook;
 
-function Knight(){
+function Knight(isWhite){
 	Piece.call(this, isWhite);
 
     getValidMoves = function(board, x, y){
@@ -267,7 +261,7 @@ function Knight(){
 Knight.prototype = Object.create(Knight.prototype);
 Knight.prototype.constructor = Knight;
 
-function Queen(){
+function Queen(isWhite){
 	Piece.call(this, isWhite);
 
     getValidMoves = function(board, x, y){
