@@ -194,18 +194,9 @@ King.prototype.getValidMoves = function(board, x, y)
 	return moves;
 }
 
-<<<<<<< HEAD
-function Rook(isWhite)
-=======
-<<<<<<< HEAD
-function Rook()
-=======
 // ----------------------------------------------------------------------
 
-
 function Rook(isWhite)
->>>>>>> f9d5c1719dda05f2cc3b3593e3fbc5a6e458577f
->>>>>>> 6a3d787bc7e63cf2a4a60469883717c6388aa50f
 {
 	Piece.call(this, isWhite);
 }
@@ -213,7 +204,8 @@ function Rook(isWhite)
 Rook.prototype = Object.create(Rook.prototype);
 Rook.prototype.constructor = Rook;
 
-Rook.protoype.getValidMoves = function(board, x, y){
+Rook.prototype.getValidMoves = function(board, x, y)
+{
         var moves=[];
         // Check for forward movement
         if(y<7){
@@ -266,14 +258,8 @@ function Knight(isWhite){
 Knight.prototype = Object.create(Knight.prototype);
 Knight.prototype.constructor = Knight;
 
-<<<<<<< HEAD
-function Knight(isWhite){
-	Piece.call(this, isWhite);
-=======
->>>>>>> 6a3d787bc7e63cf2a4a60469883717c6388aa50f
-
-Knight.prototype.getValidMoves = function(board, x, y){
-
+Knight.prototype.getValidMoves = function(board, x, y)
+{
     	// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
         var moves=[];
 
@@ -304,7 +290,7 @@ Knight.prototype.getValidMoves = function(board, x, y){
 
 
         return moves;
-    }
+}
 
 
 function Queen(isWhite){
