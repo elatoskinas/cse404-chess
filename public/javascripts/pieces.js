@@ -194,14 +194,7 @@ King.prototype.getValidMoves = function(board, x, y)
 	return moves;
 }
 
-<<<<<<< HEAD
-function Rook()
-=======
-// ----------------------------------------------------------------------
-
-
 function Rook(isWhite)
->>>>>>> f9d5c1719dda05f2cc3b3593e3fbc5a6e458577f
 {
 	Piece.call(this, isWhite);
 }
@@ -217,9 +210,10 @@ Rook.protoype.getValidMoves = function(board, x, y){
             	if(board[x][i]==null || board[x][i].isWhite!=this.isWhite)
                 moves.push(coordinatesToCell(x,i));
                 else break;
-            }
+            
             if(board[x][i].isWhite!=this.isWhite)
                	break;
+           }
         }
         // Check for backward movement
         if(y>0){
@@ -227,9 +221,10 @@ Rook.protoype.getValidMoves = function(board, x, y){
             	if(board[x][i]==null||board[x][i].isWhite!=this.isWhite)
                 moves.push(coordinatesToCell(x,i));
                 else break;
-            }
+            
             if(board[x][i].isWhite!=this.isWhite)
                	break;
+           }
         }
         // Check for left movement
         if(x>0){
@@ -237,18 +232,20 @@ Rook.protoype.getValidMoves = function(board, x, y){
             	if(board[i][y]==null||board[i][y].isWhite!=this.isWhite)
                 moves.push(coordinatesToCell(i, y));
             	break;
-            }
+            
             if(board[i][y].isWhite!=this.isWhite)
                	break;
+           }
         }
         // Check for right movement
         if(x<7){
         for(var i = x+1; i<8; i++){
         	if(board[i][y]==null||board[i][y].isWhite!=this.isWhite)
             moves.push(coordinatesToCell(i, y));
-        }
+        
         if(board[i][y].isWhite!=this.isWhite)
                	break;
+           }
         }
         // Return the array of possible moves
         return moves;
