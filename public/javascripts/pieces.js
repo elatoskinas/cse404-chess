@@ -219,7 +219,7 @@ Rook.prototype.getValidMoves = function(board, x, y)
         }
         // Check for backward movement
         if(y>0){
-            for(var i = 0; i<y;i++){
+            for(var i = y-1; i>=0;i--){
             	if(board[x][i]!=null){
             		if(board[x][i].isWhite!=this.isWhite)
             			moves.push(coordinatesToCell(x,i));
@@ -230,7 +230,7 @@ Rook.prototype.getValidMoves = function(board, x, y)
         }
         // Check for left movement
         if(x>0){
-            for(var i = 0; i<x; i++){
+            for(var i = x-1; i>=0; i--){
             	if(board[i][y]!=null){
             		if(board[i][y].isWhite!=this.isWhite)
             			moves.push(coordinatesToCell(i, y));
@@ -243,7 +243,7 @@ Rook.prototype.getValidMoves = function(board, x, y)
         if(x<7){
         for(var i = x+1; i<8; i++){
         	if(board[i][y]!=null){
-        		if(board[x][i].isWhite!=this.isWhite)
+        		if(board[i][y].isWhite!=this.isWhite)
         			moves.push(coordinatesToCell(i, y));
         		break;
         		}
