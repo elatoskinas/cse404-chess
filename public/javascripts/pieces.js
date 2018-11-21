@@ -299,11 +299,23 @@ Knight.prototype.getValidMoves = function(board, x, y)
 
 function Queen(isWhite){
 	Piece.call(this, isWhite);
+
+	this.getValidMoves = function(board, x, y)
+	{
+		var tempRook = new Rook(this.isWhite);
+		var tempBishop = new Bishop(this.isWhite);
+
+		var array1 = tempRook.getValidMoves(board, x, y);
+		var array2 = tempBishop.getValidMoves(board, x, y);
+
+		tempRook = null;
+		tempBishop = null;
+
+		var moves = array1.concat(array2);
+		
+		return moves;
+	}
 }
 
 Queen.prototype = Object.create(Queen.prototype);
-Queen.prototype.constructor = Queen; 
-
-Queen.prototype.getValidMoves = function(board, x, y){
-	return Rook.prototype.getValidMoves(board, x, y).concat(Bishop.prototype.getValidMoves(board, x, y));
-}
+Queen.prototype.constructor = Queen;
