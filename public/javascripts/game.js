@@ -88,6 +88,17 @@ function Game(id, p1, p2)
 	this.movePiece = function(x1, y1, x2, y2)
 	{
 		// code here
+
+		// update player turn accordingly after movement
+		
+		// detect if piece conquered
+		// pass to side panel method
+	}
+
+	/* Add history entry to side panel */
+	this.addToSidePanel = function(source, dest, piece, conquered)
+	{
+
 	}
 
 	/* Starts a game */
@@ -98,4 +109,25 @@ function Game(id, p1, p2)
 
 		console.log(this.board);
 	}
+
+	/* Tile clicked event */
+	$(".chess-tile").on("click", function (event)
+    {
+		console.log("tile clicked");
+
+		/* If no piece selected
+			* Is something in tile?
+				> YES:
+					- Check if it's the current player's piece, then highlight valid movement tiles and highlight the tile/piece
+				> NO:
+					- Blink tile in red
+
+			If piece selected
+				* Is something in tile?
+					> Player's piece: select new piece
+					> Remove opponent's piece from game (if move is valid)
+				* Move piece (if move is valid)
+				* Else blink tile in red if move is not valid
+		*/
+    });
 }
