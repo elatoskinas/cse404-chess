@@ -26,7 +26,7 @@ function Game(id, p1, p2)
 	var activePlayer = true;
 
 	// A pair of coordinates to indicate which piece is selected (if nothing is selected, then this is an empty array)
-	var selectedPiece = [];
+	this.selectedPiece = [];
   
 	this.board = []; // the board (a bidimensional array)
 
@@ -150,31 +150,50 @@ function Game(id, p1, p2)
 		// First and foremost, check if it's the correct Player's turn (let's use this boolean as a temporary placeholder)
 		var playerTurn = true;
 
+		// Check if the player may make a turn
 		if (playerTurn)
 		{
-			if (selectedPiece.length == 0)
+			// Check if some piece is selected by the player
+			if (this.selectedPiece.length == 0)
 			{
-
+				// Check if a piece is already in the tile
+				if (piece != null)
+				{
+					if (playerTurn == piece.isWhite) // Piece color matches Player
+					{
+						// Highlight valid movement tiles and highlight the tile/piece
+					}
+					else
+					{
+						// Blink tile in red
+					}
+				}
+				else
+				{
+					// Blink tile in red
+				}
 			}
-			else
+			else // Piece is already selected by Player
 			{
-
+				// Check if a piece is already in the tile
+				if (piece != null)
+				{
+					if (playerTurn == piece.isWhite) // Piece color matches Player
+					{
+						// Reselect piece
+					}
+					else // Enemy's piece selected
+					{
+						// Move piece if move is valid
+						// Blink in red if move is not valid
+					}
+				}
+				else
+				{
+					// Move piece (if move is valid)
+					// Else blink in red if move is not valid
+				}
 			}
 		}
-
-		/* If no piece selected
-			* Is something in tile?
-				> YES:
-					- Check if it's the current player's piece, then highlight valid movement tiles and highlight the tile/piece
-				> NO:
-					- Blink tile in red
-
-			If piece selected
-				* Is something in tile?
-					> Player's piece: select new piece
-					> Remove opponent's piece from game (if move is valid)
-				* Move piece (if move is valid)
-				* Else blink tile in red if move is not valid
-		*/
 	}
 }
