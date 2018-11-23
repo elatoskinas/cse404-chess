@@ -32,7 +32,7 @@ var testPiece = function(piece, board, x, y)
 
 var main = function()
 {
-  var g = new Game();
+  /*var g = new Game();
   g.startGame();
 
   // Tests here
@@ -42,6 +42,7 @@ var main = function()
   console.log(testPiece(g.board[3][0], g.board, 2, 3));
   console.log(testPiece(g.board[4][0], g.board, 2, 3));
   console.log(testPiece(g.board[4][1], g.board, 2, 3));
+  */
 }
 
 $(document).ready(main);
