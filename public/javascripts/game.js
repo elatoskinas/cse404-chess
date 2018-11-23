@@ -89,7 +89,7 @@ function Game(id, p1, p2)
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
 	this.movePiece = function(x1, y1, x2, y2)
-	{	
+	{
 		// Declaring the source and the destination for readibility
 		var source = coordinatesToCell(x1, y1);
 		var dest = coordinatesToCell(x2, y2);
