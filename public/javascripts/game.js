@@ -122,11 +122,25 @@ function Game(id, p1, p2)
 	/* Add history entry to side panel */
 	this.addToSidePanel = function(source, dest, piece, conquered)
 	{
+		// Instantiate piece images
 		var $image1 = $("<img>");
-		var $text = $("<p>");
 		var $image2 = $("<img>");
+<<<<<<< HEAD
 		var $tableEntry = $("<p>");
 		var translateText = source + "->" + dest;
+=======
+
+		// Instantiate move text (src -> dst)
+		var $text = $("<p>").text(source + "->" + dest);
+
+		// Initialize new table entry div
+		var $tableEntry = $("<div class=\"table-entry\">");
+
+		// Append images & text to table entry
+		$tableEntry.append($image1);
+		$tableEntry.append($text);
+		$tableEntry.append($image2);
+>>>>>>> 6075778f075d4f7d81a7a869e0fe3aec076400b7
 	}
 
 	/* Starts a game */
