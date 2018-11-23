@@ -16,14 +16,14 @@ function Game(id, p1, p2)
 		3 = draw
 		4 = one of the players disconnected
 	*/
-	var gameState = 0;
+	this.gameState = 0;
 
 	// Booleans to indicate the check status for each player
-	var playerOneCheck = false;
-	var playerTwoCheck = false;
+	this.playerOneCheck = false;
+	this.playerTwoCheck = false;
 
 	// A boolean to indicate which player is active, true = player one (white).
-	var activePlayer = true;
+	this.activePlayer = true;
 
 	// The cell of the selected piece (if nothing is selected, this is simply an empty string)
 	this.selectedPiece = "";
@@ -89,13 +89,21 @@ function Game(id, p1, p2)
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
 	this.movePiece = function(x1, y1, x2, y2)
-	{
-		// code here
+	{	
+		// Declaring the source and the destination for readibility
+		var source = coordinatesToCell(x1, y1);
+		var dest = coordinatesToCell(x2, y2);
 
-		// update player turn accordingly after movement
+		// Adding the move to the side panel
+		this.addToSidePanel(source, dest, this.board[x1][x2], this.board[x2][y2]);
 		
-		// detect if piece conquered
-		// pass to side panel method
+		// Moving the piece from the source to the destination and clearing the destination
+		this.board[x2][y2]=	this.board[x1][y1];
+		this.board[x1][y1] = null;
+		
+		// Updating the active player
+		this.activePlayer=!this.activePlayer;
+		console.log(this.activePlayer);
 	}
 
 	/* Add history entry to side panel */
