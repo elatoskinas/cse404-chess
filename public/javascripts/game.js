@@ -168,8 +168,6 @@ function Game(id, p1, p2)
 		// First and foremost, check if it's the correct Player's turn (let's use this boolean as a temporary placeholder)
 		var playerTurn = true;
 
-		
-
 		// Check if the player may make a turn
 		if (playerTurn)
 		{
@@ -207,8 +205,8 @@ function Game(id, p1, p2)
 					else // Enemy's piece selected
 					{
 						// Move piece (if move is valid)
-						if(availableMoves.includes(cellCoordinates)){
-								this.movePiece(selectedPiece, cell);
+						if(this.availableMoves.includes(cell)){
+								this.movePiece(this.selectedPiece, cell);
 						}
 						// Blink in red if move is not valid
 					}
@@ -216,8 +214,8 @@ function Game(id, p1, p2)
 				else
 				{
 					// Move piece (if move is valid)
-					if(availableMoves.includes(cellCoordinates)){
-						this.movePiece(selectedPiece, cell);
+					if(this.availableMoves.includes(cell)){
+						this.movePiece(this.selectedPiece, cell);
 					}
 					// Else blink in red if move is not valid
 				}
@@ -244,9 +242,8 @@ function Game(id, p1, p2)
 		if (cell != "")
 		{
 			// Highlight new piece & display valid moves
-			// Store valid moves in array
-			this.availableMoves=piece.getValidMoves();
-
+			var movePair = cellToCoordinates(cell);
+			this.availableMoves=piece.getValidMoves(this.board, movePair[0], movePair[1]);
 		}
 	}
 }
