@@ -2,6 +2,15 @@ function Piece(isWhite)
 {	
 	// we only have a boolean here because there's only 2 players
 	this.isWhite = isWhite;
+
+	/** Gets image name of the specified piece */
+	this.getImageName = function()
+	{
+		var img = this.constructor.name.toLowerCase() + " ";
+		img += (isWhite) ? "white" : "black";
+
+		return img;
+	}
 }
 
 // Converts x and y coordinates to the appropriate cell
@@ -22,7 +31,7 @@ var cellToCoordinates = function(cell)
 function Pawn(isWhite)
 {
 	Piece.call(this, isWhite);
-	
+
 	// Keep track if it's the first move for the Pawn
 	this.firstMove = true;
 	this.getValidMoves = function(board, x, y)
