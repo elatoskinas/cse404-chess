@@ -125,10 +125,8 @@ function Game(id, p1, p2)
 		// Instantiate piece images
 		var $image1 = $("<img>");
 		var $image2 = $("<img>");
-<<<<<<< HEAD
 		var $tableEntry = $("<p>");
 		var translateText = source + "->" + dest;
-=======
 
 		// Instantiate move text (src -> dst)
 		var $text = $("<p>").text(source + "->" + dest);
@@ -140,7 +138,16 @@ function Game(id, p1, p2)
 		$tableEntry.append($image1);
 		$tableEntry.append($text);
 		$tableEntry.append($image2);
->>>>>>> 6075778f075d4f7d81a7a869e0fe3aec076400b7
+
+		// Append the table entry to the right pannel
+		var $panel1 = $("#MovesUser1");
+		var $panel2 = $("#MovesUser2");
+
+		if(this.activePlayer)
+			$panel1.append($tableEntry);
+		else $panel2.append($tableEntry);
+
+		console.log($panel1);
 	}
 
 	/* Starts a game */
