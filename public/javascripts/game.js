@@ -95,7 +95,7 @@ function Game(id, p1, p2)
 		var dest = coordinatesToCell(x2, y2);
 
 		// Adding the move to the side panel
-		this.addToSidePanel(source, dest, this.board[x1][x2], this.board[x2][y2]);
+		this.addToSidePanel(source, dest, this.board[x1][y1], this.board[x2][y2]);
 		
 		// Moving the piece from the source to the destination and clearing the destination
 		this.board[x2][y2]=	this.board[x1][y1];
