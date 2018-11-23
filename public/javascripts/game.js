@@ -111,7 +111,8 @@ function Game(id, p1, p2)
 		
 		// Updating the active player
 		this.activePlayer=!this.activePlayer;
-		console.log(this.activePlayer);
+		// Clearing
+		this.selectPiece("", null);
 	}
 
 	/* Add history entry to side panel */
