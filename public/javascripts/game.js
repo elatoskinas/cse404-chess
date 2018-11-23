@@ -234,6 +234,7 @@ function Game(id, p1, p2)
 	
 		if (this.selectedPiece != "")
 		{
+			this.availableMoves="";
 			// Unhighlight last piece & stop displaying valid moves
 		}
 	
@@ -243,6 +244,7 @@ function Game(id, p1, p2)
 		{
 			// Highlight new piece & display valid moves
 			// Store valid moves in array
+			this.availableMoves=piece.getValidMoves();
 
 		}
 	}
