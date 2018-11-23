@@ -125,9 +125,7 @@ function Game(id, p1, p2)
 		var $image1 = $("<img>");
 		var $text = $("<p>");
 		var $image2 = $("<img>");
-
 		var $tableEntry = $("<p>");
-
 		var translateText = source + "->" + dest;
 	}
 
