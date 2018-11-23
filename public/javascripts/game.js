@@ -104,7 +104,11 @@ function Game(id, p1, p2)
 
 		// Adding the move to the side panel
 		this.addToSidePanel(cell1, cell2, this.board[x1][y1], this.board[x2][y2]);
-		
+
+		// Pawn first move negation (so it can no longer move two steps)
+		if (this.board[x1][y1].firstMove != null)
+			this.board[x1][y1].firstMove = false;
+
 		// Moving the piece from the source to the destination and clearing the destination
 		this.board[x2][y2]=	this.board[x1][y1];
 		this.board[x1][y1] = null;
@@ -177,7 +181,7 @@ function Game(id, p1, p2)
 				// Check if a piece is already in the tile
 				if (piece != null)
 				{
-					if (playerTurn == piece.isWhite) // Piece color matches Player
+					if (this.activePlayer == piece.isWhite) // Piece color matches Player
 					{
 						// Highlight Player's piece
 						this.selectPiece(cell, piece);
@@ -197,7 +201,7 @@ function Game(id, p1, p2)
 				// Check if a piece is already in the tile
 				if (piece != null)
 				{
-					if (playerTurn == piece.isWhite) // Piece color matches Player
+					if (this.activePlayer == piece.isWhite) // Piece color matches Player
 					{
 						// Reselect piece
 						this.selectPiece(cell, piece);
