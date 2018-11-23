@@ -275,4 +275,22 @@ function Game(id, p1, p2)
 			this.availableMoves=piece.getValidMoves(this.board, movePair[0], movePair[1]);
 		}
 	}
+
+	/** Update image in tile with coressponding chess piece */
+	this.updateTile = function(cell)
+	{
+		// Convert cell to coordinates
+		var xy = cellToCoordinates(cell);
+		// Get piece at coordinates
+		var piece = this.board[xy[0]][xy[1]];
+		// If piece is null, then use empty image, else get piece's image
+		var imageName = (piece != null) ? piece.getImageName() : "empty";
+
+		// Update image
+		// 1.JQuery img with specified cell as ID
+		// 2.Get first element (index 0) [which is the image]
+		// 3.Access and change src image
+		// [images reside in images/pieces/]
+		$("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
+	}
 }
