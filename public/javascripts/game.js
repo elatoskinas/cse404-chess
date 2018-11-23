@@ -25,8 +25,8 @@ function Game(id, p1, p2)
 	// A boolean to indicate which player is active, true = player one (white).
 	this.activePlayer = true;
 
-	// A pair of coordinates to indicate which piece is selected (if nothing is selected, then this is an empty array)
-	this.selectedPiece = [];
+	// The cell of the selected piece (if nothing is selected, this is simply an empty string)
+	this.selectedPiece = "";
   
 	this.board = []; // the board (a bidimensional array)
 
@@ -169,7 +169,8 @@ function Game(id, p1, p2)
 				{
 					if (playerTurn == piece.isWhite) // Piece color matches Player
 					{
-						// Highlight valid movement tiles and highlight the tile/piece
+						// Highlight Player's piece
+						this.selectPiece(cell, piece);
 					}
 					else
 					{
@@ -189,10 +190,11 @@ function Game(id, p1, p2)
 					if (playerTurn == piece.isWhite) // Piece color matches Player
 					{
 						// Reselect piece
+						this.selectPiece(cell, piece);
 					}
 					else // Enemy's piece selected
 					{
-						// Move piece if move is valid
+						// Move piece (if move is valid)
 						// Blink in red if move is not valid
 					}
 				}
@@ -202,6 +204,28 @@ function Game(id, p1, p2)
 					// Else blink in red if move is not valid
 				}
 			}
+		}
+	}
+
+	/** Select piece, highlight the piece & it's valid moves */
+	this.selectPiece = function(cell, piece)
+	{
+		if (cell == this.selectedPiece) // optimization step: do not reselect
+			return;
+
+		console.log(cell + " selected!");
+	
+		if (this.selectedPiece != "")
+		{
+			// Unhighlight last piece & stop displaying valid moves
+		}
+	
+		this.selectedPiece = cell;
+	
+		if (cell != "")
+		{
+			// Highlight new piece & display valid moves
+			// Store valid moves in array
 		}
 	}
 }
