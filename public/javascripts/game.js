@@ -27,8 +27,11 @@ function Game(id, p1, p2)
 
 	// The cell of the selected piece (if nothing is selected, this is simply an empty string)
 	this.selectedPiece = "";
+
+	this.availableMoves = []; 
   
 	this.board = []; // the board (a bidimensional array)
+	
 
 	// NOTE: when referencing pieces (such as board[1][3]),
 	// 1 will represent the column (A, B, C, ...) and 3
@@ -88,14 +91,19 @@ function Game(id, p1, p2)
 	}
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
-	this.movePiece = function(x1, y1, x2, y2)
-	{
-		// Declaring the source and the destination for readibility
-		var source = coordinatesToCell(x1, y1);
-		var dest = coordinatesToCell(x2, y2);
+	this.movePiece = function(cell1, cell2)
+	{	
+		// Parsing the input cell into a string of 2 coordinates for each cell
+		var c1 = cellToCoordinates(cell1);
+		var x1 = c1[0];
+		var y1 = c1[1];
+
+		var c2 = cellToCoordinates(cell2);
+		var x2 = c2[0];
+		var y2 = c2[1];
 
 		// Adding the move to the side panel
-		this.addToSidePanel(source, dest, this.board[x1][y1], this.board[x2][y2]);
+		this.addToSidePanel(cell1, cell2, this.board[x1][y1], this.board[x2][y2]);
 		
 		// Moving the piece from the source to the destination and clearing the destination
 		this.board[x2][y2]=	this.board[x1][y1];
@@ -142,6 +150,7 @@ function Game(id, p1, p2)
 		var cellCoordinates = cellToCoordinates(cell);
 		var x = cellCoordinates[0];
 		var y = cellCoordinates[1];
+		
 
 		// Get piece in tile
 		var piece = this.board[x][y];
@@ -158,12 +167,14 @@ function Game(id, p1, p2)
 		// First and foremost, check if it's the correct Player's turn (let's use this boolean as a temporary placeholder)
 		var playerTurn = true;
 
+		
+
 		// Check if the player may make a turn
 		if (playerTurn)
 		{
 			// Check if some piece is selected by the player
-			if (this.selectedPiece.length == 0)
-			{
+			if (this.selectedPiece == "")
+			{	
 				// Check if a piece is already in the tile
 				if (piece != null)
 				{
@@ -195,12 +206,18 @@ function Game(id, p1, p2)
 					else // Enemy's piece selected
 					{
 						// Move piece (if move is valid)
+						if(availableMoves.includes(cellCoordinates)){
+								this.movePiece(selectedPiece, cell);
+						}
 						// Blink in red if move is not valid
 					}
 				}
 				else
 				{
 					// Move piece (if move is valid)
+					if(availableMoves.includes(cellCoordinates)){
+						this.movePiece(selectedPiece, cell);
+					}
 					// Else blink in red if move is not valid
 				}
 			}
@@ -226,6 +243,7 @@ function Game(id, p1, p2)
 		{
 			// Highlight new piece & display valid moves
 			// Store valid moves in array
+
 		}
 	}
 }
