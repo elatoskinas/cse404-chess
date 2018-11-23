@@ -24,6 +24,9 @@ function Game(id, p1, p2)
 
 	// A boolean to indicate which player is active, true = player one (white).
 	var activePlayer = true;
+
+	// A pair of coordinates to indicate which piece is selected (if nothing is selected, then this is an empty array)
+	this.selectedPiece = [];
   
 	this.board = []; // the board (a bidimensional array)
 
@@ -88,14 +91,109 @@ function Game(id, p1, p2)
 	this.movePiece = function(x1, y1, x2, y2)
 	{
 		// code here
+
+		// update player turn accordingly after movement
+		
+		// detect if piece conquered
+		// pass to side panel method
+	}
+
+	/* Add history entry to side panel */
+	this.addToSidePanel = function(source, dest, piece, conquered)
+	{
+
 	}
 
 	/* Starts a game */
 	this.startGame = function()
 	{
+		// Construct & Populate Chess Board
 		this.constructBoard();
 		this.populateBoard();
 
+		var that = this; // temporary reference to current Game objectc
+
+		// Set onClick Listeners to chess tile image DOM objects
+		$(".chess-tile img").on("click", function(event)
+		{
+			// We make use of both that and this here.
+			// that refers to the Game Object, and this refers to the DOM element that was clicked on.
+			// The parent of this has the ID that represents the cell
+			that.getClick(this.parentElement.id);
+		});
+
+		// Print Board to console (debug)
 		console.log(this.board);
+	}
+	
+	/* Tile clicked event (this will have to come from an individual player
+		and be sent over to the server)*/
+	this.getClick = function(cell)
+	{
+		// Convert cell to actual coordinates
+		var cellCoordinates = cellToCoordinates(cell);
+		var x = cellCoordinates[0];
+		var y = cellCoordinates[1];
+
+		// Get piece in tile
+		var piece = this.board[x][y];
+
+		// --- FOR DEBUGGING PURPOSES ---
+		var name = "none";
+
+		if (piece != null)
+			name = piece.constructor.name;
+
+		console.log(cell + " (" + x + "," + y + ")" + " - " + name);
+		// ------------------------------
+
+		// First and foremost, check if it's the correct Player's turn (let's use this boolean as a temporary placeholder)
+		var playerTurn = true;
+
+		// Check if the player may make a turn
+		if (playerTurn)
+		{
+			// Check if some piece is selected by the player
+			if (this.selectedPiece.length == 0)
+			{
+				// Check if a piece is already in the tile
+				if (piece != null)
+				{
+					if (playerTurn == piece.isWhite) // Piece color matches Player
+					{
+						// Highlight valid movement tiles and highlight the tile/piece
+					}
+					else
+					{
+						// Blink tile in red
+					}
+				}
+				else
+				{
+					// Blink tile in red
+				}
+			}
+			else // Piece is already selected by Player
+			{
+				// Check if a piece is already in the tile
+				if (piece != null)
+				{
+					if (playerTurn == piece.isWhite) // Piece color matches Player
+					{
+						// Reselect piece
+					}
+					else // Enemy's piece selected
+					{
+						// Move piece if move is valid
+						// Blink in red if move is not valid
+					}
+				}
+				else
+				{
+					// Move piece (if move is valid)
+					// Else blink in red if move is not valid
+				}
+			}
+		}
 	}
 }

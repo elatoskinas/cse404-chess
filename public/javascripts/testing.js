@@ -1,4 +1,6 @@
-/* Test method */
+/* Test method that fills an 8x8 array of Strings with
+   'O' and 'X', where 'O' is the piece and 'X' are all the
+   possible moves */
 var testPiece = function(piece, board, x, y)
 {
     var validMoves = piece.getValidMoves(board, x, y);
@@ -34,7 +36,12 @@ var main = function()
   g.startGame();
 
   // Tests here
-  console.log(testPiece(g.board[0][0], g.board, 0, 0));
+  console.log(testPiece(g.board[0][0], g.board, 2, 3));
+  console.log(testPiece(g.board[1][0], g.board, 2, 4));
+  console.log(testPiece(g.board[2][0], g.board, 2, 3));
+  console.log(testPiece(g.board[3][0], g.board, 2, 3));
+  console.log(testPiece(g.board[4][0], g.board, 2, 3));
+  console.log(testPiece(g.board[4][1], g.board, 2, 3));
 }
 
 $(document).ready(main);
