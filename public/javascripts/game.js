@@ -88,6 +88,8 @@ function Game(id, p1, p2)
 			this.board[i][1] = new Pawn(true); // add White Pawn
 			this.board[i][6] = new Pawn(false); // add Black Pawn
 		}
+
+		// Initialize board graphics
 	}
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
@@ -117,6 +119,10 @@ function Game(id, p1, p2)
 		this.activePlayer=!this.activePlayer;
 		// Clearing
 		this.selectPiece("", null);
+
+		// Update graphics
+		this.updateTile(cell1);
+		this.updateTile(cell2);
 	}
 
 	/* Add history entry to side panel */
