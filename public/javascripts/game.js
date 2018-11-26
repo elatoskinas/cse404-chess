@@ -95,7 +95,6 @@ function Game(id, p1, p2)
 				this.updateTile(coordinatesToCell(j,i));
 				this.updateTile(coordinatesToCell(j,7-i));
 			}
-
 	}
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
@@ -318,46 +317,126 @@ function Game(id, p1, p2)
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
 		var y = xy[1];
-		// Vertical
+    
+		// Vertical & Horizontal
 		var stopu = false;
 		var stopd = false;
 		var stopl = false;
 		var stopr = false;
-		console.log(stopu);
-		console.log(stopd);
-		console.log(stopr);
-		console.log(stopl);
+    
 		for(var i = 1; i <8; i++){
 			if(x+i<8&&(!stopu)&&this.board[x+i][y]!=null){
 					stopu=true;
-					console.log("Upthreat");
 					if(this.board[x+i][y].isWhite!=this.board[x][y].isWhite&&(this.board[x+i][y] instanceof Rook || this.board[x+i][y] instanceof Queen))
 						threats.push(coordinatesToCell(x+i, y));
 				}
 			if(x-i>0&&(!stopd)&&this.board[x-i][y]!=null){
 					stopd=true;
-					console.log("Downthreat");
 					if(this.board[x-i][y].isWhite!=this.board[x][y].isWhite&&(this.board[x-i][y] instanceof Rook || this.board[x-i][y] instanceof Queen))
 						threats.push(coordinatesToCell(x-i, y));
 				}
 			if(y+i<8&&(!stopr)&&this.board[x][y+i]!=null){
 					stopr=true;
-					console.log("Rigthreat");
 					if(this.board[x][y+i].isWhite!=this.board[x][y].isWhite&&(this.board[x][y+i] instanceof Rook || this.board[x][y+i] instanceof Queen))
 						threats.push(coordinatesToCell(x,y+i));
 				}
 
 			if(y-i>0&&(!stopl)&&this.board[x][y-i]!=null){
 					stopl=true;
-					console.log("Leftthreat");
 					if(this.board[x][y-i].isWhite!=this.board[x][y].isWhite&&(this.board[x][y-i] instanceof Rook || this.board[x][y-i] instanceof Queen))
 						threats.push(coordinatesToCell(x,y-i));
 				}
 				
 		}
-		// Horizontal
-		// Diagonal
+
+		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
+		// Instantiate traversal pairs with initial possibility of traversal
+		var traversePairs =
+		[
+			{ "possible":true, "x":-1,  "y":-1  },
+			{ "possible":true, "x":-1,  "y": 1  },
+			{ "possible":true, "x": 1,  "y":-1  },
+			{ "possible":true, "x": 1,  "y": 1  }
+		]
+		
+		// Initialize offset
+		var offset = 0;
+
+		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible)
+		{
+			// Increase offset
+			offset++;
+
+			// Iterate through all traversal pairs
+			for (var i = 0; i < 4; ++i)
+			{
+				if (traversePairs[i].possible)
+				{
+					// Calculate new x and new y
+					var new_x = x + traversePairs[i].x*offset;
+					var new_y = y + traversePairs[i].y*offset;
+
+					// Check if in bounds, if not, then traversal with this combination is invalid from now on
+					if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
+					{
+						traversePairs[i].possible = false;
+						continue;
+					}
+					else
+					{
+						if (this.board[new_x][new_y] == null)
+							continue;
+						else
+						{
+							// No longer traverse through this pair
+							traversePairs[i].possible = false;
+
+							// Check if piece is of opposite color
+							if (this.board[new_x][new_y].isWhite != this.activePlayer)
+							{
+								// Check if piece is Queen
+								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop))
+								{
+									threats.push(coordinatesToCell(new_x, new_y));
+								}
+								else if (offset == 1) // Else check if offset is 1 (Pawn & King situation)
+								{
+									if (this.board[new_x][new_y] instanceof King) // Check for Kingg
+										threats.push(coordinatesToCell(new_x, new_y));
+									// Check if Pawn by only taking into account odd pairs for White & even pairs for Black (odd pairs are y = -1 [forward], the only
+									// place where an opposite colored Pawn can attack White from)
+									else if (((this.activePlayer && i % 2 != 0) || (!this.activePlayer && i % 2 == 0)) && this.board[new_x][new_y] instanceof Pawn)
+										threats.push(coordinatesToCell(new_x, new_y));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		// Horse
+		var horseCoords = [-2, -1, 1, 2];
+
+		for (var xi = 0; xi < 4; ++xi)
+		{
+			for (var yi = 0; yi < 4; ++yi)
+			{
+				if (xi != yi && -horseCoords[xi] != horseCoords[yi]) // Do not take into account pairs (-2, -2), (-2, 2), (2, -2) ...
+				{
+					var xh = x + horseCoords[xi];
+					var yh = y + horseCoords[yi];
+	
+					if (xh >= 0 && xh < 8 && yh >= 0 && yh < 8
+						&& this.board[xh][yh] != null && this.board[xh][yh].isWhite != this.activePlayer
+						&& this.board[xh][yh] instanceof Knight)
+					{
+						console.log(this.board[xh][yh].constructor.name);
+						threats.push(coordinatesToCell(xh, yh));
+					}
+				}
+			}
+		}
 
 		// Check protection state (TBD later)
 
