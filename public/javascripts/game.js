@@ -314,13 +314,53 @@ function Game(id, p1, p2)
 
 	this.checkKingThreat = function(cell)
 	{
+		var threats = [];
+		var xy = cellToCoordinates(cell);
+		var x = xy[0];
+		var y = xy[1];
 		// Vertical
+		var stopu = false;
+		var stopd = false;
+		var stopl = false;
+		var stopr = false;
+		console.log(stopu);
+		console.log(stopd);
+		console.log(stopr);
+		console.log(stopl);
+		for(var i = 1; i <8; i++){
+			if(x+i<8&&(!stopu)&&this.board[x+i][y]!=null){
+					stopu=true;
+					console.log("Upthreat");
+					if(this.board[x+i][y].isWhite!=this.board[x][y].isWhite&&(this.board[x+i][y] instanceof Rook || this.board[x+i][y] instanceof Queen))
+						threats.push(coordinatesToCell(x+i, y));
+				}
+			if(x-i>0&&(!stopd)&&this.board[x-i][y]!=null){
+					stopd=true;
+					console.log("Downthreat");
+					if(this.board[x-i][y].isWhite!=this.board[x][y].isWhite&&(this.board[x-i][y] instanceof Rook || this.board[x-i][y] instanceof Queen))
+						threats.push(coordinatesToCell(x-i, y));
+				}
+			if(y+i<8&&(!stopr)&&this.board[x][y+i]!=null){
+					stopr=true;
+					console.log("Rigthreat");
+					if(this.board[x][y+i].isWhite!=this.board[x][y].isWhite&&(this.board[x][y+i] instanceof Rook || this.board[x][y+i] instanceof Queen))
+						threats.push(coordinatesToCell(x,y+i));
+				}
+
+			if(y-i>0&&(!stopl)&&this.board[x][y-i]!=null){
+					stopl=true;
+					console.log("Leftthreat");
+					if(this.board[x][y-i].isWhite!=this.board[x][y].isWhite&&(this.board[x][y-i] instanceof Rook || this.board[x][y-i] instanceof Queen))
+						threats.push(coordinatesToCell(x,y-i));
+				}
+				
+		}
 		// Horizontal
 		// Diagonal
 		// Horse
 
 		// Check protection state (TBD later)
 
-		return false;
+		return threats;
 	}
 }
