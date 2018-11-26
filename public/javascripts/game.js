@@ -90,6 +90,12 @@ function Game(id, p1, p2)
 		}
 
 		// Initialize board graphics
+		for(var i = 0; i<=1; i++)
+			for(j=0;j<8;j++){
+				this.updateTile(coordinatesToCell(j,i));
+				this.updateTile(coordinatesToCell(j,7-i));
+			}
+
 	}
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
