@@ -19,8 +19,7 @@ function Game(id, p1, p2)
 	this.gameState = 0;
 
 	// Booleans to indicate the check status for each player
-	this.playerOneCheck = false;
-	this.playerTwoCheck = false;
+	this.checkStatus = [false, false];
 
 	// A boolean to indicate which player is active, true = player one (white).
 	this.activePlayer = true;
@@ -119,15 +118,15 @@ function Game(id, p1, p2)
 		// Moving the piece from the source to the destination and clearing the destination
 		this.board[x2][y2]=	this.board[x1][y1];
 		this.board[x1][y1] = null;
-		
-		// Updating the active player
-		this.activePlayer=!this.activePlayer;
-		// Clearing
+
+		// Clearing selected piece
 		this.selectPiece("", null);
 
 		// Update graphics
 		this.updateTile(cell1);
 		this.updateTile(cell2);
+
+		this.newTurn();
 	}
 
 	/* Add history entry to side panel */
@@ -311,6 +310,7 @@ function Game(id, p1, p2)
 		$("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
 	}
 
+	/** Checks if activePlayer's King would be threatened in specified cell */
 	this.checkKingThreat = function(cell)
 	{
 		var threats = [];
@@ -413,5 +413,19 @@ function Game(id, p1, p2)
 		// Check protection state (TBD later)
 
 		return threats;
+	}
+
+	this.newTurn = function()
+	{
+		// Reset check status
+
+		// Updating the active player
+		this.activePlayer = !this.activePlayer;
+
+		// Check for check
+/*		if (checkKingThreat(kingCell))
+		{
+			// check for checkmate
+		}*/
 	}
 }
