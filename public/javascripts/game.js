@@ -143,6 +143,12 @@ function Game(id, p1, p2)
 		// Instantiate move text (src -> dst)
 		var $text = $("<p>").text(source + "->" + dest);
 
+		// Update Images
+		$image1[0].src = "images/pieces/" + piece.getImageName() + ".png";
+
+		if (conquered != null)
+			$image2[0].src = "images/pieces/" + conquered.getImageName() + ".png";
+
 		// Initialize new table entry div
 		var $tableEntry = $("<div class=\"table-entry\">");
 
