@@ -95,7 +95,6 @@ function Game(id, p1, p2)
 				this.updateTile(coordinatesToCell(j,i));
 				this.updateTile(coordinatesToCell(j,7-i));
 			}
-
 	}
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
@@ -314,13 +313,91 @@ function Game(id, p1, p2)
 
 	this.checkKingThreat = function(cell)
 	{
+		var threats = [];
+		var xy = cellToCoordinates(cell);
+		var x = xy[0];
+		var y = xy[1];
+
 		// Vertical
 		// Horizontal
-		// Diagonal
+
+		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
+		// Instantiate traversal pairs with initial possibility of traversal
+		var traversePairs =
+		[
+			{ "possible":true, "x":-1,  "y":-1  },
+			{ "possible":true, "x":-1,  "y": 1  },
+			{ "possible":true, "x": 1,  "y":-1  },
+			{ "possible":true, "x": 1,  "y": 1  }
+		]
+		
+		// Initialize offset
+		var offset = 0;
+
+		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible)
+		{
+			// Increase offset
+			offset++;
+
+			// Iterate through all traversal pairs
+			for (var i = 0; i < 4; ++i)
+			{
+				if (traversePairs[i].possible)
+				{
+					// Calculate new x and new y
+					var new_x = x + traversePairs[i].x*offset;
+					var new_y = y + traversePairs[i].y*offset;
+
+					// Check if in bounds, if not, then traversal with this combination is invalid from now on
+					if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
+					{
+						traversePairs[i].possible = false;
+						continue;
+					}
+					else
+					{
+						if (this.board[new_x][new_y] == null)
+							continue;
+						else
+						{
+							// No longer traverse through this pair
+							traversePairs[i].possible = false;
+
+							if (this.board[new_x][new_y].isWhite != this.activePlayer
+								&& ((this.board[new_x][new_y] instanceof Queen) ||
+								(this.board[new_x][new_y] instanceof Bishop)))
+									threats.push(coordinatesToCell(new_x, new_y));
+						}
+					}
+				}
+			}
+		}
+		
 		// Horse
+		var horseCoords = [-2, -1, 1, 2];
+
+		for (var xi = 0; xi < 4; ++xi)
+		{
+			for (var yi = 0; yi < 4; ++yi)
+			{
+				if (xi != yi && -horseCoords[xi] != horseCoords[yi]) // Do not take into account pairs (-2, -2), (-2, 2), (2, -2) ...
+				{
+					var xh = x + horseCoords[xi];
+					var yh = y + horseCoords[yi];
+	
+					if (xh >= 0 && xh < 8 && yh >= 0 && yh < 8
+						&& this.board[xh][yh] != null && this.board[xh][yh].isWhite != this.activePlayer
+						&& this.board[xh][yh] instanceof Knight)
+					{
+						console.log(this.board[xh][yh].constructor.name);
+						threats.push(coordinatesToCell(xh, yh));
+					}
+				}
+			}
+		}
 
 		// Check protection state (TBD later)
 
-		return false;
+		return threats;
 	}
 }
