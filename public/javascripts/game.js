@@ -363,10 +363,24 @@ function Game(id, p1, p2)
 							// No longer traverse through this pair
 							traversePairs[i].possible = false;
 
-							if (this.board[new_x][new_y].isWhite != this.activePlayer
-								&& ((this.board[new_x][new_y] instanceof Queen) ||
-								(this.board[new_x][new_y] instanceof Bishop)))
+							// Check if piece is of opposite color
+							if (this.board[new_x][new_y].isWhite != this.activePlayer)
+							{
+								// Check if piece is Queen
+								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop))
+								{
 									threats.push(coordinatesToCell(new_x, new_y));
+								}
+								else if (offset == 1) // Else check if offset is 1 (Pawn & King situation)
+								{
+									if (this.board[new_x][new_y] instanceof King) // Check for Kingg
+										threats.push(coordinatesToCell(new_x, new_y));
+									// Check if Pawn by only taking into account odd pairs for White & even pairs for Black (odd pairs are y = -1 [forward], the only
+									// place where an opposite colored Pawn can attack White from)
+									else if (((this.activePlayer && i % 2 != 0) || (!this.activePlayer && i % 2 == 0)) && this.board[new_x][new_y] instanceof Pawn)
+										threats.push(coordinatesToCell(new_x, new_y));
+								}
+							}
 						}
 					}
 				}
