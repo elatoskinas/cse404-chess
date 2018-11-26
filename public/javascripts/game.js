@@ -311,4 +311,16 @@ function Game(id, p1, p2)
 		// [images reside in images/pieces/]
 		$("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
 	}
+
+	this.checkKingThreat = function(cell)
+	{
+		// Vertical
+		// Horizontal
+		// Diagonal
+		// Horse
+
+		// Check protection state (TBD later)
+
+		return false;
+	}
 }
