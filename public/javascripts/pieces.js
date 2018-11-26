@@ -3,6 +3,9 @@ function Piece(isWhite)
 	// we only have a boolean here because there's only 2 players
 	this.isWhite = isWhite;
 
+	// final list of valid moves (after post-validation with regards to check checking)
+	this.validMoves = [];
+
 	/** Gets image name of the specified piece */
 	this.getImageName = function()
 	{
@@ -34,7 +37,8 @@ function Pawn(isWhite)
 
 	// Keep track if it's the first move for the Pawn
 	this.firstMove = true;
-	this.getValidMoves = function(board, x, y)
+	
+	this.setValidMoves = function(board, x, y)
 	{
 		// We igonre the base case here because if a pawn reaches
 		// the end of the board, then it is no longer a pawn.
@@ -77,8 +81,8 @@ function Pawn(isWhite)
 			moves.push(coordinatesToCell(x+1, y+offset));
 		}
 
-		// Return valid moves array
-		return moves;
+		// Set valid moves to result
+		this.validMoves = moves;
 	}
 }
 
@@ -90,7 +94,7 @@ function Bishop(isWhite)
 {
 	Piece.call(this, isWhite);
 
-	this.getValidMoves = function(board, x, y)
+	this.setValidMoves = function(board, x, y)
 	{
 		var moves = [];
 
@@ -151,8 +155,8 @@ function Bishop(isWhite)
 			}
 		}
 
-		// Return valid moves array
-		return moves;
+		// Set valid moves to result
+		this.validMoves = moves;
 	}
 }
 
@@ -164,7 +168,7 @@ function King(isWhite)
 {
 	Piece.call(this, isWhite);
 
-	this.getValidMoves = function(board, x, y)
+	this.setValidMoves = function(board, x, y)
 	{
 		var moves = [];
 
@@ -194,8 +198,8 @@ function King(isWhite)
 			}
 		}
 
-		// Return valid moves array
-		return moves;
+		// Set valid moves to result
+		this.validMoves = moves;
 	}
 }
 
@@ -208,7 +212,7 @@ function Rook(isWhite)
 {
 	Piece.call(this, isWhite);
 
-	this.getValidMoves = function(board, x, y)
+	this.setValidMoves = function(board, x, y)
 	{
         var moves=[];
         // Check for forward movement
@@ -255,8 +259,8 @@ function Rook(isWhite)
         		else moves.push(coordinatesToCell(i, y));
            }
         }
-        // Return the array of possible moves
-        return moves;
+		// Set valid moves to result
+        this.validMoves = moves;
     }
 }
 
@@ -266,7 +270,7 @@ Rook.prototype.constructor = Rook;
 function Knight(isWhite){
 	Piece.call(this, isWhite);
 
-	this.getValidMoves = function(board, x, y)
+	this.setValidMoves = function(board, x, y)
 	{
 			// too lazy to do this the smart way rn, so we'll just have all the possible scenarios for now xd
 			var moves=[];
@@ -297,7 +301,8 @@ function Knight(isWhite){
 				moves.push(coordinatesToCell(x-2,y-1));
 
 
-			return moves;
+			// Set valid moves to result
+			this.validMoves = moves;
 	}
 }
 
@@ -308,20 +313,21 @@ Knight.prototype.constructor = Knight;
 function Queen(isWhite){
 	Piece.call(this, isWhite);
 
-	this.getValidMoves = function(board, x, y)
+	this.setValidMoves = function(board, x, y)
 	{
 		var tempRook = new Rook(this.isWhite);
 		var tempBishop = new Bishop(this.isWhite);
 
-		var array1 = tempRook.getValidMoves(board, x, y);
-		var array2 = tempBishop.getValidMoves(board, x, y);
+		tempRook.setValidMoves(board, x, y);
+		tempBishop.setValidMoves(board, x, y);
+
+		var moves = tempRook.validMoves.concat(tempBishop.validMoves);
 
 		tempRook = null;
 		tempBishop = null;
-
-		var moves = array1.concat(array2);
 		
-		return moves;
+		// Set valid moves to result
+		this.validMoves = moves;
 	}
 }
 

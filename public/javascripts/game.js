@@ -95,6 +95,8 @@ function Game(id, p1, p2)
 				this.updateTile(coordinatesToCell(j,i));
 				this.updateTile(coordinatesToCell(j,7-i));
 			}
+
+		this.setValidMovesAll(); // set valid moves for all pieces
 	}
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
@@ -294,8 +296,9 @@ function Game(id, p1, p2)
 		if (cell != "")
 		{
 			// Highlight new piece & display valid moves
-			var movePair = cellToCoordinates(cell);
-			this.availableMoves=piece.getValidMoves(this.board, movePair[0], movePair[1]);
+			// var movePair = cellToCoordinates(cell);
+			// piece.setValidMoves(this.board, movePair[0], movePair[1]);
+			this.availableMoves = piece.validMoves;
 		}
 	}
 
@@ -320,6 +323,8 @@ function Game(id, p1, p2)
 	/** Checks if activePlayer's King would be threatened in specified cell */
 	this.checkKingThreat = function(cell)
 	{
+		// TBD: make this function mark king guard pieces which could only be moved in one direction.
+		
 		var threats = [];
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
@@ -456,6 +461,7 @@ function Game(id, p1, p2)
 		return threats;
 	}
 
+	/** Ends turn of current active Player and starts a new turn */
 	this.newTurn = function()
 	{
 		// Reset check status [because valid move was made if new turn has been made]
@@ -478,13 +484,30 @@ function Game(id, p1, p2)
 			var validMovevsExist = false;
 
 			// check if valid move for King exists
-			var xy = cellToCoordinates(tihs.kingCells[newPlayerIndex]);
-
-			
+			var xy = cellToCoordinates(this.kingCells[newPlayerIndex]);
 
 			// else search whether check can be undone (by capturing piece or blocking tile)
 			
 			// else checkmate
+		}
+
+		this.setValidMovesAll();
+
+		// Make the function above return whether there are any active moves. If active_moves == 0, then if check, then game over. Else if no check, then stalemate.
+	}
+
+	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
+	this.setValidMovesAll = function()
+	{
+		for (var i = 0; i < 8; ++i)
+		{
+			for (var j = 0; j < 8; ++j)
+			{
+				if (this.board[i][j] != null && this.board[i][j].isWhite == this.activePlayer)
+				{
+					this.board[i][j].setValidMoves(this.board, i, j);
+				}
+			}
 		}
 	}
 }
