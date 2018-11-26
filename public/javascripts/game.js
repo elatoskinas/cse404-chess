@@ -467,7 +467,17 @@ function Game(id, p1, p2)
 		{
 			this.checkStatus[newPlayerIndex] = true;
 
-			// check for checkmate
+			// --check for checkmate--
+			var validMovevsExist = false;
+
+			// check if valid move for King exists
+			var xy = cellToCoordinates(tihs.kingCells[newPlayerIndex]);
+
+			
+
+			// else search whether check can be undone (by capturing piece or blocking tile)
+			
+			// else checkmate
 		}
 	}
 }
