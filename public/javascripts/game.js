@@ -317,9 +317,37 @@ function Game(id, p1, p2)
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
 		var y = xy[1];
+    
+		// Vertical & Horizontal
+		var stopu = false;
+		var stopd = false;
+		var stopl = false;
+		var stopr = false;
+    
+		for(var i = 1; i <8; i++){
+			if(x+i<8&&(!stopu)&&this.board[x+i][y]!=null){
+					stopu=true;
+					if(this.board[x+i][y].isWhite!=this.board[x][y].isWhite&&(this.board[x+i][y] instanceof Rook || this.board[x+i][y] instanceof Queen))
+						threats.push(coordinatesToCell(x+i, y));
+				}
+			if(x-i>0&&(!stopd)&&this.board[x-i][y]!=null){
+					stopd=true;
+					if(this.board[x-i][y].isWhite!=this.board[x][y].isWhite&&(this.board[x-i][y] instanceof Rook || this.board[x-i][y] instanceof Queen))
+						threats.push(coordinatesToCell(x-i, y));
+				}
+			if(y+i<8&&(!stopr)&&this.board[x][y+i]!=null){
+					stopr=true;
+					if(this.board[x][y+i].isWhite!=this.board[x][y].isWhite&&(this.board[x][y+i] instanceof Rook || this.board[x][y+i] instanceof Queen))
+						threats.push(coordinatesToCell(x,y+i));
+				}
 
-		// Vertical
-		// Horizontal
+			if(y-i>0&&(!stopl)&&this.board[x][y-i]!=null){
+					stopl=true;
+					if(this.board[x][y-i].isWhite!=this.board[x][y].isWhite&&(this.board[x][y-i] instanceof Rook || this.board[x][y-i] instanceof Queen))
+						threats.push(coordinatesToCell(x,y-i));
+				}
+				
+		}
 
 		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
 		// Instantiate traversal pairs with initial possibility of traversal
