@@ -20,6 +20,7 @@ function Game(id, p1, p2)
 
 	// Booleans to indicate the check status for each player
 	this.checkStatus = [false, false];
+	this.kingCells = ["E8", "E1"];
 
 	// A boolean to indicate which player is active, true = player one (white).
 	this.activePlayer = true;
@@ -114,6 +115,12 @@ function Game(id, p1, p2)
 		// Pawn first move negation (so it can no longer move two steps)
 		if (this.board[x1][y1].firstMove != null)
 			this.board[x1][y1].firstMove = false;
+
+		if (this.board[x1][y1] instanceof King)
+		{
+			var index = this.activePlayer ? 1 : 0;
+			this.kingCells[index] = cell2;
+		}
 
 		// Moving the piece from the source to the destination and clearing the destination
 		this.board[x2][y2]=	this.board[x1][y1];
@@ -431,7 +438,6 @@ function Game(id, p1, p2)
 						&& this.board[xh][yh] != null && this.board[xh][yh].isWhite != this.activePlayer
 						&& this.board[xh][yh] instanceof Knight)
 					{
-						console.log(this.board[xh][yh].constructor.name);
 						threats.push(coordinatesToCell(xh, yh));
 					}
 				}
@@ -445,15 +451,23 @@ function Game(id, p1, p2)
 
 	this.newTurn = function()
 	{
-		// Reset check status
+		// Reset check status [because valid move was made if new turn has been made]
+		var prevPlayerIndex = this.activePlayer ? 1 : 0;
+		this.checkStatus[prevPlayerIndex] = false;
 
 		// Updating the active player
 		this.activePlayer = !this.activePlayer;
 
 		// Check for check
-/*		if (checkKingThreat(kingCell))
+		var newPlayerIndex = this.activePlayer ? 1 : 0;
+
+		var threats = this.checkKingThreat(this.kingCells[newPlayerIndex]);
+
+		if (threats.length != 0)
 		{
+			this.checkStatus[newPlayerIndex] = true;
+
 			// check for checkmate
-		}*/
+		}
 	}
 }
