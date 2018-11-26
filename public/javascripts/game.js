@@ -323,27 +323,34 @@ function Game(id, p1, p2)
 		var stopd = false;
 		var stopl = false;
 		var stopr = false;
-    
+		
+			/* Checking all the axis one tile at a time
+			If a piece is found, then traversing in that way is interrupted
+			If the piece found belongs to the other player, and is an instance of either a Rook a Queen or a King, then the piece is added to the array
+			*/
 		for(var i = 1; i <8; i++){
+				// Movement to the right
 			if(x+i<8&&(!stopu)&&this.board[x+i][y]!=null){
 					stopu=true;
-					if(this.board[x+i][y].isWhite!=this.activePlayer&&(this.board[x+i][y] instanceof Rook || this.board[x+i][y] instanceof Queen))
+					if(this.board[x+i][y].isWhite!=this.activePlayer&&(this.board[x+i][y] instanceof Rook || this.board[x+i][y] instanceof Queen || this.board[x+i][y] instanceof King))
 						threats.push(coordinatesToCell(x+i, y));
 				}
+				// Movement to the left
 			if(x-i>0&&(!stopd)&&this.board[x-i][y]!=null){
 					stopd=true;
-					if(this.board[x-i][y].isWhite!=this.activePlayer&&(this.board[x-i][y] instanceof Rook || this.board[x-i][y] instanceof Queen))
+					if(this.board[x-i][y].isWhite!=this.activePlayer&&(this.board[x-i][y] instanceof Rook || this.board[x-i][y] instanceof Queen || this.board[x-i][y] instanceof King))
 						threats.push(coordinatesToCell(x-i, y));
 				}
+				// Movement upwards
 			if(y+i<8&&(!stopr)&&this.board[x][y+i]!=null){
 					stopr=true;
-					if(this.board[x][y+i].isWhite!=this.activePlayer&&(this.board[x][y+i] instanceof Rook || this.board[x][y+i] instanceof Queen))
+					if(this.board[x][y+i].isWhite!=this.activePlayer&&(this.board[x][y+i] instanceof Rook || this.board[x][y+i] instanceof Queen || this.board[x][y+1] instanceof King))
 						threats.push(coordinatesToCell(x,y+i));
 				}
-
+				// Movement downwards
 			if(y-i>0&&(!stopl)&&this.board[x][y-i]!=null){
 					stopl=true;
-					if(this.board[x][y-i].isWhite!=this.activePlayer&&(this.board[x][y-i] instanceof Rook || this.board[x][y-i] instanceof Queen))
+					if(this.board[x][y-i].isWhite!=this.activePlayer&&(this.board[x][y-i] instanceof Rook || this.board[x][y-i] instanceof Queen || this.board[x][y-1] instanceof King))
 						threats.push(coordinatesToCell(x,y-i));
 				}
 				
