@@ -473,27 +473,34 @@ function Game(id, p1, p2)
 
 		// Check for check
 		var newPlayerIndex = this.activePlayer ? 1 : 0;
-
+	
 		var threats = this.checkKingThreat(this.kingCells[newPlayerIndex]);
 
-		if (threats.length != 0)
+		if (threats.length != 0) // Check
 		{
 			this.checkStatus[newPlayerIndex] = true;
 
-			// --check for checkmate--
-			var validMovevsExist = false;
-
-			// check if valid move for King exists
-			var xy = cellToCoordinates(this.kingCells[newPlayerIndex]);
-
-			// else search whether check can be undone (by capturing piece or blocking tile)
-			
-			// else checkmate
+			// Validate moves accordingly to check
+		}
+		else
+		{
+			// Validate moves accordingly to guard pieces
 		}
 
+		// Check if valid moves exist
 		var hasValid = this.setValidMovesAll();
 
-		// if !hasValid && check, then checkMate. Else if !hasValid && !check, then stalemate.
+		if (!hasValid) // No valid moves exist
+		{
+			if (threats.length > 0) // Checkmate
+			{
+				
+			}
+			else // Stalemate
+			{
+				
+			}
+		}
 	}
 
 	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
