@@ -455,7 +455,21 @@ function Game(id, p1, p2)
 
 		return threats;
 	}
-
+	this.verifyKing = function(x, y){
+		var moves = this.board[x][y].getValidMoves(this.board, x, y);
+		var i = 0;
+		console.log(moves);
+			while(i < moves.length){
+				if(this.checkKingThreat(moves[i]).length!=0){
+					console.log(this.checkKingThreat(moves[i]));
+					moves.splice(i,1);
+					i--;
+				}
+				i++;
+			}
+						
+		return moves;
+	}
 	this.newTurn = function()
 	{
 		// Reset check status [because valid move was made if new turn has been made]
@@ -479,8 +493,8 @@ function Game(id, p1, p2)
 
 			// check if valid move for King exists
 			var xy = cellToCoordinates(tihs.kingCells[newPlayerIndex]);
-
-			
+			var x = xy[0];
+			var y = xy[1];
 
 			// else search whether check can be undone (by capturing piece or blocking tile)
 			
