@@ -491,14 +491,16 @@ function Game(id, p1, p2)
 			// else checkmate
 		}
 
-		this.setValidMovesAll();
+		var hasValid = this.setValidMovesAll();
 
-		// Make the function above return whether there are any active moves. If active_moves == 0, then if check, then game over. Else if no check, then stalemate.
+		// if !hasValid && check, then checkMate. Else if !hasValid && !check, then stalemate.
 	}
 
 	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
 	this.setValidMovesAll = function()
 	{
+		var hasValid = false;
+
 		for (var i = 0; i < 8; ++i)
 		{
 			for (var j = 0; j < 8; ++j)
@@ -506,8 +508,19 @@ function Game(id, p1, p2)
 				if (this.board[i][j] != null && this.board[i][j].isWhite == this.activePlayer)
 				{
 					this.board[i][j].setValidMoves(this.board, i, j);
+
+					// Validate moves here as follows:
+					// > If checkmate, then only allow moves that remove King's threat
+					// > Else alter guard pieces moves [disallow moves that result in checkmate]
+					// Make use of threats array!
+					// If threats.length > 1, the only legal moves are King's moves
+
+					if (!hasValid && this.board[i][j].validMoves.length > 0) // valid moves found
+						hasValid = true;
 				}
 			}
 		}
+
+		return hasValid;
 	}
 }
