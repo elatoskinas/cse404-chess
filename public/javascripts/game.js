@@ -180,8 +180,6 @@ function Game(id, p1, p2)
 		if(this.activePlayer)
 			$panel1.append($tableEntry);
 		else $panel2.append($tableEntry);
-
-		console.log($panel1);
 	}
 
 	/* Starts a game */
@@ -486,7 +484,10 @@ function Game(id, p1, p2)
 		var threats = this.checkKingThreat(this.kingCells[newPlayerIndex]);
 
 		if (threats.length != 0) // King is threatened by at least 1 piece. Check occurs
+		{
 			this.checkStatus[newPlayerIndex] = true;
+			console.log("Check");
+		}
 
 		// Check if valid moves exist
 		var hasValid = this.setValidMovesAll(threats);
