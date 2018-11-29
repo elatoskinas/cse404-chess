@@ -338,7 +338,8 @@ function Game(id, p1, p2)
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
 		var y = xy[1];
-    
+	
+		// TBD: move diagonal & vert/horizontal traversion to that one loop
 		// Vertical & Horizontal
 		var stopu = false;
 		var stopd = false;
@@ -482,38 +483,29 @@ function Game(id, p1, p2)
 
 		// Check for check
 		var newPlayerIndex = this.activePlayer ? 1 : 0;
-	
 		var threats = this.checkKingThreat(this.kingCells[newPlayerIndex]);
 
-		if (threats.length != 0) // Check
-		{
+		if (threats.length != 0) // King is threatened by at least 1 piece. Check occurs
 			this.checkStatus[newPlayerIndex] = true;
 
-			// Validate moves accordingly to check
-		}
-		else
-		{
-			// Validate moves accordingly to guard pieces
-		}
-
 		// Check if valid moves exist
-		var hasValid = this.setValidMovesAll();
+		var hasValid = this.setValidMovesAll(threats);
 
 		if (!hasValid) // No valid moves exist
 		{
 			if (threats.length > 0) // Checkmate
 			{
-				
+				console.log("Checkmate");
 			}
 			else // Stalemate
 			{
-				
+				console.log("Stalemate");
 			}
 		}
 	}
 
 	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
-	this.setValidMovesAll = function()
+	this.setValidMovesAll = function(threats)
 	{
 		var hasValid = false;
 
@@ -527,7 +519,7 @@ function Game(id, p1, p2)
 
 					// Validate moves here as follows:
 					// > If checkmate, then only allow moves that remove King's threat
-					// > Else alter guard pieces moves [disallow moves that result in checkmate]
+					// > Else alter guard pieces moves [disallow moves that result in check]
 					// Make use of threats array!
 					// If threats.length > 1, the only legal moves are King's moves
 
