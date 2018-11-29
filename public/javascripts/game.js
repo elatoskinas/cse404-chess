@@ -114,11 +114,20 @@ function Game(id, p1, p2)
 		// Adding the move to the side panel
 		this.addToSidePanel(cell1, cell2, this.board[x1][y1], this.board[x2][y2]);
 
-		// Pawn first move negation (so it can no longer move two steps)
-		if (this.board[x1][y1].firstMove != null)
-			this.board[x1][y1].firstMove = false;
+		if (this.board[x1][y1] instanceof Pawn)
+		{
+			// Pawn first move negation (so it can no longer move two steps)
+			if (this.board[x1][y1].firstMove)
+				this.board[x1][y1].firstMove = false;
+			else if (y2 == 7 || y2 == 0) // End reached (this check is enough, since white pawn can't reach y2 == 0 and so on)
+			{
+				// Get user selection and convert Pawn to Queen/Bishop/Rook/Knight (according to choice)
 
-		if (this.board[x1][y1] instanceof King)
+				// Temporarily auto-converrt to Queen:
+				this.board[x1][y1] = new Queen(this.activePlayer);
+			}
+		}
+		else if (this.board[x1][y1] instanceof King)
 		{
 			var index = this.activePlayer ? 1 : 0;
 			this.kingCells[index] = cell2;
