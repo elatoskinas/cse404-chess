@@ -468,6 +468,22 @@ function Game(id, p1, p2)
 
 		return threats;
 	}
+  
+	this.verifyKing = function(x, y){
+		var moves = this.board[x][y].getValidMoves(this.board, x, y);
+		var i = 0;
+		console.log(moves);
+			while(i < moves.length){
+				if(this.checkKingThreat(moves[i]).length!=0){
+					console.log(this.checkKingThreat(moves[i]));
+					moves.splice(i,1);
+					i--;
+				}
+				i++;
+			}
+						
+		return moves;
+	}
 
 	/** Ends turn of current active Player and starts a new turn */
 	this.newTurn = function()
@@ -529,7 +545,6 @@ function Game(id, p1, p2)
 				}
 			}
 		}
-
 		return hasValid;
 	}
 }
