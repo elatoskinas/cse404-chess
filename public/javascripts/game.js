@@ -389,11 +389,11 @@ function Game(id, p1, p2)
 							if (this.board[new_x][new_y].isWhite != this.activePlayer)
 							{
 								// Check if piece is Queen
-								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop)&&i<4)
+								if (((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop))&&i<4)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
-								if((this.board[ne_x][new_y] instanceof Queen || this.board[new_x][new_y] instanceof Rook)&&i>3)
+								if((this.board[new_x][new_y] instanceof Queen || this.board[new_x][new_y] instanceof Rook)&&i>3)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
@@ -407,11 +407,13 @@ function Game(id, p1, p2)
 										threats.push(coordinatesToCell(new_x, new_y));
 								}
 							}
+							else if (cell == this.kingCells[this.activePlayer ? 1 : 0]) // Only checkGuard in this method if it's King's Cell being considered
+							{
+								traversePairs[i].checkGuard = true; // start checking if this piece is guarding the King
+							}
 						}
 						else if (traversePairs[i].checkGuard)
-						{
-							// checkGuard will only be toggled if white piece found upon traversePairs[i].possible
-							
+						{	
 							if (this.board[new_x][new_y] == null)
 								continue;
 							else
@@ -420,7 +422,36 @@ function Game(id, p1, p2)
 
 								if (this.board[new_x][new_y].isWhite != this.activePlayer)
 								{
-									// if black piece, check if it it's the appropriate type
+									// if opposite color piece, check if it's the appropriate type
+									if (this.board[new_x][new_y] instanceof Queen // Queen can traverse diagonally/vertically/horizontally. Potential Queen threat
+										|| ((i <= 3) && this.board[new_x][new_y] instanceof Bishop) // Bishop can traverse diagonally. Potential Bishop threat
+										|| ((i > 3) && this.board[new_x][new_y] instanceof Rook)) // Rook can traverse horizontally/vertically. Potential Rook threat
+									{
+										// --- BACKWARDS TRAVERSAL ---
+
+										// Start from threat piece
+										var x1 = new_x;
+										var y1 = new_y;
+
+										// Keep array of cells that are valid moves
+										var necessaryMoves = [];
+
+										// Iterate while guard piece not found
+										while (this.board[x1][y1] == null || this.board[x1][y1].isWhite != this.activePlayer)
+										{
+											// Push valid move into array
+											necessaryMoves.push(coordinatesToCell(x1, y1));
+
+											// Traverse back
+											x1 -= traversePairs[i].x;
+											y1 -= traversePairs[i].y;
+										}
+
+										console.log(necessaryMoves);
+
+										// Set necessary moves array of piece
+										this.board[x1][y1].necessaryMoves = necessaryMoves;
+									}
 								}
 							}
 						}
@@ -540,17 +571,10 @@ function Game(id, p1, p2)
 
 		// Filter out tiles that are possibly threatened
 		var i = 0;
-<<<<<<< HEAD
-			while(i < moves.length){
-				if(this.checkKingThreat(moves[i])[0]!=null){
-					console.log(this.checkKingThreat(moves[i]));
-				if(this.checkKingThreat(moves[i]).length!=0){
-=======
 			while(i < moves.length)
 			{
 				if(this.checkKingThreat(moves[i])[0]!=null)
 				{
->>>>>>> c3b874ec7a8147f881cfa56676ae202bfe5e3549
 					moves.splice(i,1);
 					i--;
 				}
@@ -616,9 +640,10 @@ function Game(id, p1, p2)
 					{
 						this.board[i][j].setValidMoves(this.board, i, j);
 
-						if (threats.length == 0)
+						if (threats.length == 0 && this.board[i][j].necessaryMoves.length != 0)
 						{
 							// Guard piece validation
+							this.board[i][j].validMoves = this.verify(this.board[i][j].validMoves, this.board[i][j].necessaryMoves);
 						}
 						else if (threats.length == 1)
 						{
@@ -634,9 +659,12 @@ function Game(id, p1, p2)
 					if (!hasValid && this.board[i][j].validMoves.length > 0) // valid moves found
 						hasValid = true;
 				}
+				else if (this.board[i][j] != null && this.board[i][j].isWhite != this.activePlayer)
+				{
+					this.board[i][j].necessaryMoves = [];
+				}
 			}
 		}
 		return hasValid;
 	}
-}
 }
