@@ -526,9 +526,6 @@ function Game(id, p1, p2)
 	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
 	this.setValidMovesAll = function(threats, kingCell)
 	{
-		if (threats != null)
-			console.log(threats.length);
-	
 		var hasValid = false;
 
 		// Get & validate King's moves
