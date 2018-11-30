@@ -393,7 +393,7 @@ function Game(id, p1, p2)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
-								if((this.board[ne_x][new_y] instanceof Queen || this.board[new_x][new_y] instanceof Rook)&&i>3)
+								if((this.board[new_x][new_y] instanceof Queen || this.board[new_x][new_y] instanceof Rook)&&i>3)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
@@ -407,11 +407,13 @@ function Game(id, p1, p2)
 										threats.push(coordinatesToCell(new_x, new_y));
 								}
 							}
+							else
+							{
+								traversePairs[i].checkGuard = true; // start checking if this piece is guarding the King
+							}
 						}
 						else if (traversePairs[i].checkGuard)
-						{
-							// checkGuard will only be toggled if white piece found upon traversePairs[i].possible
-							
+						{	
 							if (this.board[new_x][new_y] == null)
 								continue;
 							else
@@ -540,17 +542,10 @@ function Game(id, p1, p2)
 
 		// Filter out tiles that are possibly threatened
 		var i = 0;
-<<<<<<< HEAD
-			while(i < moves.length){
-				if(this.checkKingThreat(moves[i])[0]!=null){
-					console.log(this.checkKingThreat(moves[i]));
-				if(this.checkKingThreat(moves[i]).length!=0){
-=======
 			while(i < moves.length)
 			{
 				if(this.checkKingThreat(moves[i])[0]!=null)
 				{
->>>>>>> c3b874ec7a8147f881cfa56676ae202bfe5e3549
 					moves.splice(i,1);
 					i--;
 				}
@@ -638,5 +633,4 @@ function Game(id, p1, p2)
 		}
 		return hasValid;
 	}
-}
 }
