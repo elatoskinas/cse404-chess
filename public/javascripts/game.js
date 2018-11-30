@@ -96,7 +96,7 @@ function Game(id, p1, p2)
 				this.updateTile(coordinatesToCell(j,7-i));
 			}
 
-		this.setValidMovesAll(); // set valid moves for all pieces
+		this.setValidMovesAll([], this.kingCells[1]); // set valid moves for all pieces
 	}
 	
 	/* Move piece from x1 to x2 and from y1 to y2, knowing that the move is valid */
@@ -331,7 +331,6 @@ function Game(id, p1, p2)
 	this.checkKingThreat = function(cell)
 	{
 		// TBD: make this function mark king guard pieces which could only be moved in one direction.
-		
 		var threats = [];
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
@@ -380,10 +379,10 @@ function Game(id, p1, p2)
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
 		[
-			{ "possible":true, "x":-1,  "y":-1  },
-			{ "possible":true, "x":-1,  "y": 1  },
-			{ "possible":true, "x": 1,  "y":-1  },
-			{ "possible":true, "x": 1,  "y": 1  }
+			{ "possible":true, "x":-1,  "y":-1, "checkGuard": false  },
+			{ "possible":true, "x":-1,  "y": 1, "checkGuard": false },
+			{ "possible":true, "x": 1,  "y":-1, "checkGuard": false },
+			{ "possible":true, "x": 1,  "y": 1, "checkGuard": false }
 		]
 		
 		// Initialize offset
@@ -397,7 +396,7 @@ function Game(id, p1, p2)
 			// Iterate through all traversal pairs
 			for (var i = 0; i < 4; ++i)
 			{
-				if (traversePairs[i].possible)
+				if (traversePairs[i].possible || traversePairs[i].checkGuard)
 				{
 					// Calculate new x and new y
 					var new_x = x + traversePairs[i].x*offset;
@@ -413,7 +412,7 @@ function Game(id, p1, p2)
 					{
 						if (this.board[new_x][new_y] == null)
 							continue;
-						else
+						else if (traversePairs[i].possible)
 						{
 							// No longer traverse through this pair
 							traversePairs[i].possible = false;
@@ -428,7 +427,7 @@ function Game(id, p1, p2)
 								}
 								else if (offset == 1) // Else check if offset is 1 (Pawn & King situation)
 								{
-									if (this.board[new_x][new_y] instanceof King) // Check for Kingg
+									if (this.board[new_x][new_y] instanceof King) // Check for King
 										threats.push(coordinatesToCell(new_x, new_y));
 									// Check if Pawn by only taking into account odd pairs for White & even pairs for Black (odd pairs are y = -1 [forward], the only
 									// place where an opposite colored Pawn can attack White from)
@@ -436,6 +435,10 @@ function Game(id, p1, p2)
 										threats.push(coordinatesToCell(new_x, new_y));
 								}
 							}
+						}
+						else if (traversePairs[i].checkGuard)
+						{
+
 						}
 					}
 				}
@@ -470,12 +473,11 @@ function Game(id, p1, p2)
 	}
   
 	this.verifyKing = function(x, y){
-		var moves = this.board[x][y].getValidMoves(this.board, x, y);
+		var moves = this.board[x][y].validMoves;
+
 		var i = 0;
-		console.log(moves);
 			while(i < moves.length){
 				if(this.checkKingThreat(moves[i]).length!=0){
-					console.log(this.checkKingThreat(moves[i]));
 					moves.splice(i,1);
 					i--;
 				}
@@ -506,7 +508,7 @@ function Game(id, p1, p2)
 		}
 
 		// Check if valid moves exist
-		var hasValid = this.setValidMovesAll(threats);
+		var hasValid = this.setValidMovesAll(threats, this.kingCells[newPlayerIndex]);
 
 		if (!hasValid) // No valid moves exist
 		{
@@ -522,23 +524,47 @@ function Game(id, p1, p2)
 	}
 
 	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
-	this.setValidMovesAll = function(threats)
+	this.setValidMovesAll = function(threats, kingCell)
 	{
+		if (threats != null)
+			console.log(threats.length);
+	
 		var hasValid = false;
+
+		// Get & validate King's moves
+		var xy = cellToCoordinates(kingCell);
+		this.board[xy[0]][xy[1]].setValidMoves(this.board, xy[0], xy[1]);
+		this.board[xy[0]][xy[1]].validMoves = this.verifyKing(xy[0], xy[1]);
+
+		if (this.board[xy[0]][xy[1]].validMoves.length > 0)
+			hasValid = true;
 
 		for (var i = 0; i < 8; ++i)
 		{
 			for (var j = 0; j < 8; ++j)
 			{
-				if (this.board[i][j] != null && this.board[i][j].isWhite == this.activePlayer)
+				if (this.board[i][j] != null && this.board[i][j].isWhite == this.activePlayer && !(this.board[i][j] instanceof King))
 				{
-					this.board[i][j].setValidMoves(this.board, i, j);
+					if (threats == null || threats.length <= 1)
+					{
+						this.board[i][j].setValidMoves(this.board, i, j);
 
-					// Validate moves here as follows:
-					// > If checkmate, then only allow moves that remove King's threat
-					// > Else alter guard pieces moves [disallow moves that result in check]
-					// Make use of threats array!
-					// If threats.length > 1, the only legal moves are King's moves
+						// Validate moves here as follows:
+						// > If check, then only allow moves that remove King's threat
+						// > Else alter guard pieces moves [disallow moves that result in check]
+
+						if (threats.length == 0)
+						{
+							// Guard piece validation
+						}
+						else if (threats.length == 1)
+						{
+							// Check removal validation
+						}
+					}
+					else // Only the King has valid moves (> 1 threat)
+						this.board[i][j].validMoves = [];
+
 
 					if (!hasValid && this.board[i][j].validMoves.length > 0) // valid moves found
 						hasValid = true;
