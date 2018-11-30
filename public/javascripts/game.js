@@ -362,7 +362,6 @@ function Game(id, p1, p2)
 				}
 				
 		}
-
 		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
@@ -455,19 +454,20 @@ function Game(id, p1, p2)
 
 		return threats;
 	}
+	
 	this.verifyKing = function(x, y){
 		var moves = this.board[x][y].getValidMoves(this.board, x, y);
+		this.activePlayer=!this.activePlayer;
 		var i = 0;
-		console.log(moves);
 			while(i < moves.length){
-				if(this.checkKingThreat(moves[i]).length!=0){
+				if(this.checkKingThreat(moves[i])[0]!=null){
 					console.log(this.checkKingThreat(moves[i]));
 					moves.splice(i,1);
 					i--;
 				}
 				i++;
 			}
-						
+		this.activePlayer=!this.activePlayer;				
 		return moves;
 	}
 	this.newTurn = function()
