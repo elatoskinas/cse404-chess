@@ -374,7 +374,6 @@ function Game(id, p1, p2)
 				}
 				
 		}
-
 		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
@@ -471,19 +470,88 @@ function Game(id, p1, p2)
 
 		return threats;
 	}
+
+	this.blockOrCapture = function (a, b){
+		a1 = cellToCoordinates(a)[0];
+		a2 = cellToCoordinates(a)[1];
+		b1 = cellToCoordinates(b)[0];
+		b2 = cellToCoordinates(b)[1];
+		var necessaryMoves= [];
+		var i;
+		var j;
+		// Diagonal threats
+		if((b1-a1)*(b2-a2)!=0){
+			if(a1>b1){
+				i=1;
+				if(a2>b2) j=1;
+				else j=-1;
+			} else {
+				i=-1;
+				if(a2>b2) j=1;
+				else j =-1;
+			}
+		
+		while(coordinatesToCell(a1,a2)!=b){
+			necessaryMoves.push(coordinatesToCell(a1,a2));	
+			a1-=i;
+			a2-=j;		
+			}
+		// Vertical and horizontal threats
+		} else {
+			// Vertical
+			if(a1==b1){
+				if(a2>b2) i=1;
+				else i=-1;
+
+				while(a2!=b2){
+					necessaryMoves.push(coordinatesToCell(a1,a2));
+					a2-=i;
+				}
+				// Horizontal
+			} else if(a2==b2){
+				if(a1>b1) i=1;
+				else i=-1;
+
+				while(a1!=b1){
+					necessaryMoves.push(coordinatesToCell(a1,a2));
+					a1-=i;
+				}
+			}
+		} 
+
+		return necessaryMoves;	
+	}
+
+	this.verify = function(validMoves, necessaryMoves){
+		var i = 0;
+
+		while(i<necessaryMoves.length){
+			if(!validMoves.includes(necessaryMoves[i])){
+				necessaryMoves.splice(i,1);
+				i--;
+			}
+				i++;
+		}
+		return necessaryMoves;
+
+	}
   
 	this.verifyKing = function(x, y){
 		var moves = this.board[x][y].validMoves;
 
 		var i = 0;
 			while(i < moves.length){
+<<<<<<< HEAD
+				if(this.checkKingThreat(moves[i])[0]!=null){
+					console.log(this.checkKingThreat(moves[i]));
+=======
 				if(this.checkKingThreat(moves[i]).length!=0){
+>>>>>>> a71ac1eb5206edc1e1b5b344908aaa38d11e5a4d
 					moves.splice(i,1);
 					i--;
 				}
 				i++;
-			}
-						
+			}			
 		return moves;
 	}
 
