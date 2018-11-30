@@ -388,12 +388,13 @@ function Game(id, p1, p2)
 							// Check if piece is of opposite color
 							if (this.board[new_x][new_y].isWhite != this.activePlayer)
 							{
-								// Check if piece is Queen
+								// For diagonal: Check if piece is Queen
 								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop)&&i<4)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
-								if((this.board[ne_x][new_y] instanceof Queen || this.board[new_x][new_y] instanceof Rook)&&i>3)
+								// For vertical and Horizontal: check if piece is a Queen or a Rook
+								if(((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Rook))&&i>3)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
@@ -540,17 +541,10 @@ function Game(id, p1, p2)
 
 		// Filter out tiles that are possibly threatened
 		var i = 0;
-<<<<<<< HEAD
-			while(i < moves.length){
-				if(this.checkKingThreat(moves[i])[0]!=null){
-					console.log(this.checkKingThreat(moves[i]));
-				if(this.checkKingThreat(moves[i]).length!=0){
-=======
 			while(i < moves.length)
 			{
 				if(this.checkKingThreat(moves[i])[0]!=null)
 				{
->>>>>>> c3b874ec7a8147f881cfa56676ae202bfe5e3549
 					moves.splice(i,1);
 					i--;
 				}
@@ -638,5 +632,4 @@ function Game(id, p1, p2)
 		}
 		return hasValid;
 	}
-}
 }
