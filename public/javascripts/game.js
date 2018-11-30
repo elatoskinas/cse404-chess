@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* Game class used to keep track of a game of ID
    and keep all the variables for that specific game */
 function Game(id, p1, p2)
@@ -633,7 +632,6 @@ function Game(id, p1, p2)
 		}
 		return hasValid;
 	}
-=======
 /* Game class used to keep track of a game of ID
    and keep all the variables for that specific game */
 function Game(id, p1, p2)
@@ -1303,5 +1301,5 @@ function Game(id, p1, p2)
 		}
 		return hasValid;
 	}
->>>>>>> c0bdc98aed8716aebd7075501637a3f5012be0a3
+}
 }
