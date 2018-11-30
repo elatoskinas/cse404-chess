@@ -454,10 +454,9 @@ function Game(id, p1, p2)
 
 		return threats;
 	}
-	
+
 	this.verifyKing = function(x, y){
 		var moves = this.board[x][y].getValidMoves(this.board, x, y);
-		this.activePlayer=!this.activePlayer;
 		var i = 0;
 			while(i < moves.length){
 				if(this.checkKingThreat(moves[i])[0]!=null){
@@ -466,8 +465,7 @@ function Game(id, p1, p2)
 					i--;
 				}
 				i++;
-			}
-		this.activePlayer=!this.activePlayer;				
+			}			
 		return moves;
 	}
 	this.newTurn = function()
