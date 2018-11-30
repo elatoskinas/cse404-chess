@@ -337,43 +337,7 @@ function Game(id, p1, p2)
 		var y = xy[1];
 	
 		// TBD: move diagonal & vert/horizontal traversion to that one loop
-		// Vertical & Horizontal
-		var stopu = false;
-		var stopd = false;
-		var stopl = false;
-		var stopr = false;
-		
-			/* Checking all the axis one tile at a time
-			If a piece is found, then traversing in that way is interrupted
-			If the piece found belongs to the other player, and is an instance of either a Rook a Queen or a King, then the piece is added to the array
-			*/
-		for(var i = 1; i <8; i++){
-				// Movement to the right
-			if(x+i<8&&(!stopu)&&this.board[x+i][y]!=null){
-					stopu=true;
-					if(this.board[x+i][y].isWhite!=this.activePlayer&&(this.board[x+i][y] instanceof Rook || this.board[x+i][y] instanceof Queen || this.board[x+i][y] instanceof King))
-						threats.push(coordinatesToCell(x+i, y));
-				}
-				// Movement to the left
-			if(x-i>0&&(!stopd)&&this.board[x-i][y]!=null){
-					stopd=true;
-					if(this.board[x-i][y].isWhite!=this.activePlayer&&(this.board[x-i][y] instanceof Rook || this.board[x-i][y] instanceof Queen || this.board[x-i][y] instanceof King))
-						threats.push(coordinatesToCell(x-i, y));
-				}
-				// Movement upwards
-			if(y+i<8&&(!stopr)&&this.board[x][y+i]!=null){
-					stopr=true;
-					if(this.board[x][y+i].isWhite!=this.activePlayer&&(this.board[x][y+i] instanceof Rook || this.board[x][y+i] instanceof Queen || this.board[x][y+1] instanceof King))
-						threats.push(coordinatesToCell(x,y+i));
-				}
-				// Movement downwards
-			if(y-i>0&&(!stopl)&&this.board[x][y-i]!=null){
-					stopl=true;
-					if(this.board[x][y-i].isWhite!=this.activePlayer&&(this.board[x][y-i] instanceof Rook || this.board[x][y-i] instanceof Queen || this.board[x][y-1] instanceof King))
-						threats.push(coordinatesToCell(x,y-i));
-				}
-				
-		}
+
 		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
@@ -381,19 +345,24 @@ function Game(id, p1, p2)
 			{ "possible":true, "x":-1,  "y":-1, "checkGuard": false },
 			{ "possible":true, "x":-1,  "y": 1, "checkGuard": false },
 			{ "possible":true, "x": 1,  "y":-1, "checkGuard": false },
-			{ "possible":true, "x": 1,  "y": 1, "checkGuard": false }
+			{ "possible":true, "x": 1,  "y": 1, "checkGuard": false },
+			{ "possible":true, "x": 0, 	"y":-1, "checkGuard": false },
+			{ "possible":true, "x": 0, 	"y": 1, "checkGuard": false },
+			{ "possible":true, "x":-1, 	"y": 0, "checkGuard": false },
+			{ "possible":true, "x": 1, 	"y": 0, "checkGuard": false },
 		]
 		
 		// Initialize offset
 		var offset = 0;
 
-		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible)
+		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible
+			|| traversePairs[4].possible || traversePairs[5].possible || traversePairs[6].possible || traversePairs[7].possible) 
 		{
 			// Increase offset
 			offset++;
 
 			// Iterate through all traversal pairs
-			for (var i = 0; i < 4; ++i)
+			for (var i = 0; i < traversePairs.length; ++i)
 			{
 				if (traversePairs[i].possible || traversePairs[i].checkGuard)
 				{
@@ -420,7 +389,11 @@ function Game(id, p1, p2)
 							if (this.board[new_x][new_y].isWhite != this.activePlayer)
 							{
 								// Check if piece is Queen
-								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop))
+								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop)&&i<4)
+								{
+									threats.push(coordinatesToCell(new_x, new_y));
+								}
+								if((this.board[ne_x][new_y] instanceof Queen || this.board[new_x][new_y] instanceof Rook)&&i>3)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
@@ -430,7 +403,7 @@ function Game(id, p1, p2)
 										threats.push(coordinatesToCell(new_x, new_y));
 									// Check if Pawn by only taking into account odd pairs for White & even pairs for Black (odd pairs are y = -1 [forward], the only
 									// place where an opposite colored Pawn can attack White from)
-									else if (((this.activePlayer && i % 2 != 0) || (!this.activePlayer && i % 2 == 0)) && this.board[new_x][new_y] instanceof Pawn)
+									else if (((this.activePlayer && i % 2 != 0) || (!this.activePlayer && i % 2 == 0)) && (this.board[new_x][new_y] instanceof Pawn)&&i<4)
 										threats.push(coordinatesToCell(new_x, new_y));
 								}
 							}
@@ -567,10 +540,17 @@ function Game(id, p1, p2)
 
 		// Filter out tiles that are possibly threatened
 		var i = 0;
+<<<<<<< HEAD
+			while(i < moves.length){
+				if(this.checkKingThreat(moves[i])[0]!=null){
+					console.log(this.checkKingThreat(moves[i]));
+				if(this.checkKingThreat(moves[i]).length!=0){
+=======
 			while(i < moves.length)
 			{
 				if(this.checkKingThreat(moves[i])[0]!=null)
 				{
+>>>>>>> c3b874ec7a8147f881cfa56676ae202bfe5e3549
 					moves.splice(i,1);
 					i--;
 				}
@@ -658,4 +638,5 @@ function Game(id, p1, p2)
 		}
 		return hasValid;
 	}
+}
 }
