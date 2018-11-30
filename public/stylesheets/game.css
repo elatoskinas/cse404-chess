@@ -3,4 +3,22 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
+  height: 720px;
+  width: 720px;
+}
+
+.chess-tile:nth-child(2n)
+{
+  background: black;
+}
+
+.chess-tile:nth-child(2n+1)
+{
+  background: silver;
+}
+
+.chess-tile img
+{
+  height: 80px;
+  width: 80px;
 }
