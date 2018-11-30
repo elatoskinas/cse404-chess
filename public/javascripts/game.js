@@ -1083,8 +1083,6 @@ function Game(id, p1, p2)
 											y1 -= traversePairs[i].y;
 										}
 
-										console.log(necessaryMoves);
-
 										// Set necessary moves array of piece
 										this.board[x1][y1].necessaryMoves = necessaryMoves;
 									}
@@ -1123,6 +1121,7 @@ function Game(id, p1, p2)
 		return threats;
 	}
 
+	/* Returns valid moves (for other pieces) when King is checked */
 	this.blockOrCapture = function (a, b){
 		a1 = cellToCoordinates(a)[0];
 		a2 = cellToCoordinates(a)[1];
@@ -1178,6 +1177,8 @@ function Game(id, p1, p2)
 		return necessaryMoves;	
 	}
 
+	/** Returns the intersection of validMoves and necessaryMoves (necessaryMoves being the actual validMoves,
+	 *  and validMoves being the valid moves of the piece) */
 	this.verify = function(validMoves, necessaryMoves){
 		var i = 0;
 
@@ -1192,6 +1193,7 @@ function Game(id, p1, p2)
 
 	}
   
+	/** Sets the King's valid moves in accordance to potential threat of Check in every cell */
 	this.setValidMovesKing = function(kingCell)
 	{
 		// Decode cell to coordinates
