@@ -389,7 +389,7 @@ function Game(id, p1, p2)
 							if (this.board[new_x][new_y].isWhite != this.activePlayer)
 							{
 								// Check if piece is Queen
-								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop)&&i<4)
+								if (((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop))&&i<4)
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
@@ -407,7 +407,7 @@ function Game(id, p1, p2)
 										threats.push(coordinatesToCell(new_x, new_y));
 								}
 							}
-							else
+							else if (cell == this.kingCells[this.activePlayer ? 1 : 0]) // Only checkGuard in this method if it's King's Cell being considered
 							{
 								traversePairs[i].checkGuard = true; // start checking if this piece is guarding the King
 							}
@@ -422,7 +422,36 @@ function Game(id, p1, p2)
 
 								if (this.board[new_x][new_y].isWhite != this.activePlayer)
 								{
-									// if black piece, check if it it's the appropriate type
+									// if opposite color piece, check if it's the appropriate type
+									if (this.board[new_x][new_y] instanceof Queen // Queen can traverse diagonally/vertically/horizontally. Potential Queen threat
+										|| ((i <= 3) && this.board[new_x][new_y] instanceof Bishop) // Bishop can traverse diagonally. Potential Bishop threat
+										|| ((i > 3) && this.board[new_x][new_y] instanceof Rook)) // Rook can traverse horizontally/vertically. Potential Rook threat
+									{
+										// --- BACKWARDS TRAVERSAL ---
+
+										// Start from threat piece
+										var x1 = new_x;
+										var y1 = new_y;
+
+										// Keep array of cells that are valid moves
+										var necessaryMoves = [];
+
+										// Iterate while guard piece not found
+										while (this.board[x1][y1] == null || this.board[x1][y1].isWhite != this.activePlayer)
+										{
+											// Push valid move into array
+											necessaryMoves.push(coordinatesToCell(x1, y1));
+
+											// Traverse back
+											x1 -= traversePairs[i].x;
+											y1 -= traversePairs[i].y;
+										}
+
+										console.log(necessaryMoves);
+
+										// Set necessary moves array of piece
+										this.board[x1][y1].necessaryMoves = necessaryMoves;
+									}
 								}
 							}
 						}
@@ -611,9 +640,10 @@ function Game(id, p1, p2)
 					{
 						this.board[i][j].setValidMoves(this.board, i, j);
 
-						if (threats.length == 0)
+						if (threats.length == 0 && this.board[i][j].necessaryMoves.length != 0)
 						{
 							// Guard piece validation
+							this.board[i][j].validMoves = this.verify(this.board[i][j].validMoves, this.board[i][j].necessaryMoves);
 						}
 						else if (threats.length == 1)
 						{
@@ -628,6 +658,10 @@ function Game(id, p1, p2)
 
 					if (!hasValid && this.board[i][j].validMoves.length > 0) // valid moves found
 						hasValid = true;
+				}
+				else if (this.board[i][j] != null && this.board[i][j].isWhite != this.activePlayer)
+				{
+					this.board[i][j].necessaryMoves = [];
 				}
 			}
 		}
