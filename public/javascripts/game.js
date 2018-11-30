@@ -378,7 +378,7 @@ function Game(id, p1, p2)
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
 		[
-			{ "possible":true, "x":-1,  "y":-1, "checkGuard": false  },
+			{ "possible":true, "x":-1,  "y":-1, "checkGuard": false },
 			{ "possible":true, "x":-1,  "y": 1, "checkGuard": false },
 			{ "possible":true, "x": 1,  "y":-1, "checkGuard": false },
 			{ "possible":true, "x": 1,  "y": 1, "checkGuard": false }
@@ -437,7 +437,19 @@ function Game(id, p1, p2)
 						}
 						else if (traversePairs[i].checkGuard)
 						{
+							// checkGuard will only be toggled if white piece found upon traversePairs[i].possible
+							
+							if (this.board[new_x][new_y] == null)
+								continue;
+							else
+							{
+								traversePairs[i].checkGuard = false;
 
+								if (this.board[new_x][new_y].isWhite != this.activePlayer)
+								{
+									// if black piece, check if it it's the appropriate type
+								}
+							}
 						}
 					}
 				}
@@ -474,6 +486,10 @@ function Game(id, p1, p2)
 	this.blockOrCapture = function (a, b){
 		a1 = cellToCoordinates(a)[0];
 		a2 = cellToCoordinates(a)[1];
+
+		if (this.board[a1][a2] instanceof Knight || this.board[a1][a2] instanceof Pawn)
+			return [a];
+
 		b1 = cellToCoordinates(b)[0];
 		b2 = cellToCoordinates(b)[1];
 		var necessaryMoves= [];
@@ -536,23 +552,30 @@ function Game(id, p1, p2)
 
 	}
   
-	this.verifyKing = function(x, y){
+	this.setValidMovesKing = function(kingCell)
+	{
+		// Decode cell to coordinates
+		var xy = cellToCoordinates(kingCell);
+		var x = xy[0];
+		var y = xy[1];
+
+		// Set valid moves (initial) for King
+		this.board[x][y].setValidMoves(this.board, x, y);
+		
+		// Reference to valid moves
 		var moves = this.board[x][y].validMoves;
 
+		// Filter out tiles that are possibly threatened
 		var i = 0;
-			while(i < moves.length){
-<<<<<<< HEAD
-				if(this.checkKingThreat(moves[i])[0]!=null){
-					console.log(this.checkKingThreat(moves[i]));
-=======
-				if(this.checkKingThreat(moves[i]).length!=0){
->>>>>>> a71ac1eb5206edc1e1b5b344908aaa38d11e5a4d
+			while(i < moves.length)
+			{
+				if(this.checkKingThreat(moves[i])[0]!=null)
+				{
 					moves.splice(i,1);
 					i--;
 				}
 				i++;
-			}			
-		return moves;
+			}
 	}
 
 	/** Ends turn of current active Player and starts a new turn */
@@ -598,9 +621,8 @@ function Game(id, p1, p2)
 
 		// Get & validate King's moves
 		var xy = cellToCoordinates(kingCell);
-		this.board[xy[0]][xy[1]].setValidMoves(this.board, xy[0], xy[1]);
-		this.board[xy[0]][xy[1]].validMoves = this.verifyKing(xy[0], xy[1]);
-
+		this.setValidMovesKing(kingCell);
+		
 		if (this.board[xy[0]][xy[1]].validMoves.length > 0)
 			hasValid = true;
 
@@ -614,10 +636,6 @@ function Game(id, p1, p2)
 					{
 						this.board[i][j].setValidMoves(this.board, i, j);
 
-						// Validate moves here as follows:
-						// > If check, then only allow moves that remove King's threat
-						// > Else alter guard pieces moves [disallow moves that result in check]
-
 						if (threats.length == 0)
 						{
 							// Guard piece validation
@@ -625,6 +643,8 @@ function Game(id, p1, p2)
 						else if (threats.length == 1)
 						{
 							// Check removal validation
+							var necessaryMoves = this.blockOrCapture(threats[0], kingCell);
+							this.board[i][j].validMoves = this.verify(this.board[i][j].validMoves, necessaryMoves);
 						}
 					}
 					else // Only the King has valid moves (> 1 threat)
