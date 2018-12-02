@@ -642,12 +642,13 @@ function Game(id, p1, p2)
 					{
 						this.board[i][j].setValidMoves(this.board, i, j);
 
-						if (threats.length == 0 && this.board[i][j].necessaryMoves.length != 0)
+						if (this.board[i][j].necessaryMoves.length != 0)
 						{
 							// Guard piece validation
 							this.board[i][j].validMoves = this.verify(this.board[i][j].validMoves, this.board[i][j].necessaryMoves);
 						}
-						else if (threats.length == 1)
+						
+						if (threats.length == 1)
 						{
 							// Check removal validation
 							var necessaryMoves = this.blockOrCapture(threats[0], kingCell);
