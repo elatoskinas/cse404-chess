@@ -382,6 +382,9 @@ function Game(id, p1, p2)
 							continue;
 						else if (traversePairs[i].possible)
 						{
+							if (this.board[new_x][new_y] instanceof King && this.board[new_x][new_y].isWhite == this.activePlayer) // ignore own color King (premature tile movement checks)
+								continue;
+
 							// No longer traverse through this pair
 							traversePairs[i].possible = false;
 
