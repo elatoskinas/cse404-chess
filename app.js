@@ -1,6 +1,6 @@
 var express = require("express");
 var http = require("http");
-var ws = require("ws");
+var websocket = require("ws");
 
 // route path
 var indexRouter = require("./routes/index.js");
@@ -16,13 +16,19 @@ app.use('/play', indexRouter);
 
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
-var connectionID = 0; // each websocket has a unique ID
+var connectionID = 0; // keep track of next unique WebSocket Connection ID
 
-var server = http.createServer(app).listen(port);
-const wss = new ws.Server( {server} );
+// TBD: Move these stats elsewhere
+var gamesInitialized = 0;
+// -------------------------------
+
+var currentGame = new Game(gamesInitialized++); // keep track of current game
+
+var server = http.createServer(app).listen(port); // create server on port
+const wss = new websocket.Server( {server} ); // create WebSocket server
 
 wss.on("connection", function connection(ws) {
-    ws.on("message", function incoming(message) {
-        console.log("X");
-    });
+    let connection = ws; // reference connection to ws
+    connection.id = connectionID++; // assign unique ID, increment it for use for next connections
+    let playerType = currentGame.addPlayer(connection); // true for White, false for Black
 });
