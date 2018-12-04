@@ -1,3 +1,5 @@
+this.necessaryMoves = [];
+
 function Piece(isWhite)
 {	
 	// we only have a boolean here because there's only 2 players
