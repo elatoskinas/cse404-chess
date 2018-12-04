@@ -330,15 +330,22 @@ function Game(id, p1, p2)
 	/** Checks if activePlayer's King would be threatened in specified cell */
 	this.checkKingThreat = function(cell)
 	{
+<<<<<<< HEAD
 		// TBD: make this function mark king guard pieces which could only be moved in one direction.
+=======
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 		var threats = [];
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
 		var y = xy[1];
+<<<<<<< HEAD
 	
 		// TBD: move diagonal & vert/horizontal traversion to that one loop
 
 		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
+=======
+
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
 		[
@@ -355,8 +362,17 @@ function Game(id, p1, p2)
 		// Initialize offset
 		var offset = 0;
 
+<<<<<<< HEAD
 		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible
 			|| traversePairs[4].possible || traversePairs[5].possible || traversePairs[6].possible || traversePairs[7].possible) 
+=======
+		// Keep checking for various scenarios while possible (so traverse all 8 directions, keep checking for guard pieces)
+		// This should cover every possible scenario for the King's threat (except from Knight, which is covered afterwards).
+		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible
+			|| traversePairs[4].possible || traversePairs[5].possible || traversePairs[6].possible || traversePairs[7].possible
+			|| traversePairs[0].checkGuard || traversePairs[1].checkGuard || traversePairs[2].checkGuard || traversePairs[3].checkGuard
+			|| traversePairs[4].checkGuard || traversePairs[5].checkGuard || traversePairs[6].checkGuard || traversePairs[7].checkGuard)
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 		{
 			// Increase offset
 			offset++;
@@ -374,6 +390,10 @@ function Game(id, p1, p2)
 					if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
 					{
 						traversePairs[i].possible = false;
+<<<<<<< HEAD
+=======
+						traversePairs[i].checkGuard = false;
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 						continue;
 					}
 					else
@@ -382,12 +402,19 @@ function Game(id, p1, p2)
 							continue;
 						else if (traversePairs[i].possible)
 						{
+<<<<<<< HEAD
+=======
+							if (this.board[new_x][new_y] instanceof King && this.board[new_x][new_y].isWhite == this.activePlayer) // ignore own color King (premature tile movement checks)
+								continue;
+
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 							// No longer traverse through this pair
 							traversePairs[i].possible = false;
 
 							// Check if piece is of opposite color
 							if (this.board[new_x][new_y].isWhite != this.activePlayer)
 							{
+<<<<<<< HEAD
 								// For diagonal: Check if piece is Queen
 								if ((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop)&&i<4)
 								{
@@ -395,6 +422,14 @@ function Game(id, p1, p2)
 								}
 								// For vertical and Horizontal: check if piece is a Queen or a Rook
 								if(((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Rook))&&i>3)
+=======
+								// Check if piece is Queen
+								if (((this.board[new_x][new_y] instanceof Queen) || (this.board[new_x][new_y] instanceof Bishop))&&i<4)
+								{
+									threats.push(coordinatesToCell(new_x, new_y));
+								}
+								if((this.board[new_x][new_y] instanceof Queen || this.board[new_x][new_y] instanceof Rook)&&i>3)
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 								{
 									threats.push(coordinatesToCell(new_x, new_y));
 								}
@@ -408,11 +443,21 @@ function Game(id, p1, p2)
 										threats.push(coordinatesToCell(new_x, new_y));
 								}
 							}
+<<<<<<< HEAD
 						}
 						else if (traversePairs[i].checkGuard)
 						{
 							// checkGuard will only be toggled if white piece found upon traversePairs[i].possible
 							
+=======
+							else if (cell == this.kingCells[this.activePlayer ? 1 : 0]) // Only checkGuard in this method if it's King's Cell being considered
+							{
+								traversePairs[i].checkGuard = true; // start checking if this piece is guarding the King
+							}
+						}
+						else if (traversePairs[i].checkGuard)
+						{
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 							if (this.board[new_x][new_y] == null)
 								continue;
 							else
@@ -421,7 +466,38 @@ function Game(id, p1, p2)
 
 								if (this.board[new_x][new_y].isWhite != this.activePlayer)
 								{
+<<<<<<< HEAD
 									// if black piece, check if it it's the appropriate type
+=======
+									// if opposite color piece, check if it's the appropriate type
+									if (this.board[new_x][new_y] instanceof Queen // Queen can traverse diagonally/vertically/horizontally. Potential Queen threat
+										|| ((i <= 3) && this.board[new_x][new_y] instanceof Bishop) // Bishop can traverse diagonally. Potential Bishop threat
+										|| ((i > 3) && this.board[new_x][new_y] instanceof Rook)) // Rook can traverse horizontally/vertically. Potential Rook threat
+									{
+										// --- BACKWARDS TRAVERSAL ---
+
+										// Start from threat piece
+										var x1 = new_x;
+										var y1 = new_y;
+
+										// Keep array of cells that are valid moves
+										var necessaryMoves = [];
+
+										// Iterate while guard piece not found
+										while (this.board[x1][y1] == null || this.board[x1][y1].isWhite != this.activePlayer)
+										{
+											// Push valid move into array
+											necessaryMoves.push(coordinatesToCell(x1, y1));
+
+											// Traverse back
+											x1 -= traversePairs[i].x;
+											y1 -= traversePairs[i].y;
+										}
+
+										// Set necessary moves array of piece
+										this.board[x1][y1].necessaryMoves = necessaryMoves;
+									}
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 								}
 							}
 						}
@@ -430,7 +506,11 @@ function Game(id, p1, p2)
 			}
 		}
 		
+<<<<<<< HEAD
 		// Horse
+=======
+		// Knight
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 		var horseCoords = [-2, -1, 1, 2];
 
 		for (var xi = 0; xi < 4; ++xi)
@@ -457,6 +537,10 @@ function Game(id, p1, p2)
 		return threats;
 	}
 
+<<<<<<< HEAD
+=======
+	/* Returns valid moves (for other pieces) when King is checked */
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 	this.blockOrCapture = function (a, b){
 		a1 = cellToCoordinates(a)[0];
 		a2 = cellToCoordinates(a)[1];
@@ -512,6 +596,11 @@ function Game(id, p1, p2)
 		return necessaryMoves;	
 	}
 
+<<<<<<< HEAD
+=======
+	/** Returns the intersection of validMoves and necessaryMoves (necessaryMoves being the actual validMoves,
+	 *  and validMoves being the valid moves of the piece) */
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 	this.verify = function(validMoves, necessaryMoves){
 		var i = 0;
 
@@ -526,6 +615,10 @@ function Game(id, p1, p2)
 
 	}
   
+<<<<<<< HEAD
+=======
+	/** Sets the King's valid moves in accordance to potential threat of Check in every cell */
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 	this.setValidMovesKing = function(kingCell)
 	{
 		// Decode cell to coordinates
@@ -610,11 +703,21 @@ function Game(id, p1, p2)
 					{
 						this.board[i][j].setValidMoves(this.board, i, j);
 
+<<<<<<< HEAD
 						if (threats.length == 0)
 						{
 							// Guard piece validation
 						}
 						else if (threats.length == 1)
+=======
+						if (this.board[i][j].necessaryMoves.length != 0)
+						{
+							// Guard piece validation
+							this.board[i][j].validMoves = this.verify(this.board[i][j].validMoves, this.board[i][j].necessaryMoves);
+						}
+						
+						if (threats.length == 1)
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 						{
 							// Check removal validation
 							var necessaryMoves = this.blockOrCapture(threats[0], kingCell);
@@ -628,6 +731,13 @@ function Game(id, p1, p2)
 					if (!hasValid && this.board[i][j].validMoves.length > 0) // valid moves found
 						hasValid = true;
 				}
+<<<<<<< HEAD
+=======
+				else if (this.board[i][j] != null && this.board[i][j].isWhite != this.activePlayer)
+				{
+					this.board[i][j].necessaryMoves = [];
+				}
+>>>>>>> 3f1f5efcb01fa54bf1bd2cbc8beaf10d5f597374
 			}
 		}
 		return hasValid;
