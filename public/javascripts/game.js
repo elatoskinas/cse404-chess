@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Game class used to keep track of a game of ID
    and keep all the variables for that specific game */
 function Game(id, p1, p2)
@@ -632,6 +633,8 @@ function Game(id, p1, p2)
 		}
 		return hasValid;
 	}
+=======
+>>>>>>> aea85798823da4aa2f64100e223e6e4b5d39bdea
 /* Game class used to keep track of a game of ID
    and keep all the variables for that specific game */
 function Game(id, p1, p2)
@@ -964,15 +967,11 @@ function Game(id, p1, p2)
 	/** Checks if activePlayer's King would be threatened in specified cell */
 	this.checkKingThreat = function(cell)
 	{
-		// TBD: make this function mark king guard pieces which could only be moved in one direction.
 		var threats = [];
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
 		var y = xy[1];
-	
-		// TBD: move diagonal & vert/horizontal traversion to that one loop
 
-		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
 		[
@@ -989,8 +988,12 @@ function Game(id, p1, p2)
 		// Initialize offset
 		var offset = 0;
 
+		// Keep checking for various scenarios while possible (so traverse all 8 directions, keep checking for guard pieces)
+		// This should cover every possible scenario for the King's threat (except from Knight, which is covered afterwards).
 		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible
-			|| traversePairs[4].possible || traversePairs[5].possible || traversePairs[6].possible || traversePairs[7].possible) 
+			|| traversePairs[4].possible || traversePairs[5].possible || traversePairs[6].possible || traversePairs[7].possible
+			|| traversePairs[0].checkGuard || traversePairs[1].checkGuard || traversePairs[2].checkGuard || traversePairs[3].checkGuard
+			|| traversePairs[4].checkGuard || traversePairs[5].checkGuard || traversePairs[6].checkGuard || traversePairs[7].checkGuard)
 		{
 			// Increase offset
 			offset++;
@@ -1008,6 +1011,7 @@ function Game(id, p1, p2)
 					if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
 					{
 						traversePairs[i].possible = false;
+						traversePairs[i].checkGuard = false;
 						continue;
 					}
 					else
@@ -1016,6 +1020,9 @@ function Game(id, p1, p2)
 							continue;
 						else if (traversePairs[i].possible)
 						{
+							if (this.board[new_x][new_y] instanceof King && this.board[new_x][new_y].isWhite == this.activePlayer) // ignore own color King (premature tile movement checks)
+								continue;
+
 							// No longer traverse through this pair
 							traversePairs[i].possible = false;
 
@@ -1047,7 +1054,7 @@ function Game(id, p1, p2)
 							}
 						}
 						else if (traversePairs[i].checkGuard)
-						{	
+						{
 							if (this.board[new_x][new_y] == null)
 								continue;
 							else
@@ -1092,7 +1099,7 @@ function Game(id, p1, p2)
 			}
 		}
 		
-		// Horse
+		// Knight
 		var horseCoords = [-2, -1, 1, 2];
 
 		for (var xi = 0; xi < 4; ++xi)
@@ -1276,12 +1283,13 @@ function Game(id, p1, p2)
 					{
 						this.board[i][j].setValidMoves(this.board, i, j);
 
-						if (threats.length == 0 && this.board[i][j].necessaryMoves.length != 0)
+						if (this.board[i][j].necessaryMoves.length != 0)
 						{
 							// Guard piece validation
 							this.board[i][j].validMoves = this.verify(this.board[i][j].validMoves, this.board[i][j].necessaryMoves);
 						}
-						else if (threats.length == 1)
+						
+						if (threats.length == 1)
 						{
 							// Check removal validation
 							var necessaryMoves = this.blockOrCapture(threats[0], kingCell);
@@ -1303,5 +1311,8 @@ function Game(id, p1, p2)
 		}
 		return hasValid;
 	}
+<<<<<<< HEAD
 }
+=======
+>>>>>>> aea85798823da4aa2f64100e223e6e4b5d39bdea
 }
