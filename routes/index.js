@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var fs = require()
-var app = express();
 /* GET home page. */
 
 router.get("/play", function(req, res)
