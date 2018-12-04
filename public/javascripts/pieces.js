@@ -6,6 +6,9 @@ function Piece(isWhite)
 	// final list of valid moves (after post-validation with regards to check checking)
 	this.validMoves = [];
 
+	// if empty, then take valid moves. Else, take this array
+	this.necessaryMoves = [];
+
 	/** Gets image name of the specified piece */
 	this.getImageName = function()
 	{
