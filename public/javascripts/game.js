@@ -688,3 +688,5 @@ function Game(id)
 		return hasValid;
 	}
 }
+
+module.exports = Game;
