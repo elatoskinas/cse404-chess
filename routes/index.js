@@ -3,17 +3,13 @@ var router = express.Router();
 var fs = require()
 var app = express();
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+
+router.get("/play", function(req, res)
+{
+  res.sendFile("game.html", {root: "./public"});
 });
 
-app.get('/home', function(req, res){
-  if(req.url === '/home'){
-    res.writeHead(200, ('Content type': 'text/html'));
-
-  }
-    res.send("Yes!!");
+router.get("/", function(req, res){
+  res.sendFile("splash.html", {root: "./public"});
 });
-
-app.listen(3000);
 module.exports = router;
