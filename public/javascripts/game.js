@@ -7,17 +7,18 @@ function Game(id)
 	this.p2 = null;
 	
 	this.getID = function() { return this.id; }
+
 	this.addPlayer = function(p)
 	{
 		if (p1 == null)
 		{
-			p = p1;
+			p1 = p;
 			return true; // white
 		}
 		
 		if (p2 == null)
 		{
-			p = p2;
+			p2 = p;
 			return false; // black
 		}
 	}
