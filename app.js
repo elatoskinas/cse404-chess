@@ -8,4 +8,7 @@ var app = express();
 
 app.use(express.static(__dirname + "/public"));
 
+app.use('/', indexRouter);
+app.use('/play', indexRouter);
+
 http.createServer(app).listen(port);
