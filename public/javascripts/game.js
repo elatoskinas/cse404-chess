@@ -330,15 +330,11 @@ function Game(id, p1, p2)
 	/** Checks if activePlayer's King would be threatened in specified cell */
 	this.checkKingThreat = function(cell)
 	{
-		// TBD: make this function mark king guard pieces which could only be moved in one direction.
 		var threats = [];
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
 		var y = xy[1];
-	
-		// TBD: move diagonal & vert/horizontal traversion to that one loop
 
-		// Diagonal (Unfortunately copying my code here from pieces.js, kind of hard to generalize this)
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
 		[
@@ -355,8 +351,12 @@ function Game(id, p1, p2)
 		// Initialize offset
 		var offset = 0;
 
+		// Keep checking for various scenarios while possible (so traverse all 8 directions, keep checking for guard pieces)
+		// This should cover every possible scenario for the King's threat (except from Knight, which is covered afterwards).
 		while (traversePairs[0].possible || traversePairs[1].possible || traversePairs[2].possible || traversePairs[3].possible
-			|| traversePairs[4].possible || traversePairs[5].possible || traversePairs[6].possible || traversePairs[7].possible) 
+			|| traversePairs[4].possible || traversePairs[5].possible || traversePairs[6].possible || traversePairs[7].possible
+			|| traversePairs[0].checkGuard || traversePairs[1].checkGuard || traversePairs[2].checkGuard || traversePairs[3].checkGuard
+			|| traversePairs[4].checkGuard || traversePairs[5].checkGuard || traversePairs[6].checkGuard || traversePairs[7].checkGuard)
 		{
 			// Increase offset
 			offset++;
@@ -374,6 +374,7 @@ function Game(id, p1, p2)
 					if (new_x < 0 || new_x >= 8 || new_y < 0 || new_y >= 8)
 					{
 						traversePairs[i].possible = false;
+						traversePairs[i].checkGuard = false;
 						continue;
 					}
 					else
@@ -416,7 +417,7 @@ function Game(id, p1, p2)
 							}
 						}
 						else if (traversePairs[i].checkGuard)
-						{	
+						{
 							if (this.board[new_x][new_y] == null)
 								continue;
 							else
@@ -461,7 +462,7 @@ function Game(id, p1, p2)
 			}
 		}
 		
-		// Horse
+		// Knight
 		var horseCoords = [-2, -1, 1, 2];
 
 		for (var xi = 0; xi < 4; ++xi)
