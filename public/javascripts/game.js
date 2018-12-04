@@ -334,7 +334,6 @@ function Game(id, p1, p2)
 		var xy = cellToCoordinates(cell);
 		var x = xy[0];
 		var y = xy[1];
-
 		// Instantiate traversal pairs with initial possibility of traversal
 		var traversePairs =
 		[
