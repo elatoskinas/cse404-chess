@@ -1,6 +1,7 @@
 var express = require("express");
 var http = require("http");
 var websocket = require("ws");
+var Game = require("./public/javascripts/game");
 
 // route path
 var indexRouter = require("./routes/index.js");
