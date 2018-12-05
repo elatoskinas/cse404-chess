@@ -2,6 +2,7 @@
    and keep all the variables for that specific game */
 function GameState()
 {
+	var messages = require("./messages");
 	// Game State here
 	/* Game states:
 		0 = ongoing
@@ -18,9 +19,6 @@ function GameState()
 
 	// A boolean to indicate which player is active, true = player one (white).
 	this.activePlayer = true;
-
-	// The cell of the selected piece (if nothing is selected, this is simply an empty string)
-	this.selectedPiece = "";
 
 	this.availableMoves = []; 
   
@@ -83,13 +81,6 @@ function GameState()
 			this.board[i][6] = new Pawn(false); // add Black Pawn
 		}
 
-		// Initialize board graphics
-		for(var i = 0; i<=1; i++)
-			for(j=0;j<8;j++){
-//				this.updateTile(coordinatesToCell(j,i));
-//				this.updateTile(coordinatesToCell(j,7-i));
-			}
-
 		this.setValidMovesAll([], this.kingCells[1]); // set valid moves for all pieces
 	}
 	
@@ -106,7 +97,7 @@ function GameState()
 		var y2 = c2[1];
 
 		// Adding the move to the side panel
-		this.addToSidePanel(cell1, cell2, this.board[x1][y1], this.board[x2][y2]);
+//		this.addToSidePanel(cell1, cell2, this.board[x1][y1], this.board[x2][y2]);
 
 		if (this.board[x1][y1] instanceof Pawn)
 		{
@@ -128,17 +119,23 @@ function GameState()
 		}
 
 		// Moving the piece from the source to the destination and clearing the destination
-		this.board[x2][y2]=	this.board[x1][y1];
+		this.board[x2][y2] = this.board[x1][y1];
 		this.board[x1][y1] = null;
 
 		// Clearing selected piece
-		this.selectPiece("", null);
-
-		// Update graphics
-		this.updateTile(cell1);
-		this.updateTile(cell2);
+		this.selectPiece("", null, "");
 
 		this.newTurn();
+
+		// Construct message
+		var moveMsg = messages.O_MOVE_PIECE;
+		moveMsg.player = !this.activePlayer;
+		moveMsg.tileFrom = cell1;
+		moveMsg.tileTo = cell2;
+		moveMsg.image = this.board[x2][y2].getImageName();
+
+		// And return it
+		return moveMsg;
 	}
 
 	/* Add history entry to side panel */
@@ -182,28 +179,18 @@ function GameState()
 		// Construct & Populate Chess Board
 		this.constructBoard();
 		this.populateBoard();
-
-//		var that = this; // temporary reference to current Game objectc
-
-		// Set onClick Listeners to chess tile image DOM objects
-/*		$(".chess-tile img").on("click", function(event)
-		{
-			// We make use of both that and this here.
-			// that refers to the Game Object, and this refers to the DOM element that was clicked on.
-			// The parent of this has the ID that represents the cell
-			that.getClick(this.parentElement.id);
-		});*/
 	}
 	
-	/* Tile clicked event (this will have to come from an individual player
-		and be sent over to the server)*/
-	this.getClick = function(cell)
+	/* Tile clicked event on cell by specified Player */
+	this.getClick = function(cell, player, selectedPiece)
 	{
+		if (player != this.activePlayer) // not the correct Player's turn
+			return;
+
 		// Convert cell to actual coordinates
 		var cellCoordinates = cellToCoordinates(cell);
 		var x = cellCoordinates[0];
 		var y = cellCoordinates[1];
-		
 
 		// Get piece in tile
 		var piece = this.board[x][y];
@@ -217,79 +204,73 @@ function GameState()
 		console.log(cell + " (" + x + "," + y + ")" + " - " + name);
 		// ------------------------------
 
-		// First and foremost, check if it's the correct Player's turn (let's use this boolean as a temporary placeholder)
-		var playerTurn = true;
-
-		// Check if the player may make a turn
-		if (playerTurn)
-		{
-			// Check if some piece is selected by the player
-			if (this.selectedPiece == "")
-			{	
-				// Check if a piece is already in the tile
-				if (piece != null)
+		// Check if some piece is selected by the player
+		if (selectedPiece == "")
+		{	
+			// Check if a piece is already in the tile
+			if (piece != null)
+			{
+				if (this.activePlayer == piece.isWhite) // Piece color matches Player
 				{
-					if (this.activePlayer == piece.isWhite) // Piece color matches Player
-					{
-						// Highlight Player's piece
-						this.selectPiece(cell, piece);
-					}
-					else
-					{
-						// Blink tile in red
-					}
+					// Highlight Player's piece
+					return this.selectPiece(cell, piece, selectedPiece);
 				}
 				else
 				{
 					// Blink tile in red
 				}
 			}
-			else // Piece is already selected by Player
+			else
 			{
-				// Check if a piece is already in the tile
-				if (piece != null)
-				{
-					if (this.activePlayer == piece.isWhite) // Piece color matches Player
-					{
-						// Reselect piece
-						this.selectPiece(cell, piece);
-					}
-					else // Enemy's piece selected
-					{
-						// Move piece (if move is valid)
-						if(this.availableMoves.includes(cell)){
-								this.movePiece(this.selectedPiece, cell);
-						}
-						// Blink in red if move is not valid
-					}
-				}
-				else
-				{
-					// Move piece (if move is valid)
-					if(this.availableMoves.includes(cell)){
-						this.movePiece(this.selectedPiece, cell);
-					}
-					// Else blink in red if move is not valid
-				}
+				// Blink tile in red
 			}
 		}
+		else // Piece is already selected by Player
+		{
+			// Check if a piece is already in the tile
+			if (piece != null)
+			{
+				if (this.activePlayer == piece.isWhite) // Piece color matches Player
+				{
+					// Reselect piece
+					return this.selectPiece(cell, piece, selectedPiece);
+				}
+				else // Enemy's piece selected
+				{
+					// Move piece (if move is valid)
+					if(this.availableMoves.includes(cell))
+					{
+						return this.movePiece(selectedPiece, cell);
+					}
+					// Blink in red if move is not valid
+				}
+			}
+			else
+			{
+				// Move piece (if move is valid)
+				if(this.availableMoves.includes(cell)){
+					return this.movePiece(selectedPiece, cell);
+				}
+				// Else blink in red if move is not valid
+			}
+		}
+
+		return null;
 	}
 
 	/** Select piece, highlight the piece & it's valid moves */
-	this.selectPiece = function(cell, piece)
+	this.selectPiece = function(cell, piece, selectedPiece)
 	{
-		if (cell == this.selectedPiece) // optimization step: do not reselect
+		if (cell == selectedPiece) // optimization step: do not reselect
 			return;
 
 		console.log(cell + " selected!");
 	
-		if (this.selectedPiece != "")
+		if (selectedPiece != "")
 		{
-			this.availableMoves="";
+			this.availableMoves=[];
 			// Unhighlight last piece & stop displaying valid moves
 		}
-	
-		this.selectedPiece = cell;
 	
 		if (cell != "")
 		{
@@ -298,24 +279,14 @@ function GameState()
 			// piece.setValidMoves(this.board, movePair[0], movePair[1]);
 			this.availableMoves = piece.validMoves;
 		}
-	}
 
-	/** Update image in tile with coressponding chess piece */
-	this.updateTile = function(cell)
-	{
-		// Convert cell to coordinates
-		var xy = cellToCoordinates(cell);
-		// Get piece at coordinates
-		var piece = this.board[xy[0]][xy[1]];
-		// If piece is null, then use empty image, else get piece's image
-		var imageName = (piece != null) ? piece.getImageName() : "empty";
+		// Construct message
+		var selectMsg = messages.O_SELECT_PIECE;
+		selectMsg.tile = cell;
+		selectMsg.validMoves = this.availableMoves;
 
-		// Update image
-		// 1.JQuery img with specified cell as ID
-		// 2.Get first element (index 0) [which is the image]
-		// 3.Access and change src image
-		// [images reside in images/pieces/]
-		$("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
+		// And return it
+		return selectMsg;
 	}
 
 	/** Checks if activePlayer's King would be threatened in specified cell */
