@@ -10,13 +10,13 @@ function Game(id)
 	{
 		if (this.p1 == null)
 		{
-			this.p1 = p;
-			return true; // white
+            this.p1 = p;
+            return true; // white
 		}
 		
 		if (this.p2 == null)
 		{
-			this.p2 = p;
+            this.p2 = p;
 			return false; // black
 		}
     }
