@@ -90,5 +90,33 @@ wss.on("connection", function connection(ws) {
             }
         }
     });
-});
 
+    // inform the client about the pieces that will be controlled by the client (constructing the message accordingly beforehand)
+    let playerTypeJSON = messages.O_PLAYER_TYPE;
+    playerTypeJSON.data = playerType;
+    connection.send(JSON.stringify(playerTypeJSON));
+
+    // Get incoming messages from WebSockets
+    connection.on("message", function incoming(message)
+    {
+        var incomingMSG = JSON.parse(message);
+
+        if (incomingMSG.type === messages.O_TILE_CLICK_BY.type)
+        {
+            var clickResponse = currentGame.gameState.getClick(incomingMSG.tile, incomingMSG.player, incomingMSG.selected);
+
+            if (clickResponse != null)
+            {
+                if (clickResponse.type === "MOVE-PIECE") // Update board for both players
+                {
+                    currentGame.p1.send(JSON.stringify(clickResponse));
+                    currentGame.p2.send(JSON.stringify(clickResponse));
+                }
+                else
+                {
+                    connection.send(JSON.stringify(clickResponse));
+                }
+            }
+        }
+    });
+});
