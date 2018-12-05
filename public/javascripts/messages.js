@@ -24,16 +24,16 @@
     // Server to Client: Black's Turn
     exports.O_PLAYER_TURN = {
         type: "BLACK-TURN",
-        data: null
+        data: null // A or B
     }
     // Server to Player A or B: Check
     exports.O_CHECK = {
         type: "CHECK",
-        data: null
+        data: null // A or B
     }
     // Server to Player A & B: GameOver With Win/Stalemate/Loss result
     exports.O_CHECKMATE = {
         type: "CHECKMATE",
-        data: null
+        data: null // Win/Stalemate/Loss
     }
 });
