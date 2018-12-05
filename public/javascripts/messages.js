@@ -24,7 +24,8 @@
 		player: false, // the player that did the movement
 		tileFrom: "",
 		tileTo: "",
-		image: ""
+        imageFrom: "",
+        imageTo: ""
     }
     
     // Server to Client: Piece Selection Result

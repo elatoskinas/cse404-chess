@@ -96,6 +96,14 @@ function GameState()
 		var x2 = c2[0];
 		var y2 = c2[1];
 
+		// Construct message
+		var moveMsg = messages.O_MOVE_PIECE;
+		moveMsg.player = !this.activePlayer;
+		moveMsg.tileFrom = cell1;
+		moveMsg.tileTo = cell2;
+		moveMsg.imageTo = (this.board[x2][y2] == null ? "empty" : this.board[x2][y2].getImageName());
+		moveMsg.imageFrom = this.board[x1][y1].getImageName();
+
 		// Adding the move to the side panel
 //		this.addToSidePanel(cell1, cell2, this.board[x1][y1], this.board[x2][y2]);
 
@@ -127,14 +135,7 @@ function GameState()
 
 		this.newTurn();
 
-		// Construct message
-		var moveMsg = messages.O_MOVE_PIECE;
-		moveMsg.player = !this.activePlayer;
-		moveMsg.tileFrom = cell1;
-		moveMsg.tileTo = cell2;
-		moveMsg.image = this.board[x2][y2].getImageName();
-
-		// And return it
+		// Return message
 		return moveMsg;
 	}
 
