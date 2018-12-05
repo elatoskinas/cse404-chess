@@ -62,7 +62,7 @@ wss.on("connection", function connection(ws) {
 
             if (clickResponse != null)
             {
-                if (clickResponse.type === "MOVE-PIECE")
+                if (clickResponse.type === "MOVE-PIECE") // Update board for both players
                 {
                     currentGame.p1.send(JSON.stringify(clickResponse));
                     currentGame.p2.send(JSON.stringify(clickResponse));

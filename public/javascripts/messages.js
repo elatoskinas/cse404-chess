@@ -18,7 +18,7 @@
     };
 
     // Server to Client: Piece Movement
-	var O_MOVE_PIECE =
+	exports.O_MOVE_PIECE =
 	{
 		type: "MOVE-PIECE",
 		player: false, // the player that did the movement
@@ -28,7 +28,7 @@
     }
     
     // Server to Client: Piece Selection Result
-	var O_SELECT_PIECE =
+	exports.O_SELECT_PIECE =
 	{
 		type: "SELECT-PIECE",
 		tile: "",

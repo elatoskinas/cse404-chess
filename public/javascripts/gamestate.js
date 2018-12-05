@@ -127,13 +127,14 @@ function GameState()
 
 		this.newTurn();
 
+		// Construct message
 		var moveMsg = messages.O_MOVE_PIECE;
-
 		moveMsg.player = !this.activePlayer;
 		moveMsg.tileFrom = cell1;
 		moveMsg.tileTo = cell2;
 		moveMsg.image = this.board[x2][y2].getImageName();
 
+		// And return it
 		return moveMsg;
 	}
 
@@ -237,7 +238,8 @@ function GameState()
 				else // Enemy's piece selected
 				{
 					// Move piece (if move is valid)
-					if(this.availableMoves.includes(cell)){
+					if(this.availableMoves.includes(cell))
+					{
 						return this.movePiece(selectedPiece, cell);
 					}
 					// Blink in red if move is not valid
@@ -278,13 +280,12 @@ function GameState()
 			this.availableMoves = piece.validMoves;
 		}
 
-		console.log(messages.O_SELECT_PIECE);
-
+		// Construct message
 		var selectMsg = messages.O_SELECT_PIECE;
-
 		selectMsg.tile = cell;
 		selectMsg.validMoves = this.availableMoves;
 
+		// And return it
 		return selectMsg;
 	}
 

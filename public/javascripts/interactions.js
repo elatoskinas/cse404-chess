@@ -12,7 +12,7 @@
 
         if (incomingMSG.type === "UPDATE-TILE")
         {
-            updateImage(incomingMSG.tile, incomingMSG.image);
+            updateTile(incomingMSG.tile, incomingMSG.image);
         }
         else if (incomingMSG.type === "PLAYER-TYPE")
         {
@@ -25,8 +25,8 @@
         }
         else if (incomingMSG.type === "MOVE-PIECE")
         {
-            updateImage(incomingMSG.tileFrom, "empty");
-            updateImage(incomingMSG.tileTo, incomingMSG.image);
+            updateTile(incomingMSG.tileFrom, "empty");
+            updateTile(incomingMSG.tileTo, incomingMSG.image);
         }
     }
 
@@ -49,7 +49,7 @@
 	});
 })(); // execute immediately
 
-var updateImage = function(cell, imageName)
+var updateTile = function(cell, imageName)
 {
     // Update image
 	// 1.JQuery img with specified cell as ID
@@ -58,3 +58,38 @@ var updateImage = function(cell, imageName)
 	// [images reside in images/pieces/]
 	$("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
 }
+
+/* Add history entry to side panel */
+/*this.addToSidePanel = function(source, dest, imageFrom, imageTo)
+{
+	// Instantiate piece images
+	var $image1 = $("<img>");
+	var $image2 = $("<img>");
+	var $tableEntry = $("<p>");
+	var translateText = source + "->" + dest;
+
+	// Instantiate move text (src -> dst)
+	var $text = $("<p>").text(source + "->" + dest);
+
+	// Update Images
+	$image1[0].src = "images/pieces/" + imageFrom + ".png";
+
+	if (imageTo != "empty")
+		$image2[0].src = "images/pieces/" + imageTo + ".png";
+
+	// Initialize new table entry div
+	var $tableEntry = $("<div class=\"table-entry\">");
+
+	// Append images & text to table entry
+	$tableEntry.append($image1);
+	$tableEntry.append($text);
+	$tableEntry.append($image2);
+
+    // Append the table entry to the right pannel
+    //	var $panel1 = $("#MovesUser1");
+//	var $panel2 = $("#MovesUser2");
+
+	if(this.activePlayer)
+		$panel1.append($tableEntry);
+	else $panel2.append($tableEntry);
+}*/
