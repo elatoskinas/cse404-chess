@@ -1,28 +1,7 @@
 /* Game class used to keep track of a game of ID
    and keep all the variables for that specific game */
-function Game(id)
-{
-	this.id = id;
-	this.p1 = null;
-	this.p2 = null;
-	
-	this.getID = function() { return this.id; }
-
-	this.addPlayer = function(p)
-	{
-		if (p1 == null)
-		{
-			p1 = p;
-			return true; // white
-		}
-		
-		if (p2 == null)
-		{
-			p2 = p;
-			return false; // black
-		}
-	}
-	
+function GameState()
+{	
 	// Game State here
 	/* Game states:
 		0 = ongoing
@@ -689,3 +668,10 @@ function Game(id)
 		return hasValid;
 	}
 }
+
+// Initializes the game and gets socket connection
+(function setup()
+{
+    // start WebSocket connection
+    var socket = new WebSocket("ws://localhost:3000");
+})(); // execute immediately
