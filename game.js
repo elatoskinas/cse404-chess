@@ -6,8 +6,11 @@ function Game(id)
 	this.p1 = null;
 	this.p2 = null;
 	this.gameState = null;
+	this.hasTwoPlayers = false;
 
 	this.getID = function() { return this.id; }
+
+
 
 	this.addPlayer = function(p)
 	{
@@ -24,10 +27,12 @@ function Game(id)
 		
 		if (this.p2 == null)
 		{
-      this.p2 = p;
+			this.p2 = p;
+			this.hasTwoPlayers=true;
 			return false; // black
 		}
 	}
 }
+
 
 module.exports = Game;
