@@ -4,6 +4,7 @@
     // start WebSocket connection
     var socket = new WebSocket("ws://localhost:3000");
     var isWhite = true;
+    var selectedPiece = "";
 
     socket.onmessage = function(event)
     {
@@ -18,6 +19,15 @@
             if (incomingMSG.data == false)
                 isWhite = false;
         }
+        else if (incomingMSG.type === "SELECT-PIECE")
+        {
+            selectedPiece = incomingMSG.tile;
+        }
+        else if (incomingMSG.type === "MOVE-PIECE")
+        {
+            updateImage(incomingMSG.tileFrom, "empty");
+            updateImage(incomingMSG.tileTo, incomingMSG.image);
+        }
     }
 
     // Set onClick Listeners to chess tile image DOM objects
@@ -27,11 +37,13 @@
         {
             type: "TILE-CLICKED-BY",
             player: false, // get player that the tile was clicked by (false for black, true for white)
-            tile: "" // get tile that was clicked on
+            tile: "", // get tile that was clicked on
+            selected: "" // get already selected tile, if exists
         };
 
         O_TILE_CLICK_BY.player = isWhite;
         O_TILE_CLICK_BY.tile = this.parentElement.id;
+        O_TILE_CLICK_BY.selected = selectedPiece;
 
         socket.send(JSON.stringify(O_TILE_CLICK_BY));
 	});

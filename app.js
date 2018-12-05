@@ -51,16 +51,6 @@ wss.on("connection", function connection(ws) {
     playerTypeJSON.data = playerType;
     connection.send(JSON.stringify(playerTypeJSON));
 
-	// Initialize board graphics
-    for(var i = 0; i<=1; i++)
-    {
-        for(var j=0;j<8;j++)
-        {
-            connection.send(currentGame.gameState.updateTileJSON(j, i));
-            connection.send(currentGame.gameState.updateTileJSON(j, 7-i));
-		}
-    }
-
     // Get incoming messages from WebSockets
     connection.on("message", function incoming(message)
     {
@@ -68,7 +58,20 @@ wss.on("connection", function connection(ws) {
 
         if (incomingMSG.type === messages.O_TILE_CLICK_BY.type)
         {
-            currentGame.gameState.getClick(incomingMSG.tile, incomingMSG.player);
+            var clickResponse = currentGame.gameState.getClick(incomingMSG.tile, incomingMSG.player, incomingMSG.selected);
+
+            if (clickResponse != null)
+            {
+                if (clickResponse.type === "MOVE-PIECE")
+                {
+                    currentGame.p1.send(JSON.stringify(clickResponse));
+                    currentGame.p2.send(JSON.stringify(clickResponse));
+                }
+                else
+                {
+                    connection.send(JSON.stringify(clickResponse));
+                }
+            }
         }
     });
 });
