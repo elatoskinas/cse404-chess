@@ -1,3 +1,5 @@
+var GameState = require("./public/javascripts/gamestate");
+
 function Game(id)
 {
 	this.id = id;
