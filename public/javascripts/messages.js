@@ -51,5 +51,10 @@
         data: false
     };
     exports.S_PLAYER_BLACK = JSON.stringify(exports.O_PLAYER_BLACK);
+
+    // Client to Server: Set Gamestate
+
+    // Server to Client: Update Board
+    
 }(typeof exports === "undefined" ? this.messages = {} : exports));
 // If exports is undefined, we are on the client; else the server

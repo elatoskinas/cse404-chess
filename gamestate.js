@@ -1,7 +1,7 @@
 /* GameState class used to keep track of a single game (shared among two players)
    and keep all the variables for that specific game */
 function GameState()
-{	
+{
 	// Game State here
 	/* Game states:
 		0 = ongoing
@@ -10,7 +10,7 @@ function GameState()
 		3 = draw
 		4 = one of the players disconnected
 	*/
-	this.gameState = 0;
+//	this.gameState = 0;
 
 	// Booleans to indicate the check status for each player
 	this.checkStatus = [false, false];
