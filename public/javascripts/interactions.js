@@ -26,7 +26,8 @@
         else if (incomingMSG.type === "MOVE-PIECE")
         {
             updateTile(incomingMSG.tileFrom, "empty");
-            updateTile(incomingMSG.tileTo, incomingMSG.image);
+            updateTile(incomingMSG.tileTo, incomingMSG.imageFrom);
+            addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo);
         }
     }
 
@@ -60,13 +61,11 @@ var updateTile = function(cell, imageName)
 }
 
 /* Add history entry to side panel */
-/*this.addToSidePanel = function(source, dest, imageFrom, imageTo)
+var addToSidePanel = function(source, dest, imageFrom, imageTo)
 {
 	// Instantiate piece images
 	var $image1 = $("<img>");
 	var $image2 = $("<img>");
-	var $tableEntry = $("<p>");
-	var translateText = source + "->" + dest;
 
 	// Instantiate move text (src -> dst)
 	var $text = $("<p>").text(source + "->" + dest);
@@ -86,10 +85,9 @@ var updateTile = function(cell, imageName)
 	$tableEntry.append($image2);
 
     // Append the table entry to the right pannel
-    //	var $panel1 = $("#MovesUser1");
-//	var $panel2 = $("#MovesUser2");
-
-	if(this.activePlayer)
-		$panel1.append($tableEntry);
-	else $panel2.append($tableEntry);
-}*/
+    var $panel1 = $("#MovesUser1");
+    var $panel2 = $("#MovesUser2");
+    
+    $panel1.append($tableEntry);
+	$panel2.append($tableEntry);
+}
