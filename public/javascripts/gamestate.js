@@ -1,4 +1,4 @@
-/* Game class used to keep track of a game of ID
+/* GameState class used to keep track of a single game (shared among two players)
    and keep all the variables for that specific game */
 function GameState()
 {	
@@ -176,8 +176,8 @@ function GameState()
 		else $panel2.append($tableEntry);
 	}
 
-	/* Starts a game */
-	this.startGame = function()
+	/* Initializes a game */
+	this.initializeGame = function()
 	{
 		// Construct & Populate Chess Board
 		this.constructBoard();
@@ -193,9 +193,6 @@ function GameState()
 			// The parent of this has the ID that represents the cell
 			that.getClick(this.parentElement.id);
 		});
-
-		// Print Board to console (debug)
-		console.log(this.board);
 	}
 	
 	/* Tile clicked event (this will have to come from an individual player
@@ -668,10 +665,3 @@ function GameState()
 		return hasValid;
 	}
 }
-
-// Initializes the game and gets socket connection
-(function setup()
-{
-    // start WebSocket connection
-    var socket = new WebSocket("ws://localhost:3000");
-})(); // execute immediately
