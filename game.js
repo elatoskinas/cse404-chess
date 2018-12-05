@@ -12,7 +12,7 @@ function Game(id)
 	this.addPlayer = function(p)
 	{
 		if (this.p1 == null)
-		{
+    {
 			this.p1 = p;
 
 			// Since Player 1 is the first person to join the game, initialize state at that point in time
@@ -24,7 +24,7 @@ function Game(id)
 		
 		if (this.p2 == null)
 		{
-			this.p2 = p;
+      this.p2 = p;
 			return false; // black
 		}
 	}
