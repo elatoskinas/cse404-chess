@@ -24,7 +24,7 @@ function Game(id)
 		
 		if (this.p2 == null)
 		{
-      this.p2 = p;
+     		this.p2 = p;
 			return false; // black
 		}
 	}

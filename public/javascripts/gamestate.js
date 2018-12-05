@@ -83,13 +83,6 @@ function GameState()
 			this.board[i][6] = new Pawn(false); // add Black Pawn
 		}
 
-		// Initialize board graphics
-		for(var i = 0; i<=1; i++)
-			for(j=0;j<8;j++){
-//				this.updateTile(coordinatesToCell(j,i));
-//				this.updateTile(coordinatesToCell(j,7-i));
-			}
-
 		this.setValidMovesAll([], this.kingCells[1]); // set valid moves for all pieces
 	}
 	
@@ -316,6 +309,27 @@ function GameState()
 		// 3.Access and change src image
 		// [images reside in images/pieces/]
 		$("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
+	}
+
+	this.updateTileJSON = function (x, y)
+	{
+		var O_UPDATE_TILE =
+		{
+			type: "UPDATE-TILE",
+			tile: "",
+			image: ""
+		}
+
+		var cell = coordinatesToCell(x, y);
+		// Get piece at coordinates
+		var piece = this.board[x][y];
+		// If piece is null, then use empty image, else get piece's image
+		var imageName = (piece != null) ? piece.getImageName() : "empty";
+
+		O_UPDATE_TILE.tile = cell;
+		O_UPDATE_TILE.image = imageName;
+
+		return JSON.stringify(O_UPDATE_TILE);
 	}
 
 	/** Checks if activePlayer's King would be threatened in specified cell */

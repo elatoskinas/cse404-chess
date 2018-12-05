@@ -47,4 +47,14 @@ wss.on("connection", function connection(ws) {
 
     // inform the client about the pieces that will be controlled by the client
     connection.send((playerType) ? messages.S_PLAYER_WHITE : messages.S_PLAYER_BLACK);
+
+	// Send tiles to update
+    for(var i = 0; i<=1; i++)
+    {
+        for(var j=0;j<8;j++)
+        {
+            connection.send(currentGame.gameState.updateTileJSON(j, i));
+            connection.send(currentGame.gameState.updateTileJSON(j, 7-i));
+		}
+    }
 });
