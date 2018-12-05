@@ -45,10 +45,13 @@ wss.on("connection", function connection(ws) {
     // debug
     console.log("Player %s placed in game %s as %s", connection.id, currentGame.id, (playerType ? "White" : "Black"));
 
-    // inform the client about the pieces that will be controlled by the client
-    connection.send((playerType) ? messages.S_PLAYER_WHITE : messages.S_PLAYER_BLACK);
 
-	// Send tiles to update
+    // inform the client about the pieces that will be controlled by the client (constructing the message accordingly beforehand)
+    let playerTypeJSON = messages.O_PLAYER_TYPE;
+    playerTypeJSON.data = playerType;
+    connection.send(JSON.stringify(playerTypeJSON));
+
+	// Initialize board graphics
     for(var i = 0; i<=1; i++)
     {
         for(var j=0;j<8;j++)
@@ -57,4 +60,15 @@ wss.on("connection", function connection(ws) {
             connection.send(currentGame.gameState.updateTileJSON(j, 7-i));
 		}
     }
+
+    // Get incoming messages from WebSockets
+    connection.on("message", function incoming(message)
+    {
+        var incomingMSG = JSON.parse(message);
+
+        if (incomingMSG.type === messages.O_TILE_CLICK_BY.type)
+        {
+            currentGame.gameState.getClick(incomingMSG.tile, incomingMSG.player);
+        }
+    });
 });

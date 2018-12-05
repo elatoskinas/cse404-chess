@@ -175,28 +175,19 @@ function GameState()
 		// Construct & Populate Chess Board
 		this.constructBoard();
 		this.populateBoard();
-
-//		var that = this; // temporary reference to current Game objectc
-
-		// Set onClick Listeners to chess tile image DOM objects
-/*		$(".chess-tile img").on("click", function(event)
-		{
-			// We make use of both that and this here.
-			// that refers to the Game Object, and this refers to the DOM element that was clicked on.
-			// The parent of this has the ID that represents the cell
-			that.getClick(this.parentElement.id);
-		});*/
 	}
 	
 	/* Tile clicked event (this will have to come from an individual player
 		and be sent over to the server)*/
-	this.getClick = function(cell)
+	this.getClick = function(cell, player)
 	{
+		if (player != this.activePlayer) // not the correct Player's turn
+			return;
+
 		// Convert cell to actual coordinates
 		var cellCoordinates = cellToCoordinates(cell);
 		var x = cellCoordinates[0];
 		var y = cellCoordinates[1];
-		
 
 		// Get piece in tile
 		var piece = this.board[x][y];
