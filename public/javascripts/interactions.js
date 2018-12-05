@@ -25,9 +25,14 @@
         }
         else if (incomingMSG.type === "MOVE-PIECE")
         {
+            if (incomingMSG.player == isWhite) // if this player made the move, deselect piece
+                selectedPiece = "";
+
             updateTile(incomingMSG.tileFrom, "empty");
             updateTile(incomingMSG.tileTo, incomingMSG.imageFrom);
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo);
+
+            console.log(selectedPiece);
         }
     }
 

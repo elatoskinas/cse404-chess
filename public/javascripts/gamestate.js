@@ -98,14 +98,11 @@ function GameState()
 
 		// Construct message
 		var moveMsg = messages.O_MOVE_PIECE;
-		moveMsg.player = !this.activePlayer;
+		moveMsg.player = this.activePlayer;
 		moveMsg.tileFrom = cell1;
 		moveMsg.tileTo = cell2;
+		moveMsg.imageFrom = this.board[x1][y1].getImageName(); // there's a bug here
 		moveMsg.imageTo = (this.board[x2][y2] == null ? "empty" : this.board[x2][y2].getImageName());
-		moveMsg.imageFrom = this.board[x1][y1].getImageName();
-
-		// Adding the move to the side panel
-//		this.addToSidePanel(cell1, cell2, this.board[x1][y1], this.board[x2][y2]);
 
 		if (this.board[x1][y1] instanceof Pawn)
 		{
@@ -133,45 +130,11 @@ function GameState()
 		// Clearing selected piece
 		this.selectPiece("", null, "");
 
+		// Start new turn
 		this.newTurn();
 
 		// Return message
 		return moveMsg;
-	}
-
-	/* Add history entry to side panel */
-	this.addToSidePanel = function(source, dest, piece, conquered)
-	{
-		// Instantiate piece images
-		var $image1 = $("<img>");
-		var $image2 = $("<img>");
-		var $tableEntry = $("<p>");
-		var translateText = source + "->" + dest;
-
-		// Instantiate move text (src -> dst)
-		var $text = $("<p>").text(source + "->" + dest);
-
-		// Update Images
-		$image1[0].src = "images/pieces/" + piece.getImageName() + ".png";
-
-		if (conquered != null)
-			$image2[0].src = "images/pieces/" + conquered.getImageName() + ".png";
-
-		// Initialize new table entry div
-		var $tableEntry = $("<div class=\"table-entry\">");
-
-		// Append images & text to table entry
-		$tableEntry.append($image1);
-		$tableEntry.append($text);
-		$tableEntry.append($image2);
-
-		// Append the table entry to the right pannel
-		var $panel1 = $("#MovesUser1");
-		var $panel2 = $("#MovesUser2");
-
-		if(this.activePlayer)
-			$panel1.append($tableEntry);
-		else $panel2.append($tableEntry);
 	}
 
 	/* Initializes a game */
@@ -249,7 +212,8 @@ function GameState()
 			else
 			{
 				// Move piece (if move is valid)
-				if(this.availableMoves.includes(cell)){
+				if(this.availableMoves.includes(cell))
+				{
 					return this.movePiece(selectedPiece, cell);
 				}
 				// Else blink in red if move is not valid
