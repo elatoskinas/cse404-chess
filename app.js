@@ -54,26 +54,32 @@ wss.on("connection", function connection(ws) {
     // Get incoming messages from WebSockets
     connection.on("message", function incoming(message)
     {
+        // Parse message
         var incomingMSG = JSON.parse(message);
 
+        // Receive Click Event from WebSocket
         if (incomingMSG.type === messages.O_TILE_CLICK_BY.type)
         {
+            // Generate click response according to game state
             var clickResponse = currentGame.gameState.getClick(incomingMSG.tile, incomingMSG.player, incomingMSG.selected);
 
+            // Click response is valid
             if (clickResponse != null)
             {
-                if (clickResponse.type === "MOVE-PIECE") // Update board for both players
+                if (clickResponse.type === messages.O_MOVE_PIECE) // Moved piece successfully
                 {
-                    // deselect piece
+                    // clear O_SELECT_PIECE variables & send the message to the client that executed the move (effectively deselecting the piece)
                     messages.O_SELECT_PIECE.tile = "";
                     messages.O_SELECT_PIECE.validMoves = [];
                     connection.send(JSON.stringify(messages.O_SELECT_PIECE));
                     
+                    // Update board for both players
                     currentGame.p1.send(JSON.stringify(clickResponse));
                     currentGame.p2.send(JSON.stringify(clickResponse));
                 }
-                else
+                else // Select piece
                 {
+                    // Send response to client containing info required for piece selection
                     connection.send(JSON.stringify(clickResponse));
                 }
             }

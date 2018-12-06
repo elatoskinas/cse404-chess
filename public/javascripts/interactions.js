@@ -3,6 +3,8 @@
 {
     // start WebSocket connection
     var socket = new WebSocket("ws://localhost:3000");
+
+    // State for current client. Keep this in separate Object later.
     var isWhite = true;
     var selectedPiece = "";
     var validMoves = [];
@@ -22,6 +24,7 @@
         }
         else if (incomingMSG.type === "SELECT-PIECE")
         {
+            console.log(incomingMSG.tile + " " + incomingMSG.validMoves);
             highlightValidMoves(validMoves, "");
 
             if (selectedPiece != "")

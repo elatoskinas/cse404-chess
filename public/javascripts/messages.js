@@ -34,7 +34,16 @@
 		type: "SELECT-PIECE",
 		tile: "",
 		validMoves: []
-	}
+    }
+    
+    // // Client to Server: Tile Clicked
+    // var O_TILE_CLICK_BY =
+    // {
+    //     type: "TILE-CLICKED-BY",
+    //     player: false, // get player that the tile was clicked by (false for black, true for white)
+    //     tile: "", // get tile that was clicked on
+    //     selected: "" // get already selected tile, if exists
+    // };
 
     // ------------------------------------------------------
 
