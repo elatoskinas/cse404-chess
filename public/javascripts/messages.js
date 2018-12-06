@@ -68,5 +68,11 @@
         type: "CHECKMATE",
         data: null // Win/Stalemate/Loss
     };
+
+    exports.cloneMessage = function(message)
+    {
+        // Convert message to JSON and back, effectively cloning it
+        return JSON.parse(JSON.stringify(message));
+    }
 }(typeof exports === "undefined" ? this.messages = {} : exports));
 // If exports is undefined, we are on the client; else the server
