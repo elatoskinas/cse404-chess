@@ -6,8 +6,11 @@ function Game(id)
 	this.p1 = null;
 	this.p2 = null;
 	this.gameState = null;
+	this.hasTwoPlayers = false;
 
 	this.getID = function() { return this.id; }
+
+
 
 	this.addPlayer = function(p)
 	{
@@ -24,10 +27,16 @@ function Game(id)
 		
 		if (this.p2 == null)
 		{
+<<<<<<< HEAD
+			this.p2 = p;
+			this.hasTwoPlayers=true;
+=======
      		this.p2 = p;
+>>>>>>> 264259b20d47e9755a2bbc8a7256a3b47a26526e
 			return false; // black
 		}
 	}
 }
+
 
 module.exports = Game;
