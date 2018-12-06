@@ -11,7 +11,7 @@ function GameState()
 		3 = draw
 		4 = one of the players disconnected
 	*/
-//	this.gameState = 0;
+	this.gameState = 0;
 
 	// Booleans to indicate the check status for each player
 	this.checkStatus = [false, false];
