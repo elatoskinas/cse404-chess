@@ -64,6 +64,11 @@ wss.on("connection", function connection(ws) {
             {
                 if (clickResponse.type === "MOVE-PIECE") // Update board for both players
                 {
+                    // deselect piece
+                    messages.O_SELECT_PIECE.tile = "";
+                    messages.O_SELECT_PIECE.validMoves = [];
+                    connection.send(JSON.stringify(messages.O_SELECT_PIECE));
+                    
                     currentGame.p1.send(JSON.stringify(clickResponse));
                     currentGame.p2.send(JSON.stringify(clickResponse));
                 }

@@ -17,6 +17,16 @@
   border: 1px solid; /* some style to the board */
 }
 
+.chess-tile[data-state="valid"]
+{
+  box-shadow: inset 0 0 25px lime;
+}
+
+.chess-tile[data-state="selected"]
+{
+  box-shadow: inset 0 0 25px yellowgreen;
+}
+
 .chess-tile img
 {
   height: 60px;

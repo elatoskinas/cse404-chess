@@ -5,6 +5,7 @@
     var socket = new WebSocket("ws://localhost:3000");
     var isWhite = true;
     var selectedPiece = "";
+    var validMoves = [];
 
     socket.onmessage = function(event)
     {
@@ -21,18 +22,24 @@
         }
         else if (incomingMSG.type === "SELECT-PIECE")
         {
+            highlightValidMoves(validMoves, "");
+
+            if (selectedPiece != "")
+                changeTileState(selectedPiece, "");
+            
             selectedPiece = incomingMSG.tile;
+            validMoves = incomingMSG.validMoves;
+
+            highlightValidMoves(validMoves, "valid");
+        
+            if (selectedPiece != "")
+                changeTileState(selectedPiece, "selected");
         }
         else if (incomingMSG.type === "MOVE-PIECE")
         {
-            if (incomingMSG.player == isWhite) // if this player made the move, deselect piece
-                selectedPiece = "";
-
             updateTile(incomingMSG.tileFrom, "empty");
             updateTile(incomingMSG.tileTo, incomingMSG.imageFrom);
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo);
-
-            console.log(selectedPiece);
         }
     }
 
@@ -62,7 +69,7 @@ var updateTile = function(cell, imageName)
 	// 2.Get first element (index 0) [which is the image]
 	// 3.Access and change src image
 	// [images reside in images/pieces/]
-	$("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
+    $("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
 }
 
 /* Add history entry to side panel */
@@ -95,4 +102,20 @@ var addToSidePanel = function(source, dest, imageFrom, imageTo)
     
     $panel1.append($tableEntry);
 	$panel2.append($tableEntry);
+}
+
+var highlightValidMoves = function(validMoves, state)
+{
+    for (var i = 0; i < validMoves.length; ++i)
+    {
+        changeTileState(validMoves[i], state);
+    }
+
+    if (state == "")
+        validMoves = [];
+}
+
+var changeTileState = function(tile, state)
+{
+    $("#" + tile)[0].dataset.state = state;
 }
