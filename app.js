@@ -66,7 +66,7 @@ wss.on("connection", function connection(ws) {
             // Click response is valid
             if (clickResponse != null)
             {
-                if (clickResponse.type === messages.O_MOVE_PIECE) // Moved piece successfully
+                if (clickResponse.type === messages.O_MOVE_PIECE.type) // Moved piece successfully
                 {
                     // clear O_SELECT_PIECE variables & send the message to the client that executed the move (effectively deselecting the piece)
                     messages.O_SELECT_PIECE.tile = "";
