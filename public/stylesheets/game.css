@@ -4,8 +4,8 @@
   display: grid;
   grid-template-columns: repeat(9, 1fr); /* Make 9 columns */
   text-align: center; /* For aligning cell letters & numbers */
-  height: 650px;
-  width: 650px;
+  height: 600px;
+  width: 600px;
 }
 
 /* Chess Tiles */
@@ -34,12 +34,12 @@
   padding: 5px; /* Center image in tile */
 }
 
-.chess-tile:nth-child(2n)
+.chess-tile:nth-child(2n+1)
 {
   background: #246a0d;
 }
 
-.chess-tile:nth-child(2n+1)
+.chess-tile:nth-child(2n)
 {
   background: #323232;
 }

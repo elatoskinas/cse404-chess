@@ -31,7 +31,20 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", 
         {
             // Set Player type (true case is not handled here, since we already assume true)
             if (incomingMSG.data == false)
+            {
                 isWhite = false;
+
+                // Flip the board
+                rotateBoard();
+
+                $("#User1").text("Opponent");
+                $("#User2").text("You");
+            }
+            else
+            {
+                $("#User1").text("You");
+                $("#User2").text("Opponent");
+            }
         }
         else if (incomingMSG.type === "SELECT-PIECE")
         {
@@ -93,21 +106,16 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", 
         if (state == 0)
             return;
 
-        // Generate TILE-CLICKED-BY message
-        var O_TILE_CLICK_BY =
-        {
-            type: "TILE-CLICKED-BY",
-            player: false, // get player that the tile was clicked by (false for black, true for white)
-            tile: "", // get tile that was clicked on
-            selected: "" // get already selected tile, if exists
-        };
+        // Construct click message
+        var clickMSG = messages.cloneMessage(messages.O_TILE_CLICK_BY);
 
-        O_TILE_CLICK_BY.player = isWhite;
-        O_TILE_CLICK_BY.tile = this.parentElement.id;
-        O_TILE_CLICK_BY.selected = selectedPiece;
+        clickMSG.player = isWhite;
+        clickMSG.tile = this.parentElement.id;
+        clickMSG.selected = selectedPiece;
+        clickMSG = JSON.stringify(clickMSG);
 
         // Send message to server
-        socket.send(JSON.stringify(O_TILE_CLICK_BY));
+        socket.send(clickMSG);
 	});
 })(); // execute immediately
 
@@ -182,4 +190,30 @@ var changeStatusText = function(text)
 {
     var statusText = $("#" + "status_text");
     statusText[0].textContent = text;
+}
+
+/** Rotates the board for black piece */
+var rotateBoard = function()
+{
+    // Detach all tiles from the Chess Board
+    var tiles = $(".chess-tile").detach();
+
+    // Remove all br from the Chess Board
+    $("#chess-board br").remove();
+
+    // Append tiles in reverse order (effectively flipping the board)
+    for (var i = tiles.length; i--; i >= 0)
+    {
+        $("#chess-board")[0].append(tiles[i]);
+
+        // Add back br elements every 8 tiles
+        if (i % 8 == 0)
+        {
+            // Create br element
+            var br = document.createElement('br');
+
+            // Append br
+            $("#chess-board")[0].append(br);
+        }
+    }
 }

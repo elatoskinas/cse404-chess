@@ -50,14 +50,14 @@
         status: 1
     }
 
-    // // Client to Server: Tile Clicked
-    // var O_TILE_CLICK_BY =
-    // {
-    //     type: "TILE-CLICKED-BY",
-    //     player: false, // get player that the tile was clicked by (false for black, true for white)
-    //     tile: "", // get tile that was clicked on
-    //     selected: "" // get already selected tile, if exists
-    // };
+    // Client to Server: Tile Clicked
+    var O_TILE_CLICK_BY =
+    {
+        type: "TILE-CLICKED-BY",
+        player: false, // get player that the tile was clicked by (false for black, true for white)
+        tile: "", // get tile that was clicked on
+        selected: "" // get already selected tile, if exists
+    };
 
     // ------------------------------------------------------
 
