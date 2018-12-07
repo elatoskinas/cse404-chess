@@ -55,17 +55,15 @@ wss.on("connection", function connection(ws) {
 
     if (!playerType) // Second Player joined
     {
-        // Start Game
-
-        // Construct Message
-        var startMSG = messages.cloneMessage(messages.O_GAME_STATUS);
-        startMSG.status = 1;
-        startMSG.data = true; // Player controlling White Pieces starts
-        startMSG = JSON.stringify(startMSG);
-
-        // Send to both Sockets
+        // Start Game & Send Message to both sockets
+        var startMSG = JSON.stringify(messages.O_START_GAME);
         currentGame.p1.send(startMSG);
         connection.send(startMSG);
+    }
+    else // First Player joined
+    {
+        // Inform the client that we're waiting for another Player
+        connection.send(JSON.stringify(messages.O_INITIALIZE_GAME));
     }
 
     connection.on("close", function (code) {

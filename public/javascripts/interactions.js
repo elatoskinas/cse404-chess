@@ -13,7 +13,7 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
 
     // States:
     // 0 - WAITING FOR PLAYER
-    // 1 - SWITCH TURN
+    // 1 - ONGOING GAME
     var state = 0;
 
     // Message received from Server
@@ -59,6 +59,11 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
 
             // Add movement entry to side panel
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo, incomingMSG.player);
+
+            if (incomingMSG.player == isWhite)
+                changeStatusText(statusMessages[2]);
+            else
+                changeStatusText(statusMessages[1]);
         }
         else if (incomingMSG.type === "STATE")
         {
@@ -69,7 +74,7 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
                 changeStatusText(statusMessages[0]);
             else if (state == 1)
             {
-                if (incomingMSG.data == isWhite)
+                if (isWhite)
                     changeStatusText(statusMessages[1]);
                 else
                     changeStatusText(statusMessages[2]);
