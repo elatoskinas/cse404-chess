@@ -40,7 +40,8 @@
     exports.O_GAME_STATUS =
     {
         type: "STATE",
-        status: 0
+        status: 0,
+        data: null // additional data, e.g. player turn
     }
 
     // // Client to Server: Tile Clicked

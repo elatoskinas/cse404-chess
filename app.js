@@ -60,6 +60,7 @@ wss.on("connection", function connection(ws) {
         // Construct Message
         var startMSG = messages.cloneMessage(messages.O_GAME_STATUS);
         startMSG.status = 1;
+        startMSG.data = true; // Player controlling White Pieces starts
         startMSG = JSON.stringify(startMSG);
 
         // Send to both Sockets

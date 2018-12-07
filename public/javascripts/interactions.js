@@ -1,4 +1,4 @@
-var statusTexts = ["Waiting for Players...", ""];
+var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
 
 // Initializes the game and gets socket connection
 (function setup()
@@ -13,15 +13,8 @@ var statusTexts = ["Waiting for Players...", ""];
 
     // States:
     // 0 - WAITING FOR PLAYER
-    // 1 - GAME ONGOING
+    // 1 - SWITCH TURN
     var state = 0;
-
-    // Socket opens
-    socket.onopen = function(event)
-    {
-        // Initialize status text to Waiting for Players
-        changeStatusText(0);
-    }
 
     // Message received from Server
     socket.onmessage = function(event)
@@ -48,7 +41,6 @@ var statusTexts = ["Waiting for Players...", ""];
             if (selectedPiece != "")
                 changeTileState(selectedPiece, "");
             
-            
             // Set selected piece & valid moves
             selectedPiece = incomingMSG.tile;
             validMoves = incomingMSG.validMoves;
@@ -70,8 +62,18 @@ var statusTexts = ["Waiting for Players...", ""];
         }
         else if (incomingMSG.type === "STATE")
         {
+            // Change state & update text
             state = incomingMSG.status;
-            changeStatusText(state);
+
+            if (state == 0)
+                changeStatusText(statusMessages[0]);
+            else if (state == 1)
+            {
+                if (incomingMSG.data == isWhite)
+                    changeStatusText(statusMessages[1]);
+                else
+                    changeStatusText(statusMessages[2]);
+            }
         }
     }
 
@@ -169,8 +171,9 @@ var changeTileState = function(tile, state)
     $("#" + tile)[0].dataset.state = state; // override state
 }
 
-var changeStatusText = function(state)
+/** Change Game Status text */
+var changeStatusText = function(text)
 {
     var statusText = $("#" + "status_text");
-    statusText[0].textContent = statusTexts[state];
+    statusText[0].textContent = text;
 }
