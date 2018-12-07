@@ -36,12 +36,18 @@
 		validMoves: []
     }
 
-    // Server to Client: Change Game Status
-    exports.O_GAME_STATUS =
+    // Server to Client: Initialize Game (Waiting for Players)
+    exports.O_INITIALIZE_GAME =
     {
         type: "STATE",
-        status: 0,
-        data: null // additional data, e.g. player turn
+        status: 0
+    }
+
+    // Server to Client: Start Game
+    exports.O_START_GAME =
+    {
+        type: "STATE",
+        status: 1
     }
 
     // // Client to Server: Tile Clicked
@@ -62,11 +68,6 @@
         status: 2
     };
 
-    // Server to Client: White's Turn
-    exports.O_PLAYER_TURN = {
-        type: "PLAYER-TURN",
-        data: null
-    };
     // Server to Player A or B: Check
     exports.O_CHECK = {
         type: "CHECK",
