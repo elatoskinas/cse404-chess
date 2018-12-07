@@ -53,6 +53,10 @@
 
             // Add movement entry to side panel
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo, incomingMSG.player);
+        } 
+        else if (incomingMSG.type === "GAME-ABORTED") 
+        {
+            console.log("Your fellow gamer disconnected.");
         }
     }
 
