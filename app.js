@@ -67,45 +67,24 @@ wss.on("connection", function connection(ws) {
     }
 
     connection.on("close", function (code) {
-        if(!websockets[connection.id].hasTwoPlayers){
-            websockets[connection.id].p1=null;
-            //gamesInitialized--;
+        let gameObj = websockets[connection.id];
+        console.log(connection.id + " disconnected");
+        if(!gameObj.hasTwoPlayers){
+            gameObj.p1=null;
+            gamesInitialized--;
             if(res==0) res = 1;
             else res = 0;
-            console.log(res);
         }
-        else{
-        /*
-         * code 1001 means almost always closing initiated by the client;
-         * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
-         */
-        console.log(connection.id + " disconnected ...");
-    
-        if (code == "1001") {
-            /*
-            * if possible, abort the game; if not, the game is already completed
-            */
-            let gameObj = websockets[connection.id];
-    
-                /*
-                 * determine whose connection remains open;
-                 * close it
-                 */
-                try {
-                    gameObj.p1.close();
-                    gameObj.p1 = null;
-                }
-                catch(e){
-                    console.log("Player A closing: "+ e);
-                }
-    
-                try {
-                    gameObj.p2.close(); 
-                    gameObj.p2 = null;
-                }
-                catch(e){
-                    console.log("Player B closing: " + e);
+        else{    
+        if (code == "1001"&&gameObj.p1&&gameObj.p2) {
+                if(connection.id%2!=res){
+                    gameObj.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
+                    gameObj.p2=null;
                 }                
+                else{
+                    gameObj.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
+                    gameObj.p1=null;
+                }                              
             }
         }
     });
