@@ -10,8 +10,6 @@ function Game(id)
 
 	this.getID = function() { return this.id; }
 
-
-
 	this.addPlayer = function(p)
 	{
 		if (this.p1 == null)
@@ -27,12 +25,8 @@ function Game(id)
 		
 		if (this.p2 == null)
 		{
-<<<<<<< HEAD
 			this.p2 = p;
 			this.hasTwoPlayers=true;
-=======
-     		this.p2 = p;
->>>>>>> 264259b20d47e9755a2bbc8a7256a3b47a26526e
 			return false; // black
 		}
 	}

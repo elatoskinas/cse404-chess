@@ -97,7 +97,7 @@ function GameState()
 		var y2 = c2[1];
 
 		// Construct message
-		var moveMsg = messages.O_MOVE_PIECE;
+		var moveMsg = messages.cloneMessage(messages.O_MOVE_PIECE);
 		moveMsg.player = this.activePlayer;
 		moveMsg.tileFrom = cell1;
 		moveMsg.tileTo = cell2;
@@ -246,7 +246,7 @@ function GameState()
 		}
 
 		// Construct message
-		var selectMsg = messages.O_SELECT_PIECE;
+		var selectMsg = messages.cloneMessage(messages.O_SELECT_PIECE);
 		selectMsg.tile = cell;
 		selectMsg.validMoves = this.availableMoves;
 

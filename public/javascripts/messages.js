@@ -34,7 +34,16 @@
 		type: "SELECT-PIECE",
 		tile: "",
 		validMoves: []
-	}
+    }
+    
+    // // Client to Server: Tile Clicked
+    // var O_TILE_CLICK_BY =
+    // {
+    //     type: "TILE-CLICKED-BY",
+    //     player: false, // get player that the tile was clicked by (false for black, true for white)
+    //     tile: "", // get tile that was clicked on
+    //     selected: "" // get already selected tile, if exists
+    // };
 
     // ------------------------------------------------------
 
@@ -59,5 +68,11 @@
         type: "CHECKMATE",
         data: null // Win/Stalemate/Loss
     };
+
+    exports.cloneMessage = function(message)
+    {
+        // Convert message to JSON and back, effectively cloning it
+        return JSON.parse(JSON.stringify(message));
+    }
 }(typeof exports === "undefined" ? this.messages = {} : exports));
 // If exports is undefined, we are on the client; else the server
