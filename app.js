@@ -112,6 +112,26 @@ wss.on("connection", function connection(ws) {
                     // Update board for both players
                     currentGame.p1.send(JSON.stringify(clickResponse));
                     currentGame.p2.send(JSON.stringify(clickResponse));
+
+                    var checkmateStatus = currentGame.gameState.newTurn();
+                    if(checkmateStatus.data!=null){
+                        if(checkmateStatus.data==1){
+                            if(checkmateStatus.player==true){
+                                currentGame.p1.send(JSON.stringify(checkmateStatus));
+                                checkmateStatus.data+=1;
+                                currentGame.p2.send(JSON.stringify(checkmateStatus));
+                            } else {
+                                currentGame.p2.send(JSON.stringify(checkmateStatus));
+                                checkmateStatus.data+=1;
+                                currentGame.p1.send(JSON.stringify(checkmateStatus));
+                            }
+                        }
+                        if(checkmateStatus.data==0){
+                            currentGame.p1.send(JSON.stringify(checkmateStatus));
+                            currentGame.p2.send(JSON.stringify(checkmateStatus));
+                        }
+                    }
+                        
                 }
                 else // Select piece
                 {
@@ -119,6 +139,6 @@ wss.on("connection", function connection(ws) {
                     connection.send(JSON.stringify(clickResponse));
                 }
             }
-        }
+        } 
     });
 });

@@ -1,4 +1,4 @@
-var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", "Your fellow gamer aborted the game."];
+var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", "Your fellow gamer aborted the game.", "You won!", "You lost!", "Stalemate!!"];
 
 // Initializes the game and gets socket connection
 (function setup()
@@ -79,7 +79,19 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", 
                 else
                     changeStatusText(statusMessages[2]);
             } else if (state == 2)
-                    changeStatusText(statusMessages[3]);
+            {
+                changeStatusText(statusMessages[3]);
+            }
+            else if (state == 3)
+            {
+                if(incomingMSG.data==1)
+                changeStatusText(statusMessages[5]);
+                else if(incomingMSG.data==2)
+                changeStatusText(statusMessages[4]);
+                else if (incomingMSG.data==0)
+                changeStatusText(statusMessages[6]);
+            }
+
         }
     }
 
@@ -90,7 +102,7 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", 
         // 1.Waiting for Player
         // 2.Game Aborted
         // 3.Game Over
-        if (state == 0)
+        if (state == 0||state==2||state==3)
             return;
 
         // Generate TILE-CLICKED-BY message
