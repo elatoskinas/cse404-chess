@@ -1,4 +1,4 @@
-var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
+var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", "Your fellow gamer aborted the game."];
 
 // Initializes the game and gets socket connection
 (function setup()
@@ -59,12 +59,16 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
 
             // Add movement entry to side panel
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo, incomingMSG.player);
+<<<<<<< HEAD
+        } 
+=======
 
             if (incomingMSG.player == isWhite)
                 changeStatusText(statusMessages[2]);
             else
                 changeStatusText(statusMessages[1]);
         }
+>>>>>>> 8c2003056f276b2b6f5caf978f22048499833553
         else if (incomingMSG.type === "STATE")
         {
             // Change state & update text
@@ -78,7 +82,8 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
                     changeStatusText(statusMessages[1]);
                 else
                     changeStatusText(statusMessages[2]);
-            }
+            } else if (state == 2)
+                    changeStatusText(statusMessages[3]);
         }
     }
 

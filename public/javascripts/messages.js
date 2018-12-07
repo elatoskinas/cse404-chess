@@ -64,7 +64,8 @@
     // Server to Client: Aborted Game
     exports.O_GAME_ABORTED =
     {
-        type: "GAME-ABROTED"
+        type: "STATE",
+        status: 2
     };
 
     // Server to Player A or B: Check
