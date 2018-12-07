@@ -1,3 +1,5 @@
+var statusTexts = ["Waiting for Players...", ""];
+
 // Initializes the game and gets socket connection
 (function setup()
 {
@@ -8,6 +10,18 @@
     var isWhite = true;
     var selectedPiece = "";
     var validMoves = [];
+
+    // States:
+    // 0 - WAITING FOR PLAYER
+    // 1 - GAME ONGOING
+    var state = 0;
+
+    // Socket opens
+    socket.onopen = function(event)
+    {
+        // Initialize status text to Waiting for Players
+        changeStatusText(0);
+    }
 
     // Message received from Server
     socket.onmessage = function(event)
@@ -54,11 +68,23 @@
             // Add movement entry to side panel
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo, incomingMSG.player);
         }
+        else if (incomingMSG.type === "STATE")
+        {
+            state = incomingMSG.status;
+            changeStatusText(state);
+        }
     }
 
     // Set onClick Listeners to chess tile image DOM objects
 	$(".chess-tile img").on("click", function(event)
 	{
+        // Click not processed due to:
+        // 1.Waiting for Player
+        // 2.Game Aborted
+        // 3.Game Over
+        if (state == 0)
+            return;
+
         // Generate TILE-CLICKED-BY message
         var O_TILE_CLICK_BY =
         {
@@ -141,4 +167,10 @@ var highlightValidMoves = function(validMoves, state)
 var changeTileState = function(tile, state)
 {
     $("#" + tile)[0].dataset.state = state; // override state
+}
+
+var changeStatusText = function(state)
+{
+    var statusText = $("#" + "status_text");
+    statusText[0].textContent = statusTexts[state];
 }

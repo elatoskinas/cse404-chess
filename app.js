@@ -53,6 +53,20 @@ wss.on("connection", function connection(ws) {
     playerTypeJSON.data = playerType;
     connection.send(JSON.stringify(playerTypeJSON));
 
+    if (!playerType) // Second Player joined
+    {
+        // Start Game
+
+        // Construct Message
+        var startMSG = messages.cloneMessage(messages.O_GAME_STATUS);
+        startMSG.status = 1;
+        startMSG = JSON.stringify(startMSG);
+
+        // Send to both Sockets
+        currentGame.p1.send(startMSG);
+        connection.send(startMSG);
+    }
+
     connection.on("close", function (code) {
         if(!websockets[connection.id].hasTwoPlayers){
             websockets[connection.id].p1=null;

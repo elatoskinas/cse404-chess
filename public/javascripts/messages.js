@@ -35,7 +35,14 @@
 		tile: "",
 		validMoves: []
     }
-    
+
+    // Server to Client: Change Game Status
+    exports.O_GAME_STATUS =
+    {
+        type: "STATE",
+        status: 0
+    }
+
     // // Client to Server: Tile Clicked
     // var O_TILE_CLICK_BY =
     // {
