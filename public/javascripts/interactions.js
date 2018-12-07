@@ -1,4 +1,4 @@
-var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
+var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", "Your fellow gamer aborted the game."];
 
 // Initializes the game and gets socket connection
 (function setup()
@@ -60,10 +60,6 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
             // Add movement entry to side panel
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo, incomingMSG.player);
         } 
-        else if (incomingMSG.type === "GAME-ABORTED") 
-        {
-            console.log("Your fellow gamer disconnected.");
-        }
         else if (incomingMSG.type === "STATE")
         {
             // Change state & update text
@@ -77,7 +73,8 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn"];
                     changeStatusText(statusMessages[1]);
                 else
                     changeStatusText(statusMessages[2]);
-            }
+            } else if (state == 2)
+                    changeStatusText(statusMessages[3]);
         }
     }
 
