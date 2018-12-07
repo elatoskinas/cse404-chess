@@ -3,15 +3,6 @@
 function GameState()
 {
 	var messages = require("./messages");
-	// Game State here
-	/* Game states:
-		0 = ongoing
-		1 = player 1 won
-		2 = player 2 won
-		3 = draw
-		4 = one of the players disconnected
-	*/
-	this.gameState = 0;
 
 	// Booleans to indicate the check status for each player
 	this.checkStatus = [false, false];
