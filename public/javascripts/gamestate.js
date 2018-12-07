@@ -101,7 +101,6 @@ function GameState()
 		moveMsg.player = this.activePlayer;
 		moveMsg.tileFrom = cell1;
 		moveMsg.tileTo = cell2;
-		moveMsg.imageFrom = this.board[x1][y1].getImageName(); // there's a bug here
 		moveMsg.imageTo = (this.board[x2][y2] == null ? "empty" : this.board[x2][y2].getImageName());
 
 		if (this.board[x1][y1] instanceof Pawn)
@@ -122,6 +121,9 @@ function GameState()
 			var index = this.activePlayer ? 1 : 0;
 			this.kingCells[index] = cell2;
 		}
+
+		// Keep this after above if-else block because Pawn may be upgraded to Queen
+		moveMsg.imageFrom = this.board[x1][y1].getImageName();
 
 		// Moving the piece from the source to the destination and clearing the destination
 		this.board[x2][y2] = this.board[x1][y1];

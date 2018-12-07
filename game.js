@@ -19,7 +19,6 @@ function Game(id)
 			// Since Player 1 is the first person to join the game, initialize state at that point in time
 			this.gameState = new GameState();
 			this.gameState.initializeGame();
-			
 			return true; // white
 		}
 		
