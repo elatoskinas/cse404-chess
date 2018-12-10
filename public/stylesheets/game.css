@@ -10,8 +10,8 @@
 .chess-tile
 {
   float: left;
-  height: 75px;
-  width: 75px;
+  height: 60px;
+  width: 60px;
   border: 1px solid; /* some style to the board */
   cursor: pointer;
 }
@@ -48,8 +48,8 @@
 
 .chess-tile img
 {
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   padding: 5px; /* Center image in tile */
 }
 
