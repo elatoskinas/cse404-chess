@@ -18,10 +18,13 @@ app.use(express.static(__dirname + "/public"));
 app.use('/', indexRouter);
 app.use('/play', indexRouter);
 
+var gamesInitialized = 0;
+// -------------------------------
+
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
 var connectionID = 0; // keep track of next unique WebSocket Connection ID
-var currentGame = new Game(gameStats.gamesInitialized++); // keep track of current game
+var currentGame = new Game(gamesInitialized); // keep track of current game
 
 // Server Creation
 var server = http.createServer(app).listen(port); // create server on port
@@ -30,11 +33,11 @@ const wss = new websocket.Server( {server} ); // create WebSocket server
 // Listen for incoming WebSocket connections
 wss.on("connection", function connection(ws) {
     let connection = ws; // reference connection to ws
-    connection.id = connectionID++; // assign unique ID, increment it for use for next connections
+    connection.id = connectionID++; // assign unique ID, increment it for use for next connections   
 
     let playerType = currentGame.addPlayer(connection); // true for White, false for Black
     websockets[connection.id] = currentGame; // assign game to connection ID in WebSockets array
-
+    gameStats.activeGamers++;
     // debug
     console.log("Player %s placed in game %s as %s", connection.id, currentGame.id, (playerType ? "White" : "Black"));
 
@@ -60,16 +63,16 @@ wss.on("connection", function connection(ws) {
         connection.send(JSON.stringify(messages.O_INITIALIZE_GAME));
     }
 
+    
     var socketGame = websockets[connection.id];
 
     // Close WebSocket
     connection.on("close", function (code)
-    {
+    {   gameStats.activeGamers--;
         console.log(connection.id + " disconnected");
-        
-        if(!socketGame.hasTwoPlayers)
-        {
+        if(!socketGame.hasTwoPlayers){
             socketGame.p1=null;
+            gamesInitialized--;
         }
         else if (code == "1001")
         {
@@ -126,6 +129,7 @@ wss.on("connection", function connection(ws) {
 
                         if(checkmateStatus.data==1){
                             // If a checkmate is detected, send the corresponding messages to each player
+                            gameStats.gamesCompleted++;
                             if(checkmateStatus.player==true){
                                 socketGame.p1.send(JSON.stringify(checkmateStatus));
                                 checkmateStatus.data+=1;
