@@ -108,8 +108,38 @@ wss.on("connection", function connection(ws) {
                     connection.send(JSON.stringify(messages.O_SELECT_PIECE));
                     
                     // Update board for both players
+                    var checkmateStatus = socketGame.gameState.newTurn();
+                    // If a piece is moved successfully, switch the turn     
                     socketGame.p1.send(JSON.stringify(clickResponse));
                     socketGame.p2.send(JSON.stringify(clickResponse));
+
+                    var playerCheckStatus = socketGame.gameState.sendCheckStatus(); 
+                    
+                    if(playerCheckStatus!=null){
+                        if(playerCheckStatus.data==true)
+                        socketGame.p1.send(JSON.stringify(playerCheckStatus));
+                        else socketGame.p2.send(JSON.stringify(playerCheckStatus));
+                    }
+
+                    if(checkmateStatus.data!=null){
+                        if(checkmateStatus.data==1){
+                            // If a checkmate is detected, send the corresponding messages to each player
+                            if(checkmateStatus.player==true){
+                                socketGame.p1.send(JSON.stringify(checkmateStatus));
+                                checkmateStatus.data+=1;
+                                socketGame.p2.send(JSON.stringify(checkmateStatus));
+                            } else {
+                                socketGame.p2.send(JSON.stringify(checkmateStatus));
+                                checkmateStatus.data+=1;
+                                socketGame.p1.send(JSON.stringify(checkmateStatus));
+                            }
+                        }
+                        if(checkmateStatus.data==0){
+                            // If a stalemate is detected, send the same message to both of the players
+                            socketGame.p1.send(JSON.stringify(checkmateStatus));
+                            socketGame.p2.send(JSON.stringify(checkmateStatus));
+                        }
+                    }
                 }
                 else // Select piece
                 {
@@ -117,6 +147,6 @@ wss.on("connection", function connection(ws) {
                     connection.send(JSON.stringify(clickResponse));
                 }
             }
-        }
+        } 
     });
 });

@@ -70,13 +70,16 @@
 
     // Server to Player A or B: Check
     exports.O_CHECK = {
-        type: "CHECK",
+        type: "STATE",
+        status: 4,
         data: null // A or B
     };
     // Server to Player A & B: GameOver With Win/Stalemate/Loss result
     exports.O_CHECKMATE = {
-        type: "CHECKMATE",
-        data: null // Win/Stalemate/Loss
+        type: "STATE",
+        status: 3,
+        data: null, // Win/Stalemate/Loss
+        player: null // A or B
     };
 
     exports.cloneMessage = function(message)

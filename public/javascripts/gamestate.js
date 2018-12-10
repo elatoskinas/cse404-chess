@@ -3,7 +3,7 @@
 function GameState()
 {
 	var messages = require("./messages");
-
+  
 	// Booleans to indicate the check status for each player
 	this.checkStatus = [false, false];
 	this.kingCells = ["E8", "E1"];
@@ -124,7 +124,7 @@ function GameState()
 		this.selectPiece("", null, "");
 
 		// Start new turn
-		this.newTurn();
+		//this.newTurn();
 
 		// Return message
 		return moveMsg;
@@ -245,6 +245,16 @@ function GameState()
 
 		// And return it
 		return selectMsg;
+	}
+
+	var threatsActive=false;
+	this.sendCheckStatus= function(){
+		if(this.threatsActive){
+			var msg = messages.cloneMessage(messages.O_CHECK);
+			msg.data=this.activePlayer;
+			return msg;
+		}
+		return null;
 	}
 
 	/** Checks if activePlayer's King would be threatened in specified cell */
@@ -404,7 +414,8 @@ function GameState()
 		}
 
 		// Check protection state (TBD later)
-
+		if(!(this.threatsActive&&threats.length>0))
+		this.threatsActive=(threats.length!=0);
 		return threats;
 	}
 
@@ -529,18 +540,21 @@ function GameState()
 
 		// Check if valid moves exist
 		var hasValid = this.setValidMovesAll(threats, this.kingCells[newPlayerIndex]);
-
+		var msg = messages.cloneMessage(messages.O_CHECKMATE);
 		if (!hasValid) // No valid moves exist
 		{
 			if (threats.length > 0) // Checkmate
 			{
-				console.log("Checkmate");
+
+				msg.data = 1;
+				msg.player = this.activePlayer;
 			}
 			else // Stalemate
 			{
-				console.log("Stalemate");
+				msg.data = 0;
 			}
 		}
+		return msg;
 	}
 
 	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
