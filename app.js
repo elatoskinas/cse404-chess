@@ -19,7 +19,6 @@ app.use('/', indexRouter);
 app.use('/play', indexRouter);
 
 var gamesInitialized = 0;
-// -------------------------------
 
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
