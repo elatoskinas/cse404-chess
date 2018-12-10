@@ -52,6 +52,7 @@ wss.on("connection", function connection(ws) {
 
         // Start next new Game to put Players in
         currentGame = new Game(gameStats.gamesInitialized++);
+        gameStats.ongoingGames++;
     }
     else // First Player joined
     {
@@ -70,19 +71,18 @@ wss.on("connection", function connection(ws) {
         {
             socketGame.p1=null;
         }
-        else
+        else if (code == "1001")
         {
-            if (code == "1001" && socketGame.p1 && socketGame.p2)
+            gameStats.ongoingGames--;
+
+            // Check if sockets have not been closed, and if not, send them the Game Aborted message
+            if(socketGame.p1.readyState != 3)
             {
-                // Check if sockets have not been closed, and if not, send them the Game Aborted message
-                if(socketGame.p1.readyState != 3)
-                {
-                    socketGame.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
-                }                
-                else if (socketGame.p2.readyState != 3)
-                {
-                    socketGame.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
-                }                              
+                socketGame.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
+            }                
+            else if (socketGame.p2.readyState != 3)
+            {
+                socketGame.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
             }
         }
     });
@@ -122,6 +122,8 @@ wss.on("connection", function connection(ws) {
                     }
 
                     if(checkmateStatus.data!=null){
+                        gameStats.ongoingGames--;
+
                         if(checkmateStatus.data==1){
                             // If a checkmate is detected, send the corresponding messages to each player
                             if(checkmateStatus.player==true){
