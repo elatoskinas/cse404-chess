@@ -18,27 +18,19 @@ app.use(express.static(__dirname + "/public"));
 app.use('/', indexRouter);
 app.use('/play', indexRouter);
 
-var gamesInitialized = 0;
-
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
 var connectionID = 0; // keep track of next unique WebSocket Connection ID
-var currentGame = new Game(gamesInitialized); // keep track of current game
+var currentGame = new Game(gameStats.gamesInitialized++); // keep track of current game
 
 // Server Creation
 var server = http.createServer(app).listen(port); // create server on port
 const wss = new websocket.Server( {server} ); // create WebSocket server
-var res = 0;
+
 // Listen for incoming WebSocket connections
 wss.on("connection", function connection(ws) {
     let connection = ws; // reference connection to ws
-    connection.id = connectionID++; // assign unique ID, increment it for use for next connections   
-
-    if(connection.id%2==res&&connection.id>1)
-    {
-        gamesInitialized+=1;
-        currentGame = new Game(gamesInitialized);
-    }
+    connection.id = connectionID++; // assign unique ID, increment it for use for next connections
 
     let playerType = currentGame.addPlayer(connection); // true for White, false for Black
     websockets[connection.id] = currentGame; // assign game to connection ID in WebSockets array
@@ -57,6 +49,9 @@ wss.on("connection", function connection(ws) {
         var startMSG = JSON.stringify(messages.O_START_GAME);
         currentGame.p1.send(startMSG);
         connection.send(startMSG);
+
+        // Start next new Game to put Players in
+        currentGame = new Game(gameStats.gamesInitialized++);
     }
     else // First Player joined
     {
@@ -64,29 +59,29 @@ wss.on("connection", function connection(ws) {
         connection.send(JSON.stringify(messages.O_INITIALIZE_GAME));
     }
 
-    
     var socketGame = websockets[connection.id];
 
     // Close WebSocket
     connection.on("close", function (code)
     {
         console.log(connection.id + " disconnected");
-        if(!socketGame.hasTwoPlayers){
-            socketGame.p1=null;
-            gamesInitialized--;
-            if(res==0) res = 1;
-            else res = 0;
-        }
-        else{    
-        if (code == "1001"&&socketGame.p1&&socketGame.p2)
+        
+        if(!socketGame.hasTwoPlayers)
         {
-                if(connection.id%2!=res){
+            socketGame.p1=null;
+        }
+        else
+        {
+            if (code == "1001" && socketGame.p1 && socketGame.p2)
+            {
+                // Check if sockets have not been closed, and if not, send them the Game Aborted message
+                if(socketGame.p1.readyState != 3)
+                {
                     socketGame.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
-                    socketGame.p2=null;
                 }                
-                else{
+                else if (socketGame.p2.readyState != 3)
+                {
                     socketGame.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
-                    socketGame.p1=null;
                 }                              
             }
         }
