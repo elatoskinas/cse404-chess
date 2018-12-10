@@ -255,6 +255,16 @@ function GameState()
 		return selectMsg;
 	}
 
+	var threatsActive=false;
+	this.sendCheckStatus= function(){
+		if(this.threatsActive){
+			var msg = messages.cloneMessage(messages.O_CHECK);
+			msg.data=this.activePlayer;
+			return msg;
+		}
+		return null;
+	}
+
 	/** Checks if activePlayer's King would be threatened in specified cell */
 	this.checkKingThreat = function(cell)
 	{
@@ -412,7 +422,8 @@ function GameState()
 		}
 
 		// Check protection state (TBD later)
-
+		if(!(this.threatsActive&&threats.length>0))
+		this.threatsActive=(threats.length!=0);
 		return threats;
 	}
 
@@ -542,6 +553,7 @@ function GameState()
 		{
 			if (threats.length > 0) // Checkmate
 			{
+
 				msg.data = 1;
 				msg.player = this.activePlayer;
 			}

@@ -3,6 +3,7 @@ var http = require("http");
 var websocket = require("ws");
 
 var Game = require("./game");
+var gameStats = require("./stats");
 var messages = require("./public/javascripts/messages");
 
 // route path
@@ -17,8 +18,6 @@ app.use(express.static(__dirname + "/public"));
 app.use('/', indexRouter);
 app.use('/play', indexRouter);
 
-
-// TBD: Move this stat in GameStatus JS file
 var gamesInitialized = 0;
 // -------------------------------
 
@@ -66,24 +65,29 @@ wss.on("connection", function connection(ws) {
         connection.send(JSON.stringify(messages.O_INITIALIZE_GAME));
     }
 
-    connection.on("close", function (code) {
-        let gameObj = websockets[connection.id];
+    
+    var socketGame = websockets[connection.id];
+
+    // Close WebSocket
+    connection.on("close", function (code)
+    {
         console.log(connection.id + " disconnected");
-        if(!gameObj.hasTwoPlayers){
-            gameObj.p1=null;
+        if(!socketGame.hasTwoPlayers){
+            socketGame.p1=null;
             gamesInitialized--;
             if(res==0) res = 1;
             else res = 0;
         }
         else{    
-        if (code == "1001"&&gameObj.p1&&gameObj.p2) {
+        if (code == "1001"&&socketGame.p1&&socketGame.p2)
+        {
                 if(connection.id%2!=res){
-                    gameObj.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
-                    gameObj.p2=null;
+                    socketGame.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
+                    socketGame.p2=null;
                 }                
                 else{
-                    gameObj.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
-                    gameObj.p1=null;
+                    socketGame.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
+                    socketGame.p1=null;
                 }                              
             }
         }
@@ -99,7 +103,7 @@ wss.on("connection", function connection(ws) {
         if (incomingMSG.type === messages.O_TILE_CLICK_BY.type)
         {
             // Generate click response according to game state
-            var clickResponse = currentGame.gameState.getClick(incomingMSG.tile, incomingMSG.player, incomingMSG.selected);
+            var clickResponse = socketGame.gameState.getClick(incomingMSG.tile, incomingMSG.player, incomingMSG.selected);
 
             // Click response is valid
             if (clickResponse != null)
@@ -110,28 +114,38 @@ wss.on("connection", function connection(ws) {
                     connection.send(JSON.stringify(messages.O_SELECT_PIECE));
                     
                     // Update board for both players
-                    currentGame.p1.send(JSON.stringify(clickResponse));
-                    currentGame.p2.send(JSON.stringify(clickResponse));
+                    var checkmateStatus = socketGame.gameState.newTurn();
+                    // If a piece is moved successfully, switch the turn     
+                    socketGame.p1.send(JSON.stringify(clickResponse));
+                    socketGame.p2.send(JSON.stringify(clickResponse));
 
-                    var checkmateStatus = currentGame.gameState.newTurn();
+                    var playerCheckStatus = socketGame.gameState.sendCheckStatus(); 
+                    
+                    if(playerCheckStatus!=null){
+                        if(playerCheckStatus.data==true)
+                        socketGame.p1.send(JSON.stringify(playerCheckStatus));
+                        else socketGame.p2.send(JSON.stringify(playerCheckStatus));
+                    }
+
                     if(checkmateStatus.data!=null){
                         if(checkmateStatus.data==1){
+                            // If a checkmate is detected, send the corresponding messages to each player
                             if(checkmateStatus.player==true){
-                                currentGame.p1.send(JSON.stringify(checkmateStatus));
+                                socketGame.p1.send(JSON.stringify(checkmateStatus));
                                 checkmateStatus.data+=1;
-                                currentGame.p2.send(JSON.stringify(checkmateStatus));
+                                socketGame.p2.send(JSON.stringify(checkmateStatus));
                             } else {
-                                currentGame.p2.send(JSON.stringify(checkmateStatus));
+                                socketGame.p2.send(JSON.stringify(checkmateStatus));
                                 checkmateStatus.data+=1;
-                                currentGame.p1.send(JSON.stringify(checkmateStatus));
+                                socketGame.p1.send(JSON.stringify(checkmateStatus));
                             }
                         }
                         if(checkmateStatus.data==0){
-                            currentGame.p1.send(JSON.stringify(checkmateStatus));
-                            currentGame.p2.send(JSON.stringify(checkmateStatus));
+                            // If a stalemate is detected, send the same message to both of the players
+                            socketGame.p1.send(JSON.stringify(checkmateStatus));
+                            socketGame.p2.send(JSON.stringify(checkmateStatus));
                         }
                     }
-                        
                 }
                 else // Select piece
                 {

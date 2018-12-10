@@ -50,14 +50,14 @@
         status: 1
     }
 
-    // // Client to Server: Tile Clicked
-    // var O_TILE_CLICK_BY =
-    // {
-    //     type: "TILE-CLICKED-BY",
-    //     player: false, // get player that the tile was clicked by (false for black, true for white)
-    //     tile: "", // get tile that was clicked on
-    //     selected: "" // get already selected tile, if exists
-    // };
+    // Client to Server: Tile Clicked
+    var O_TILE_CLICK_BY =
+    {
+        type: "TILE-CLICKED-BY",
+        player: false, // get player that the tile was clicked by (false for black, true for white)
+        tile: "", // get tile that was clicked on
+        selected: "" // get already selected tile, if exists
+    };
 
     // ------------------------------------------------------
 
@@ -70,7 +70,8 @@
 
     // Server to Player A or B: Check
     exports.O_CHECK = {
-        type: "CHECK",
+        type: "STATE",
+        status: 4,
         data: null // A or B
     };
     // Server to Player A & B: GameOver With Win/Stalemate/Loss result
