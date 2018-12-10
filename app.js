@@ -24,7 +24,7 @@ var gamesInitialized = 0;
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
 var connectionID = 0; // keep track of next unique WebSocket Connection ID
-var currentGame = new Game(gamesInitialized); // keep track of current game
+var currentGame = new Game(gamesInitialized++); // keep track of current game
 
 // Server Creation
 var server = http.createServer(app).listen(port); // create server on port
@@ -72,7 +72,7 @@ wss.on("connection", function connection(ws) {
         console.log(connection.id + " disconnected");
         if(!socketGame.hasTwoPlayers){
             socketGame.p1=null;
-            gamesInitialized--;
+            gameStats.gamesInitialized--;
         }
         else if (code == "1001")
         {
@@ -126,10 +126,10 @@ wss.on("connection", function connection(ws) {
 
                     if(checkmateStatus.data!=null){
                         gameStats.ongoingGames--;
+                        gameStats.gamesCompleted++;
 
                         if(checkmateStatus.data==1){
                             // If a checkmate is detected, send the corresponding messages to each player
-                            gameStats.gamesCompleted++;
                             if(checkmateStatus.player==true){
                                 socketGame.p1.send(JSON.stringify(checkmateStatus));
                                 checkmateStatus.data+=1;
