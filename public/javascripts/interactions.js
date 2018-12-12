@@ -143,7 +143,6 @@ var updateTile = function(cell, imageName)
 	// [images reside in images/pieces/]
     $("#" + cell + " img")[0].src = "images/pieces/" + imageName + ".png";
 }
-
 /* Add history entry to side panel */
 var addToSidePanel = function(source, dest, imageFrom, imageTo, player)
 {
