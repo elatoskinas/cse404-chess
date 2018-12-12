@@ -1,13 +1,12 @@
-var express = require('express');
-var router = express.Router();
-/* GET home page. */
-
-router.get("/play", function(req, res)
+module.exports = function(app, gameStats)
 {
-  res.sendFile("game.html", {root: "./public"});
-});
-
-router.get("/", function(req, res){
-  res.render("splash.ejs", {});
-});
-module.exports = router;
+  app.get("/play", function(req, res)
+  {
+     res.sendFile("game.html", {root: "./public"});
+  });
+  
+  app.get("/", function(req, res)
+  {
+    res.render("splash.ejs", {activeGamers: gameStats.activeGamers, ongoingGames: gameStats.ongoingGames, gamesCompleted: gameStats.gamesCompleted});
+  });
+}
