@@ -78,21 +78,6 @@ main
     text-align: center;
 }
 
-.column button
-{
-    background-color: #6ec660;
-    font-size: 500%;
-    color: white;
-    text-shadow: 1px 1px 2px black;
-    border: 8px outset #53a03a;
-}
-
-.column button:hover
-{
-    background-color: #488e3e;
-    color: #a5a367;
-}
-
 .column:nth-child(1)
 {
     width: 75%;
@@ -113,6 +98,27 @@ main
     position: absolute;
     bottom: 5%;
     left: 31%;
+}
+
+#play-button button
+{
+    background-color: #6ec660;
+    font-size: 500%;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    border: 8px outset #53a03a;
+}
+
+#play-button button:hover
+{
+    background-color: #488e3e;
+    color: #a5a367;
+}
+
+#play-button button:active
+{
+    background-color:  #1a5413;
+    color: #585633;
 }
 
 #play-img1
