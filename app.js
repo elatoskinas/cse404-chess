@@ -1,6 +1,7 @@
 var express = require("express");
 var http = require("http");
 var websocket = require("ws");
+var ejs = require("ejs");
 
 var Game = require("./game");
 var gameStats = require("./stats");
@@ -11,6 +12,8 @@ var indexRouter = require("./routes/index.js");
 
 var port = process.argv[2];
 var app = express();
+
+app.set("view engine", "ejs");
 
 app.use(express.static(__dirname + "/public"));
 

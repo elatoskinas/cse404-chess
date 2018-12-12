@@ -4,7 +4,7 @@
   float: left;
   display: table;
   text-align: center; /* For aligning cell letters & numbers */
-  border: 25px ridge #a78258;
+  border: 25px ridge #ab773d;
 }
 
 /* Chess Tiles */
@@ -18,22 +18,22 @@
 }
 .chess-tile:nth-child(2n+1)
 {
-  background: #377423;
+  background: #408728;
 }
 
 .chess-tile:nth-child(2n)
 {
-  background: #cdb777;
+  background: #965a3e;
 }
 
 .chess-tile[data-state="valid"]
 {
-  box-shadow: inset 0 0 30px #00ff00;
+  box-shadow: inset 0 0 30px #61e137;
 }
 
 .chess-tile[data-state="selected"]
 {
-  box-shadow: inset 0 0 30px #00ff00;
+  box-shadow: inset 0 0 30px #61e137;
 }
 
 .chess-tile:nth-child(2n+1)[data-state="valid"]:hover
@@ -43,7 +43,7 @@
 
 .chess-tile:nth-child(2n)[data-state="valid"]:hover
 {
-  background: #9b8b59;
+  background: #71412a;
 }
 
 .chess-tile img
