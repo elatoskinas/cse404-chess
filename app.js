@@ -2,6 +2,7 @@ var express = require("express");
 var http = require("http");
 var websocket = require("ws");
 var ejs = require("ejs");
+var cookieParser = require('cookie-parser');
 
 var Game = require("./game");
 var gameStats = require("./stats");
@@ -9,6 +10,7 @@ var messages = require("./public/javascripts/messages");
 
 var port = process.argv[2];
 var app = express();
+app.use(cookieParser());
 
 // route path
 var indexRouter = require("./routes/index.js")(app, gameStats);
