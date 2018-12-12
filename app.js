@@ -7,19 +7,18 @@ var Game = require("./game");
 var gameStats = require("./stats");
 var messages = require("./public/javascripts/messages");
 
-// route path
-var indexRouter = require("./routes/index.js");
-
 var port = process.argv[2];
 var app = express();
 
-app.set("view engine", "ejs");
+// route path
+var indexRouter = require("./routes/index.js")(app, gameStats);
 
+app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
 // routes
-app.use('/', indexRouter);
-app.use('/play', indexRouter);
+//app.use('/', indexRouter);
+//app.use('/play', indexRouter);
 
 var gamesInitialized = 0;
 // -------------------------------
