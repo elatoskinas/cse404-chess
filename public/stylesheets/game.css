@@ -1,6 +1,7 @@
 #chess-board
 {
 /*  padding-left: 50px; /* Offset from left */
+  float: left;
   display: table;
   text-align: center; /* For aligning cell letters & numbers */
   border: 25px ridge #a78258;
@@ -15,7 +16,6 @@
   border: 1px solid; /* some style to the board */
   cursor: pointer;
 }
-
 .chess-tile:nth-child(2n+1)
 {
   background: #377423;
@@ -52,8 +52,30 @@
   width: 50px;
   padding: 5px; /* Center image in tile */
 }
-
 /* Table Entries */
+#Status{
+  vertical-align: top;
+  text-align: center;
+}
+#MovesUser{
+float:right;
+}
+#MovesUser1{
+  border-radius: 25px;
+  text-align: center;
+  float: right;
+  border: 10px #00ff00 ridge;
+  width: 15%;
+  height: 530px;
+}
+#MovesUser2{
+  border-radius: 25px;
+  text-align: center;
+  float:right;
+  border: 10px #00ff00 ridge;
+  height: 530px;
+  width: 15%;
+}
 .table-entry img
 {
   height: 25px;
@@ -61,9 +83,10 @@
 }
 
 .table-entry p
-{
+{ 
   display: inline;
   font-size: 24px;
   margin-left: 10px; /* shift left from left image */
   margin-right: 10px; /* shift right from right image */
+
 }
