@@ -8,6 +8,6 @@ router.get("/play", function(req, res)
 });
 
 router.get("/", function(req, res){
-  res.sendFile("splash.html", {root: "./public"});
+  res.render("splash.ejs", {});
 });
 module.exports = router;
