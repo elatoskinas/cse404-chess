@@ -97,7 +97,24 @@ main
 {
     position: absolute;
     bottom: 5%;
-    left: 31%;
+    left: 25%;
+}
+
+#play-button form::before
+{
+    content: url("splash-img/left.png");
+
+    /* center image vertically */
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+#play-button form::after
+{
+    content: url("splash-img/right.png");
+    display: inline-block;
+    vertical-align: bottom;
+    transform: scaleX(-1); /* flip image */
 }
 
 #play-button button
@@ -119,19 +136,4 @@ main
 {
     background-color:  #1a5413;
     color: #585633;
-}
-
-#play-img1
-{
-    position: relative;
-    top: 100px;
-    right: 55%;
-}
-
-#play-img2
-{
-    position: relative;
-    transform: scaleX(-1);
-    top: 100px;
-    left: 20%;
 }
