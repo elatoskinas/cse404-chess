@@ -78,16 +78,20 @@ wss.on("connection", function connection(ws) {
         }
         else if (code == "1001")
         {
-            gameStats.ongoingGames--;
+            if (socketGame.p1.readyState != 3 || socketGame.p2.readyState != 3) // there exists one player that is still connected
+            {
+                // Decrement Ongoig Games count
+                gameStats.ongoingGames--;
 
-            // Check if sockets have not been closed, and if not, send them the Game Aborted message
-            if(socketGame.p1.readyState != 3)
-            {
-                socketGame.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
-            }                
-            else if (socketGame.p2.readyState != 3)
-            {
-                socketGame.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
+                // Check if socket has been closed, and if not, send them the Game Aborted message
+                if(socketGame.p1.readyState != 3)
+                {
+                    socketGame.p1.send(JSON.stringify(messages.O_GAME_ABORTED));
+                }                
+                else if (socketGame.p2.readyState != 3)
+                {
+                    socketGame.p2.send(JSON.stringify(messages.O_GAME_ABORTED));
+                }
             }
         }
     });
