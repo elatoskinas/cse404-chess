@@ -219,7 +219,9 @@ var blinkTileRed = function(tile)
 
         setTimeout(function()
         {
-            changeTileState(tile, "");
+            // Another check to see whether state is still invalid
+            if ($("#" + tile)[0].dataset.state == "invalid")
+                changeTileState(tile, "");
         }, 500); // wait 0.5seconds for animation to finish
     }
 }
