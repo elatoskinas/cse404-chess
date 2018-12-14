@@ -94,7 +94,8 @@ float:right;
   height: 530px;
 }
 
-#MovesUser2{
+#MovesUser2
+{
   border-radius: 25px;
   text-align: center;
   float:right;
@@ -121,4 +122,5 @@ float:right;
   position: fixed;
   bottom: 0;
   right: 0;
+  font-size: 200%;
 }
