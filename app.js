@@ -22,13 +22,10 @@ app.use(express.static(__dirname + "/public"));
 //app.use('/', indexRouter);
 //app.use('/play', indexRouter);
 
-var gamesInitialized = 0;
-// -------------------------------
-
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
 var connectionID = 0; // keep track of next unique WebSocket Connection ID
-var currentGame = new Game(gamesInitialized++); // keep track of current game
+var currentGame = new Game(gameStats.gamesInitialized++); // keep track of current game
 
 // Server Creation
 var server = http.createServer(app).listen(port); // create server on port
@@ -42,6 +39,7 @@ wss.on("connection", function connection(ws) {
     let playerType = currentGame.addPlayer(connection); // true for White, false for Black
     websockets[connection.id] = currentGame; // assign game to connection ID in WebSockets array
     gameStats.activeGamers++;
+
     // debug
     console.log("Player %s placed in game %s as %s", connection.id, currentGame.id, (playerType ? "White" : "Black"));
 
@@ -74,9 +72,9 @@ wss.on("connection", function connection(ws) {
     connection.on("close", function (code)
     {   gameStats.activeGamers--;
         console.log(connection.id + " disconnected");
-        if(!socketGame.hasTwoPlayers){
+        if(!socketGame.hasTwoPlayers)
+        {
             socketGame.p1=null;
-            gameStats.gamesInitialized--;
         }
         else if (code == "1001")
         {

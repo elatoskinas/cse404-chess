@@ -235,13 +235,29 @@ var rotateBoard = function()
 /* Toggle fullscreen on/off */
 document.getElementById("fullscreen-button").onclick = function()
 {
-    if (!fullscreen)
+    if (!fullscreen) // enter fullscreen
     {
-        document.body.requestFullscreen();
+        // Compatibility checks for browsers
+        if (document.body.requestFullscreen)
+            document.body.requestFullscreen();
+        else if (document.body.msRequestFullscreen)
+            document.body.msRequestFullscreen();
+        else if (document.body.mozRequestFullscreen)
+            document.body.mozRequestFullscreen();
+        else if (document.body.webkitRequestFullscreen)
+            document.body.webkitRequestFullscreen();
     }
-    else
+    else // exit fullscreen
     {
-        document.exitFullscreen();
+        // Compatibility checks for browsers
+        if (document.exitFullscreen)
+            document.exitFullscreen();
+        else if (document.webkitExitFullscreen)
+            document.webkitExitFullscreen();
+        else if (document.mozCancelFullscreen)
+            document.mozCancelFullscreen();
+        else if (document.msExitFullscreen)
+            document.msExitFullscreen();
     }
 
     fullscreen = !fullscreen;
