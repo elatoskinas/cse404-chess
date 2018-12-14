@@ -125,7 +125,7 @@ wss.on("connection", function connection(ws) {
                     socketGame.p1.send(JSON.stringify(clickResponse));
                     socketGame.p2.send(JSON.stringify(clickResponse));
 
-                    var playerCheckStatus = socketGame.gameState.sendCheckStatus(); 
+                    var playerCheckStatus = socketGame.gameState.sendCheckStatus();
 
                     console.log(playerCheckStatus);
                     
