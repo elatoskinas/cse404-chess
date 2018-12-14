@@ -25,11 +25,19 @@ header
 
 header h1
 {
+    cursor: default;
     float: left;
     color: snow;
     font-size: 8.25vh;
     height: auto;
     padding-left: 10px;
+    transition: color 0.5s ease;
+}
+
+header h1:hover
+{
+    color: #60da37;
+    transition: color 0.5s ease;
 }
 
 header img
@@ -138,3 +146,4 @@ main
     background-color:  #1a5413;
     color: #585633;
 }
+
