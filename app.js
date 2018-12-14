@@ -120,13 +120,17 @@ wss.on("connection", function connection(ws) {
                     
                     // Update board for both players
                     var checkmateStatus = socketGame.gameState.newTurn();
-                    // If a piece is moved successfully, switch the turn     
+
+                    // If a piece is moved successfully, switch the turn
                     socketGame.p1.send(JSON.stringify(clickResponse));
                     socketGame.p2.send(JSON.stringify(clickResponse));
 
                     var playerCheckStatus = socketGame.gameState.sendCheckStatus(); 
+
+                    console.log(playerCheckStatus);
                     
                     if(playerCheckStatus!=null){
+                        console.log(playerCheckStatus);
                         if(playerCheckStatus.data==true)
                         socketGame.p1.send(JSON.stringify(playerCheckStatus));
                         else socketGame.p2.send(JSON.stringify(playerCheckStatus));

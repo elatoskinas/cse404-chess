@@ -521,6 +521,8 @@ function GameState()
 	/** Ends turn of current active Player and starts a new turn */
 	this.newTurn = function()
 	{
+		var messages = []; // messages to return to the server
+
 		// Reset check status [because valid move was made if new turn has been made]
 		var prevPlayerIndex = this.activePlayer ? 1 : 0;
 		this.checkStatus[prevPlayerIndex] = false;
@@ -536,16 +538,21 @@ function GameState()
 		{
 			this.checkStatus[newPlayerIndex] = true;
 			console.log("Check");
+
+			// Construct checking message
+			var checkMsg = messages.cloneMessage(messages.O_CHECK);
+			checkMsg.data = this.activePlayer;
+			messages.push(checkMsg);
 		}
 
 		// Check if valid moves exist
 		var hasValid = this.setValidMovesAll(threats, this.kingCells[newPlayerIndex]);
 		var msg = messages.cloneMessage(messages.O_CHECKMATE);
+
 		if (!hasValid) // No valid moves exist
 		{
 			if (threats.length > 0) // Checkmate
 			{
-
 				msg.data = 1;
 				msg.player = this.activePlayer;
 			}
@@ -554,7 +561,11 @@ function GameState()
 				msg.data = 0;
 			}
 		}
-		return msg;
+
+		// Push checkmate status message
+		messages.push(msg);
+		
+		return messages;
 	}
 
 	/** Sets valid moves for all the current player's pieces (currently a bit inefficient) */
