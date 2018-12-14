@@ -160,7 +160,7 @@ wss.on("connection", function connection(ws) {
                 }
                 else // Select piece
                 {
-                    // Send response to client containing info required for piece selection
+                    // Send response to client containing info required for piece selection/move invalidity
                     connection.send(JSON.stringify(clickResponse));
                 }
             }

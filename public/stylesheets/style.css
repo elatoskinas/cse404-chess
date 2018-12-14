@@ -13,6 +13,8 @@ body
 button
 {
   font-family: 'VT323', sans-serif;
+  background-color: #6ec660;
+  color: white;
 }
 
 #screen-warning
@@ -22,8 +24,22 @@ button
   top: 0;
   right: 0;
   font-size: 250%;
-  color: #b02a2a;
+  color: #d13131;
 }
+
+button:hover
+{
+    background-color: #488e3e;
+    color: #a5a367;
+}
+
+
+button:active
+{
+    background-color:  #1b6913;
+    color: #585633;
+}
+
 
 @media screen and (max-width: 600px), screen and (max-height: 500px)
 {

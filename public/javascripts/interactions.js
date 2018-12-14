@@ -107,7 +107,10 @@ var fullscreen = false; // is user in full screen?
             } else if (state == 4){
                 changeStatusText(statusMessages[7]);
             }
-
+        }
+        else if (incomingMSG.type === "INVALID-MOVE")
+        {
+            blinkTileRed(incomingMSG.tile);
         }
     }
 
@@ -204,6 +207,21 @@ var changeStatusText = function(text)
 {
     var statusText = $("#" + "status_text");
     statusText[0].textContent = text;
+}
+
+/** Blinks tile red on invalid move */
+var blinkTileRed = function(tile)
+{
+    // Check whether animation is not already playing
+    if ($("#" + tile)[0].dataset.state != "invalid")
+    {
+        changeTileState(tile, "invalid");
+
+        setTimeout(function()
+        {
+            changeTileState(tile, "");
+        }, 500); // wait 0.5seconds for animation to finish
+    }
 }
 
 /** Rotates the board for black piece */

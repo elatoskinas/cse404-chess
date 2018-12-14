@@ -175,11 +175,13 @@ function GameState()
 				else
 				{
 					// Blink tile in red
+					return this.invalidMoveMessage(cell);
 				}
 			}
 			else
 			{
 				// Blink tile in red
+				return this.invalidMoveMessage(cell);
 			}
 		}
 		else // Piece is already selected by Player
@@ -199,7 +201,11 @@ function GameState()
 					{
 						return this.movePiece(selectedPiece, cell);
 					}
-					// Blink in red if move is not valid
+					else
+					{
+						// Blink in red if move is not valid
+						return this.invalidMoveMessage(cell);
+					}
 				}
 			}
 			else
@@ -209,11 +215,23 @@ function GameState()
 				{
 					return this.movePiece(selectedPiece, cell);
 				}
-				// Else blink in red if move is not valid
+				else
+				{
+					// Else blink in red if move is not valid
+					return this.invalidMoveMessage(cell);
+				}
 			}
 		}
 
 		return null;
+	}
+
+	/** Returns Invalid Move message */
+	this.invalidMoveMessage = function(cell)
+	{
+		var invalidMsg = messages.cloneMessage(messages.O_INVALID_MOVE);
+		invalidMsg.tile = cell;
+		return invalidMsg;
 	}
 
 	/** Select piece, highlight the piece & it's valid moves */
