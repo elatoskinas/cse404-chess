@@ -8,3 +8,21 @@ button
 {
   font-family: 'VT323', sans-serif;
 }
+
+#screen-warning
+{
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 250%;
+  color: #b02a2a;
+}
+
+@media screen and (max-width: 600px), screen and (max-height: 500px)
+{
+  #screen-warning
+  {
+    visibility: visible;
+  }
+}

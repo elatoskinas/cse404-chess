@@ -1,4 +1,5 @@
 var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", "Your fellow gamer aborted the game.", "You won!", "You lost!", "Stalemate!!","Check!"];
+var fullscreen = false; // is user in full screen?
 
 // Initializes the game and gets socket connection
 (function setup()
@@ -229,4 +230,19 @@ var rotateBoard = function()
             $("#chess-board")[0].append(br);
         }
     }
+}
+
+/* Toggle fullscreen on/off */
+document.getElementById("fullscreen-button").onclick = function()
+{
+    if (!fullscreen)
+    {
+        document.body.requestFullscreen();
+    }
+    else
+    {
+        document.exitFullscreen();
+    }
+
+    fullscreen = !fullscreen;
 }

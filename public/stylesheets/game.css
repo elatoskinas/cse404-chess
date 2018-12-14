@@ -1,3 +1,8 @@
+*:fullscreen
+{
+  background-color: white;
+}
+
 #chess-board
 {
 /*  padding-left: 50px; /* Offset from left */
@@ -88,5 +93,11 @@ float:right;
   font-size: 24px;
   margin-left: 10px; /* shift left from left image */
   margin-right: 10px; /* shift right from right image */
+}
 
+#fullscreen-button
+{
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
