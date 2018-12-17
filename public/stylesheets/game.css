@@ -127,7 +127,7 @@ body{
   text-align: center;
   border: 15px #ab773d ridge;
   width: 300px;
-  height: 450px;
+  height: 200px;
 }
 #UserStats{
   margin-left: 10%;
@@ -142,6 +142,7 @@ body{
   float:left;
 }
 #User1{
+
   background: rgb(100, 40, 0);
 }
 #User2{
@@ -159,6 +160,7 @@ body{
   text-align: center;
 }
 .Columns{
+  background-size: cover;
   height: 100%;
   text-align: center;
   float: left;
@@ -166,11 +168,11 @@ body{
 }
 #Column1{
   height: 100%;
-  background: #965a3e;
+  background-color: #965a3e;
 }
 #Column2{
   height:100%;
-  background: #408728;
+  background-color: #408728;
 }
 
 /* Table entries */
