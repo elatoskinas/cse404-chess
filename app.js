@@ -136,7 +136,8 @@ wss.on("connection", function connection(ws) {
                     }
 
                     if(checkmateStatus.data!=null){
-                        gameStats.ongoingGames--;
+                        // For simplicity, commenting this out for now
+//                        gameStats.ongoingGames--;
                         gameStats.gamesCompleted++;
 
                         if(checkmateStatus.data==1){
