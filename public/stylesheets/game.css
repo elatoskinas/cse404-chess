@@ -177,6 +177,7 @@ body{
 {
   height: 25px;
   width: 25px;
+  padding-top: 2px;
 }
 
 .table-entry p
@@ -185,6 +186,16 @@ body{
   font-size: 24px;
   margin-left: 10px; /* shift left from left image */
   margin-right: 10px; /* shift right from right image */
+}
+
+#Column1 .table-entry:nth-child(2n+1)
+{
+  background: #a96546;
+}
+
+#Column2 .table-entry:nth-child(2n+1)
+{
+  background: #47962d;
 }
 
 /* Fullscreen Button positioning */
