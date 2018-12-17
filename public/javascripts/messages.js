@@ -1,6 +1,5 @@
 (function(exports)
 {
-    // THESE MESSAGES ARE UTILIZED
     // Player A or Player B to Server: Click Tile
     exports.O_TILE_CLICK_BY =
     {
@@ -59,8 +58,6 @@
         selected: "" // get already selected tile, if exists
     };
 
-    // ------------------------------------------------------
-
     // Server to Client: Aborted Game
     exports.O_GAME_ABORTED =
     {
@@ -74,12 +71,19 @@
         status: 4,
         data: null // A or B
     };
+
     // Server to Player A & B: GameOver With Win/Stalemate/Loss result
     exports.O_CHECKMATE = {
         type: "STATE",
         status: 3,
         data: null, // Win/Stalemate/Loss
         player: null // A or B
+    };
+
+    // Server to Client: Invalid move
+    exports.O_INVALID_MOVE = {
+        type: "INVALID-MOVE",
+        tile: ""
     };
 
     exports.cloneMessage = function(message)
