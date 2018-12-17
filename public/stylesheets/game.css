@@ -86,31 +86,63 @@
 /* Status table */
 #Status
 {
-  vertical-align: top;
-  text-align: center;
+  height: 50px;
+  width: 50px;
+  padding: 5px; /* Center image in tile */
 }
-
-#MovesUser{
-float:right;
-}
-
-#MovesUser1{
-  border-radius: 25px;
-  text-align: center;
-  float: right;
-  border: 10px #00ff00 ridge;
-  width: 15%;
-  height: 530px;
-}
-
-#MovesUser2
+/* Table Entries */
+#UserStats
 {
+}
+#UserMoves{
   border-radius: 25px;
   text-align: center;
-  float:right;
-  border: 10px #00ff00 ridge;
-  height: 530px;
-  width: 15%;
+  border: 15px #ab773d ridge;
+  width: 300px;
+  height: 450px;
+}
+#UserStats{
+  margin-left: 10%;
+  text-align: center;
+  float:left;
+  margin-top:5%;  
+}
+.Users{
+  height:100%;
+  font-size: 30px;
+  width: 150px;
+  float:left;
+}
+#User1{
+  background: rgb(100, 40, 0);
+}
+#User2{
+  background: darkgreen;
+}
+#row{
+  height:10%;
+  width:100%;
+}
+#row2{
+  overflow: auto;
+  height:90%;
+  float:none;
+  width: 100%;
+  text-align: center;
+}
+.Columns{
+  height: 100%;
+  text-align: center;
+  float: left;
+  width:50%;
+}
+#Column1{
+  height: 100%;
+  background: #965a3e;
+}
+#Column2{
+  height:100%;
+  background: #408728;
 }
 
 /* Table entries */

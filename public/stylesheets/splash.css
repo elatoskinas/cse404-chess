@@ -132,4 +132,22 @@ main
     font-size: 500%;
     text-shadow: 1px 1px 2px black;
     border: 8px outset #53a03a;
+<<<<<<< HEAD
+}
+
+#play-button button:hover
+{
+    background-color: #488e3e;
+    color: #a5a367;
+}
+
+#play-button button:active
+{
+    background-color:  #1a5413;
+    color: #585633;
+}
+body{
+    background-color:pink;
+=======
+>>>>>>> c06bb6739d54ec46c53eb3d38105f961731a65cc
 }
