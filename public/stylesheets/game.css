@@ -21,8 +21,14 @@
   100% {background: red;}
 }
 */
+
+html
+{
+    background-color: #805523;
+}
+
 body{
-  background-color: #7a513c;
+  background-color: #805523;
 }
 #chess-board
 {
