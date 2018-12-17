@@ -1,8 +1,7 @@
-/* Fill page */
+/* Fill page with content */
 html
 {
     height: 100%;
-    color: white;
 }
 
 /* Reset padding & margin, fill page */
@@ -13,7 +12,7 @@ body
     padding: 0px;
 }
 
-/* Header 20% of page height */
+/* Header (20% page height) */
 header
 {
    width: 100%;
@@ -49,7 +48,7 @@ header img
     padding-left: 1%;
 }
 
-/* Main 80% of page height */
+/* Main & body (80% page height) */
 main
 {
     height: 80%;
@@ -101,6 +100,7 @@ main
     box-shadow: inset 1px 0px 1px black;
 }
 
+/* Play Button */
 #play-button
 {
     text-align: center;
@@ -109,6 +109,7 @@ main
     width: 75%;
 }
 
+/* Play Button Images */
 #play-button form::before
 {
     content: url("splash-img/left.png");

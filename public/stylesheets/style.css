@@ -1,3 +1,4 @@
+/* Font setup */
 html
 {
   font-family: 'VT323', sans-serif;
@@ -8,23 +9,15 @@ html
 body
 {
   background-color: white;
+  color: white;
 }
 
+/* Button styling */
 button
 {
   font-family: 'VT323', sans-serif;
   background-color: #6ec660;
   color: white;
-}
-
-#screen-warning
-{
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 250%;
-  color: #d13131;
 }
 
 button:hover
@@ -38,6 +31,17 @@ button:active
 {
     background-color:  #1b6913;
     color: #585633;
+}
+
+/* Resolution warning setup */
+#screen-warning
+{
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 250%;
+  color: #d13131;
 }
 
 

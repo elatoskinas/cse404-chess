@@ -1,19 +1,19 @@
+/* Chess board styling */
 #chess-board
 {
   /*  padding-left: 50px; /* Offset from left */
-  float: left;
-  display: table;
-  text-align: center; /* For aligning cell letters & numbers */
-  border: 25px ridge #ab773d;
+  float: left; /* For the cells to be lined up properly */
+  display: table; /* To get the board */
+  border: 25px ridge #ab773d; /* Extra style for the board */
 }
 
-/* Chess Tiles */
+/* Chess Tile Styling */
 .chess-tile
 {
   float: left;
   height: 60px;
   width: 60px;
-  border: 1px solid; /* some style to the board */
+  border: 1px solid black; /* some style to the board */
   cursor: pointer;
 }
 
@@ -63,6 +63,7 @@
   animation: blinkRed 0.5s ease-in 1;
 }
 
+/* Keyframes for invalid move displaying */
 @keyframes blinkRed
 {
   0%
@@ -82,14 +83,17 @@
 
 }
 
-/* Table Entries */
-#Status{
+/* Status table */
+#Status
+{
   vertical-align: top;
   text-align: center;
 }
+
 #MovesUser{
 float:right;
 }
+
 #MovesUser1{
   border-radius: 25px;
   text-align: center;
@@ -108,6 +112,8 @@ float:right;
   height: 530px;
   width: 15%;
 }
+
+/* Table entries */
 .table-entry img
 {
   height: 25px;
@@ -122,6 +128,7 @@ float:right;
   margin-right: 10px; /* shift right from right image */
 }
 
+/* Fullscreen Button positioning */
 #fullscreen-button
 {
   position: fixed;
