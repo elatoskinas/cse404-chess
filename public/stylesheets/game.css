@@ -124,6 +124,12 @@ body{
   width: 50px;
   padding: 5px; /* Center image in tile */
 }
+
+#status_text
+{
+  text-shadow: 1px 1px 1px black;
+}
+
 /* Table Entries */
 #UserMoves{
   border-radius: 25px;
