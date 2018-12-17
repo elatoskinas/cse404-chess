@@ -1,5 +1,6 @@
 var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", "Your fellow gamer aborted the game.", "You won!", "You lost!", "Stalemate!!","Check!"];
 var fullscreen = false; // is user in full screen?
+var pieceSound = new Audio("sounds/piece-hit.wav");
 
 // Initializes the game and gets socket connection
 (function setup()
@@ -73,6 +74,9 @@ var fullscreen = false; // is user in full screen?
             // Update source & destination tiles with required images
             updateTile(incomingMSG.tileFrom, "empty"); // empty because piece was moved from source tile
             updateTile(incomingMSG.tileTo, incomingMSG.imageFrom);
+
+            // Play sound
+            pieceSound.play();
 
             // Add movement entry to side panel
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo, incomingMSG.player);
