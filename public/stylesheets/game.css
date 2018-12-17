@@ -188,12 +188,12 @@ body{
   margin-right: 10px; /* shift right from right image */
 }
 
-#Column1 .table-entry:nth-child(2n+1)
+#Column1 .table-entry:nth-child(2n)
 {
   background: #a96546;
 }
 
-#Column2 .table-entry:nth-child(2n+1)
+#Column2 .table-entry:nth-child(2n)
 {
   background: #47962d;
 }
