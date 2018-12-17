@@ -21,8 +21,14 @@
   100% {background: red;}
 }
 */
+
+html
+{
+    background-color: #805523;
+}
+
 body{
-  background-color: #7a513c;
+  background-color: #805523;
 }
 #chess-board
 {
@@ -124,7 +130,7 @@ body{
   text-align: center;
   border: 15px #ab773d ridge;
   width: 300px;
-  height: 460px;
+  height: 450px;
 }
 #UserStats{
   margin-left: 10%;
