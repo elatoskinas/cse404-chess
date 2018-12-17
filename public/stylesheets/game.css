@@ -1,3 +1,29 @@
+/*body {
+  -webkit-animation: colorchange 1ms;
+  animation-iteration-count: infinite;
+}
+
+@keyframes colorchange
+{
+  0%   {background: red;}
+  25%  {background: yellow;}
+  50%  {background: blue;}
+  75%  {background: green;}
+  100% {background: red;}
+}
+
+@-webkit-keyframes colorchange
+{
+  0%   {background: red;}
+  25%  {background: yellow;}
+  50%  {background: blue;}
+  75%  {background: green;}
+  100% {background: red;}
+}
+*/
+body{
+  background-color: #7a513c;
+}
 #chess-board
 {
 /*  padding-left: 50px; /* Offset from left */
@@ -5,6 +31,8 @@
   display: table;
   text-align: center; /* For aligning cell letters & numbers */
   border: 25px ridge #ab773d;
+  margin-left: 20%;
+  margin-top: 5%;
 }
 
 /* Chess Tiles */
@@ -53,28 +81,58 @@
   padding: 5px; /* Center image in tile */
 }
 /* Table Entries */
-#Status{
-  vertical-align: top;
-  text-align: center;
+#UserStats
+{
 }
-#MovesUser{
-float:right;
-}
-#MovesUser1{
+#UserMoves{
   border-radius: 25px;
   text-align: center;
-  float: right;
-  border: 10px #00ff00 ridge;
-  width: 15%;
-  height: 530px;
+  border: 15px #ab773d ridge;
+  width: 300px;
+  height: 450px;
 }
-#MovesUser2{
-  border-radius: 25px;
+#UserStats{
+  margin-left: 10%;
   text-align: center;
-  float:right;
-  border: 10px #00ff00 ridge;
-  height: 530px;
-  width: 15%;
+  float:left;
+  margin-top:5%;  
+}
+.Users{
+  height:100%;
+  font-size: 30px;
+  width: 150px;
+  float:left;
+}
+#User1{
+  background: rgb(100, 40, 0);
+}
+#User2{
+  background: darkgreen;
+}
+#row{
+  height:10%;
+  width:100%;
+}
+#row2{
+  overflow: auto;
+  height:90%;
+  float:none;
+  width: 100%;
+  text-align: center;
+}
+.Columns{
+  height: 100%;
+  text-align: center;
+  float: left;
+  width:50%;
+}
+#Column1{
+  height: 100%;
+  background: #965a3e;
+}
+#Column2{
+  height:100%;
+  background: #408728;
 }
 .table-entry img
 {
