@@ -1,26 +1,26 @@
+/* Requirements */
 var express = require("express");
 var http = require("http");
 var websocket = require("ws");
 var ejs = require("ejs");
 var cookieParser = require('cookie-parser');
 
+/* Local code requirements */
 var Game = require("./game");
 var gameStats = require("./stats");
 var messages = require("./public/javascripts/messages");
 
+/* Start Express app with specified command argument port */
 var port = process.argv[2];
 var app = express();
 app.use(cookieParser());
 
-// route path
+// routes setup
 var indexRouter = require("./routes/index.js")(app, gameStats);
 
+/* EJS view engine set up and directory */
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-
-// routes
-//app.use('/', indexRouter);
-//app.use('/play', indexRouter);
 
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
@@ -38,7 +38,7 @@ wss.on("connection", function connection(ws) {
 
     let playerType = currentGame.addPlayer(connection); // true for White, false for Black
     websockets[connection.id] = currentGame; // assign game to connection ID in WebSockets array
-    gameStats.activeGamers++;
+    gameStats.activeGamers++; // increase active gamers count on connection
 
     // debug
     console.log("Player %s placed in game %s as %s", connection.id, currentGame.id, (playerType ? "White" : "Black"));
