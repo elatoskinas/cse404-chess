@@ -1,10 +1,38 @@
-/* Chess board styling */
+/*body {
+  -webkit-animation: colorchange 1ms;
+  animation-iteration-count: infinite;
+}
+
+@keyframes colorchange
+{
+  0%   {background: red;}
+  25%  {background: yellow;}
+  50%  {background: blue;}
+  75%  {background: green;}
+  100% {background: red;}
+}
+
+@-webkit-keyframes colorchange
+{
+  0%   {background: red;}
+  25%  {background: yellow;}
+  50%  {background: blue;}
+  75%  {background: green;}
+  100% {background: red;}
+}
+*/
+body{
+  background-color: #7a513c;
+}
 #chess-board
 {
-  /*  padding-left: 50px; /* Offset from left */
-  float: left; /* For the cells to be lined up properly */
-  display: table; /* To get the board */
-  border: 25px ridge #ab773d; /* Extra style for the board */
+/*  padding-left: 50px; /* Offset from left */
+  float: left;
+  display: table;
+  text-align: center; /* For aligning cell letters & numbers */
+  border: 25px ridge #ab773d;
+  margin-left: 20%;
+  margin-top: 5%;
 }
 
 /* Chess Tile Styling */
