@@ -15,6 +15,9 @@ var fullscreen = false; // is user in full screen?
     // States:
     // 0 - WAITING FOR PLAYER
     // 1 - ONGOING GAME
+    // 2 - GAME ABORTED
+    // 3 - CHECKMATE
+    // 4 - CHECK
     var state = 0;
 
     // Message received from Server
