@@ -1,34 +1,31 @@
+/* Requirements */
 var express = require("express");
 var http = require("http");
 var websocket = require("ws");
 var ejs = require("ejs");
 var cookieParser = require('cookie-parser');
 
+/* Local code requirements */
 var Game = require("./game");
 var gameStats = require("./stats");
 var messages = require("./public/javascripts/messages");
 
+/* Start Express app with specified command argument port */
 var port = process.argv[2];
 var app = express();
 app.use(cookieParser());
 
-// route path
+// routes setup
 var indexRouter = require("./routes/index.js")(app, gameStats);
 
+/* EJS view engine set up and directory */
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-
-// routes
-//app.use('/', indexRouter);
-//app.use('/play', indexRouter);
-
-var gamesInitialized = 0;
-// -------------------------------
 
 // --- WebSockets ---
 var websockets = []; // array keeping track of websockets
 var connectionID = 0; // keep track of next unique WebSocket Connection ID
-var currentGame = new Game(gamesInitialized++); // keep track of current game
+var currentGame = new Game(gameStats.gamesInitialized++); // keep track of current game
 
 // Server Creation
 var server = http.createServer(app).listen(port); // create server on port
@@ -41,7 +38,8 @@ wss.on("connection", function connection(ws) {
 
     let playerType = currentGame.addPlayer(connection); // true for White, false for Black
     websockets[connection.id] = currentGame; // assign game to connection ID in WebSockets array
-    gameStats.activeGamers++;
+    gameStats.activeGamers++; // increase active gamers count on connection
+
     // debug
     console.log("Player %s placed in game %s as %s", connection.id, currentGame.id, (playerType ? "White" : "Black"));
 
@@ -74,9 +72,9 @@ wss.on("connection", function connection(ws) {
     connection.on("close", function (code)
     {   gameStats.activeGamers--;
         console.log(connection.id + " disconnected");
-        if(!socketGame.hasTwoPlayers){
+        if(!socketGame.hasTwoPlayers)
+        {
             socketGame.p1=null;
-            gameStats.gamesInitialized--;
         }
         else if (code == "1001")
         {
@@ -162,7 +160,7 @@ wss.on("connection", function connection(ws) {
                 }
                 else // Select piece
                 {
-                    // Send response to client containing info required for piece selection
+                    // Send response to client containing info required for piece selection/move invalidity
                     connection.send(JSON.stringify(clickResponse));
                 }
             }

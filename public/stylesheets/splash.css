@@ -1,8 +1,7 @@
-/* Fill page */
+/* Fill page with content */
 html
 {
     height: 100%;
-    color: white;
 }
 
 /* Reset padding & margin, fill page */
@@ -13,7 +12,7 @@ body
     padding: 0px;
 }
 
-/* Header 20% of page height */
+/* Header (20% page height) */
 header
 {
    width: 100%;
@@ -25,11 +24,19 @@ header
 
 header h1
 {
+    cursor: default;
     float: left;
     color: snow;
     font-size: 8.25vh;
     height: auto;
     padding-left: 10px;
+    transition: color 0.5s ease;
+}
+
+header h1:hover
+{
+    color: #60da37;
+    transition: color 0.5s ease;
 }
 
 header img
@@ -41,7 +48,7 @@ header img
     padding-left: 1%;
 }
 
-/* Main 80% of page height */
+/* Main & body (80% page height) */
 main
 {
     height: 80%;
@@ -93,6 +100,7 @@ main
     box-shadow: inset 1px 0px 1px black;
 }
 
+/* Play Button */
 #play-button
 {
     text-align: center;
@@ -101,6 +109,7 @@ main
     width: 75%;
 }
 
+/* Play Button Images */
 #play-button form::before
 {
     content: url("splash-img/left.png");
@@ -120,21 +129,7 @@ main
 
 #play-button button
 {
-    background-color: #6ec660;
     font-size: 500%;
-    color: white;
     text-shadow: 1px 1px 2px black;
     border: 8px outset #53a03a;
-}
-
-#play-button button:hover
-{
-    background-color: #488e3e;
-    color: #a5a367;
-}
-
-#play-button button:active
-{
-    background-color:  #1a5413;
-    color: #585633;
 }

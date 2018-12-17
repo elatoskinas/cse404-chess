@@ -1,4 +1,6 @@
 var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", "Your fellow gamer aborted the game.", "You won!", "You lost!", "Stalemate!!","Check!"];
+var fullscreen = false; // is user in full screen?
+var pieceSound = new Audio("sounds/piece-hit.wav");
 
 // Initializes the game and gets socket connection
 (function setup()
@@ -14,6 +16,9 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", 
     // States:
     // 0 - WAITING FOR PLAYER
     // 1 - ONGOING GAME
+    // 2 - GAME ABORTED
+    // 3 - CHECKMATE
+    // 4 - CHECK
     var state = 0;
 
     // Message received from Server
@@ -70,6 +75,9 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", 
             updateTile(incomingMSG.tileFrom, "empty"); // empty because piece was moved from source tile
             updateTile(incomingMSG.tileTo, incomingMSG.imageFrom);
 
+            // Play sound
+            pieceSound.play();
+
             // Add movement entry to side panel
             addToSidePanel(incomingMSG.tileFrom, incomingMSG.tileTo, incomingMSG.imageFrom, incomingMSG.imageTo, incomingMSG.player);
 
@@ -106,7 +114,10 @@ var statusMessages = ["Waiting for players...", "Your Turn", "Opponent's Turn", 
             } else if (state == 4){
                 changeStatusText(statusMessages[7]);
             }
-
+        }
+        else if (incomingMSG.type === "INVALID-MOVE")
+        {
+            blinkTileRed(incomingMSG.tile);
         }
     }
 
@@ -205,6 +216,23 @@ var changeStatusText = function(text)
     statusText[0].textContent = text;
 }
 
+/** Blinks tile red on invalid move */
+var blinkTileRed = function(tile)
+{
+    // Check whether animation is not already playing
+    if ($("#" + tile)[0].dataset.state != "invalid")
+    {
+        changeTileState(tile, "invalid");
+
+        setTimeout(function()
+        {
+            // Another check to see whether state is still invalid
+            if ($("#" + tile)[0].dataset.state == "invalid")
+                changeTileState(tile, "");
+        }, 500); // wait 0.5seconds for animation to finish
+    }
+}
+
 /** Rotates the board for black piece */
 var rotateBoard = function()
 {
@@ -229,4 +257,35 @@ var rotateBoard = function()
             $("#chess-board")[0].append(br);
         }
     }
+}
+
+/* Toggle fullscreen on/off */
+document.getElementById("fullscreen-button").onclick = function()
+{
+    if (!fullscreen) // enter fullscreen
+    {
+        // Compatibility checks for browsers
+        if (document.body.requestFullscreen)
+            document.body.requestFullscreen();
+        else if (document.body.msRequestFullscreen)
+            document.body.msRequestFullscreen();
+        else if (document.body.mozRequestFullscreen)
+            document.body.mozRequestFullscreen();
+        else if (document.body.webkitRequestFullscreen)
+            document.body.webkitRequestFullscreen();
+    }
+    else // exit fullscreen
+    {
+        // Compatibility checks for browsers
+        if (document.exitFullscreen)
+            document.exitFullscreen();
+        else if (document.webkitExitFullscreen)
+            document.webkitExitFullscreen();
+        else if (document.mozCancelFullscreen)
+            document.mozCancelFullscreen();
+        else if (document.msExitFullscreen)
+            document.msExitFullscreen();
+    }
+
+    fullscreen = !fullscreen;
 }

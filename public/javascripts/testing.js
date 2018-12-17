@@ -1,3 +1,4 @@
+/* Was used to test during the console development phase */
 /* Test method that fills an 8x8 array of Strings with
    'O' and 'X', where 'O' is the piece and 'X' are all the
    possible moves */
