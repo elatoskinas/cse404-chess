@@ -145,12 +145,12 @@ body{
   background: darkgreen;
 }
 #row{
-  height:10%;
+  height:8%;
   width:100%;
 }
 #row2{
   overflow: auto;
-  height:90%;
+  height:92%;
   float:none;
   width: 100%;
   text-align: center;
