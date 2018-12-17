@@ -116,10 +116,15 @@ body{
   }
 
 }
-
+/* Status & Moves part */
+#UserStats{
+  margin-left: 10%;
+  text-align: center;
+  float:left;
+  margin-top:3%;  
+}
 /* Status table */
-#Status
-{
+#Status{
   height: 50px;
   width: 50px;
   padding: 5px; /* Center image in tile */
@@ -138,11 +143,9 @@ body{
   width: 300px;
   height: 450px;
 }
-#UserStats{
-  margin-left: 10%;
-  text-align: center;
-  float:left;
-  margin-top:3%;  
+#row{
+  height:8%;
+  width:100%;
 }
 .Users{
   height:100%;
@@ -155,10 +158,6 @@ body{
 }
 #User2{
   background: darkgreen;
-}
-#row{
-  height:8%;
-  width:100%;
 }
 #row2{
   overflow: auto;
@@ -185,34 +184,29 @@ body{
 }
 
 /* Table entries */
-.table-entry img
-{
+.table-entry img{
   height: 25px;
   width: 25px;
   padding-top: 2px;
 }
 
-.table-entry p
-{ 
+.table-entry p{ 
   display: inline;
   font-size: 24px;
   margin-left: 10px; /* shift left from left image */
   margin-right: 10px; /* shift right from right image */
 }
 
-#Column1 .table-entry:nth-child(2n)
-{
+#Column1 .table-entry:nth-child(2n){
   background: #a96546;
 }
 
-#Column2 .table-entry:nth-child(2n)
-{
+#Column2 .table-entry:nth-child(2n){
   background: #47962d;
 }
 
 /* Fullscreen Button positioning */
-#fullscreen-button
-{
+#fullscreen-button{
   position: fixed;
   bottom: 0;
   right: 0;
