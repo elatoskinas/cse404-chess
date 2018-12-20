@@ -5,8 +5,10 @@ var pieceSound = new Audio("sounds/piece-hit.wav");
 // Initializes the game and gets socket connection
 (function setup()
 {
+    var HOST = location.origin.replace(/^http/, 'ws');
+
     // start WebSocket connection
-    var socket = new WebSocket("ws://localhost:3000");
+    var socket = new WebSocket(HOST);
 
     // State for current client. Keep this in separate Object later.
     var isWhite = true;
