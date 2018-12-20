@@ -1,6 +1,7 @@
 {
   "name": "cse404-chess",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Multiplayer chess game",
   "private": true,
   "scripts": {
     "start": "node app.js 3000"
@@ -13,5 +14,8 @@
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
     "ws": "^6.1.2"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }

@@ -28,7 +28,7 @@ var connectionID = 0; // keep track of next unique WebSocket Connection ID
 var currentGame = new Game(gameStats.gamesInitialized++); // keep track of current game
 
 // Server Creation
-var server = http.createServer(app).listen(port); // create server on port
+var server = http.createServer(app).listen(process.env.PORT || 3000); // create server on port
 const wss = new websocket.Server( {server} ); // create WebSocket server
 
 // Listen for incoming WebSocket connections
