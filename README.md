@@ -1,6 +1,8 @@
 # PixelChess (cse404-chess)
 Made for a university [Web assignment](https://github.com/chauff/Web-Teaching#assignments) according to it's requirements.
 
+Can be played [here](https://cse404-chess.herokuapp.com/)
+
 ## How To Use
 1. Clone the repository
 2. npm install to install the dependencies
